@@ -13,6 +13,42 @@
         android:theme="@style/Theme.PawSecure"
         tools:targetApi="31">
         <activity
+            android:name=".AnimalActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ReadyPasswordActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ChangePasswordActivity"
+            android:exported="false" />
+        <activity
+            android:name=".SettingsActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ProfileActivity"
+            android:exported="false" />
+        <activity
+            android:name=".NotFoundActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ActivateActivity"
+            android:exported="false" />
+        <activity
+            android:name=".LoadingActivity"
+            android:exported="false" />
+        <activity
+            android:name=".NexusActivity"
+            android:exported="false" />
+        <activity
+            android:name=".EmailActivity"
+            android:exported="false" />
+        <activity
+            android:name=".RegisterActivity"
+            android:exported="false" />
+        <activity
+            android:name=".LoginActivity"
+            android:exported="false" />
+        <activity
             android:name=".StartActivity"
             android:exported="false" />
     </application>
