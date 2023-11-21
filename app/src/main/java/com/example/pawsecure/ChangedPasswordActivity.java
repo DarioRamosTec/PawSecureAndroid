@@ -4,11 +4,11 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
 
-public class ReadyPasswordActivity extends AppCompatActivity {
+public class ChangedPasswordActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_ready_password);
+        setContentView(R.layout.activity_changed_password);
     }
 }

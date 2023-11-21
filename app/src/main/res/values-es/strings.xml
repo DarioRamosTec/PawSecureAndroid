@@ -24,4 +24,13 @@
     <string name="activity_letsgo">¡Vamos a empezar!</string>
     <string name="activity_hello">¡Activado!</string>
     <string name="activity_msg">Tu cuenta ha sido activada, ¡bienvenido!</string>
+    <string name="change_password_hello">Cambiar contraseña</string>
+    <string name="change_password_msg">Sigue las instrucciones para cambiar la contraseña.</string>
+    <string name="change_password_actual">Contraseña actual</string>
+    <string name="change_password_new">Contraseña nueva</string>
+    <string name="change_password_new_again">Confirmar contraseña nueva</string>
+    <string name="change_password_change">Cambiar contraseña</string>
+    <string name="changed_password_hello">¡Cambio exitoso!</string>
+    <string name="changed_password_msg">Tu contraseña ha cambiado, serás redirigido de vuelta a tu perfil.</string>
+    <string name="changed_password_return">Regrésame</string>
 </resources>

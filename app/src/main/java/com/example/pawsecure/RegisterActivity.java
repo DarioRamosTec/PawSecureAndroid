@@ -19,10 +19,21 @@ public class RegisterActivity extends AppCompatActivity {
                 goToLogin();
             }
         });
+        findViewById(R.id.buttonSignUpRegister).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                goToEmail();
+            }
+        });
     }
 
     void goToLogin() {
         startActivity(new Intent(this, LoginActivity.class));
         finish();
+    }
+
+    void goToEmail() {
+        Intent intent = new Intent(this, EmailActivity.class);
+        startActivity(intent);
     }
 }

@@ -23,4 +23,13 @@
     <string name="activity_letsgo">Let\'s go!</string>
     <string name="activity_hello">Activate!</string>
     <string name="activity_msg">Your account has been activated, welcome to PawSecure!</string>
+    <string name="change_password_hello">Change password</string>
+    <string name="change_password_msg">Follow the instructions to change your password.</string>
+    <string name="change_password_actual">Actual password</string>
+    <string name="change_password_new">New password</string>
+    <string name="change_password_new_again">New password again</string>
+    <string name="change_password_change">Change password</string>
+    <string name="changed_password_hello">Changed!</string>
+    <string name="changed_password_msg">Your password was changed! You will be redirect to your profile in few seconds.</string>
+    <string name="changed_password_return">Return me</string>
 </resources>
