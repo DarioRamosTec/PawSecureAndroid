@@ -1,3 +1,17 @@
 <resources>
     <string name="app_name">PawSecure</string>
+    <string name="login">Login</string>
+    <string name="sign_up">Sign up</string>
+    <string name="start_hello">Hello!</string>
+    <string name="start_msg">First of all login into your account, if you don\'t have one, we can start one.</string>
+    <string name="login_notaccount">Don\'t have an account?</string>
+    <string name="account_password">Password</string>
+    <string name="account_email">Email</string>
+    <string name="login_msg">Happy to see you return!</string>
+    <string name="account_forgot">Forgot your password?</string>
+    <string name="login_hello">Welcome back!</string>
+    <string name="register_hello">Welcome!</string>
+    <string name="register_msg">Let\'s create an account.</string>
+    <string name="account_password_again">Password again</string>
+    <string name="register_yesaccount">Already have an account?</string>
 </resources>

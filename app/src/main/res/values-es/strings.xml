@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">PawSecure</string>
+    <string name="login">Iniciar sesión</string>
+    <string name="sign_up">Registrarse</string>
+    <string name="start_hello">¡Hola!</string>
+    <string name="start_msg">Antes de empezar, inicia sesión en tu cuenta, si no tienes cuenta, vamos a crear una.</string>
+    <string name="login_notaccount">¿No tienes cuenta?</string>
+    <string name="account_password">Contraseña</string>
+    <string name="account_email">Correo electrónico</string>
+    <string name="login_msg">¡Encantados de verte regresar!</string>
+    <string name="account_forgot">¿Olvidaste la contraseña?</string>
+    <string name="login_hello">¡Bienvenido de vuelta!</string>
+    <string name="register_hello">¡Bienvenido!</string>
+    <string name="register_msg">Vamos a crear una cuenta.</string>
+    <string name="account_password_again">Confirmar contraseña</string>
+    <string name="register_yesaccount">¿Ya tienes una cuenta?</string>
+</resources>
