@@ -15,4 +15,13 @@
     <string name="register_msg">Vamos a crear una cuenta.</string>
     <string name="account_password_again">Confirmar contraseña</string>
     <string name="register_yesaccount">¿Ya tienes una cuenta?</string>
+    <string name="email_resend_available">Reenviar disponible en</string>
+    <string name="email_verify">Verificar</string>
+    <string name="seconds">segundos</string>
+    <string name="email_resend_email">Reenviar correo</string>
+    <string name="email_hello">¡Perfecto!</string>
+    <string name="email_msg">Te acabamos de mandar un correo, revísalo y sigue las instrucciones para continuar.</string>
+    <string name="activity_letsgo">¡Vamos a empezar!</string>
+    <string name="activity_hello">¡Activado!</string>
+    <string name="activity_msg">Tu cuenta ha sido activada, ¡bienvenido!</string>
 </resources>
