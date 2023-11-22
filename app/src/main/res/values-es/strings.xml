@@ -33,4 +33,11 @@
     <string name="changed_password_hello">¡Cambio exitoso!</string>
     <string name="changed_password_msg">Tu contraseña ha cambiado, serás redirigido de vuelta a tu perfil.</string>
     <string name="changed_password_return">Regrésame</string>
+    <string name="nexus_home">Inicio</string>
+    <string name="nexus_add_description">Añadir PawSecure</string>
+    <string name="nexus_icon_description">Icono de tu animal</string>
+    <string name="add_hello">¡Vamos a crear!</string>
+    <string name="add_msg">Hora de crear una nueva PawSecure.</string>
+    <string name="back">Atrás</string>
+    <string name="next">Siguiente</string>
 </resources>

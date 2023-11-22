@@ -32,4 +32,11 @@
     <string name="changed_password_hello">Changed!</string>
     <string name="changed_password_msg">Your password was changed! You will be redirect to your profile in few seconds.</string>
     <string name="changed_password_return">Return me</string>
+    <string name="nexus_home">Home</string>
+    <string name="nexus_add_description">Add PawSecure</string>
+    <string name="nexus_icon_description">Your animal icon</string>
+    <string name="add_hello">Let\'s create!</string>
+    <string name="add_msg">Time to create a PawSecure!</string>
+    <string name="back">Back</string>
+    <string name="next">Next</string>
 </resources>
