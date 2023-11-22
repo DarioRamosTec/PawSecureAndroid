@@ -39,4 +39,10 @@
     <string name="add_msg">Time to create a PawSecure!</string>
     <string name="back">Back</string>
     <string name="next">Next</string>
+    <string name="add_group">Group</string>
+    <string name="add_single">Single</string>
+    <string name="add_text">Choose your space</string>
+    <string name="decide_hello">Your pets</string>
+    <string name="decide_msg">Let\'s choose your pets for the group.</string>
+    <string name="done">Done</string>
 </resources>

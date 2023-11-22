@@ -40,4 +40,10 @@
     <string name="add_msg">Hora de crear una nueva PawSecure.</string>
     <string name="back">Atrás</string>
     <string name="next">Siguiente</string>
+    <string name="add_group">Grupo</string>
+    <string name="add_single">Único</string>
+    <string name="add_text">Selecciona el tipo de espacio</string>
+    <string name="decide_hello">Tus nuevas mascotas</string>
+    <string name="decide_msg">Escogamos las mascotas para tu grupo.</string>
+    <string name="done">Hecho</string>
 </resources>

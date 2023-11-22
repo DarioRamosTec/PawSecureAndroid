@@ -11,7 +11,7 @@
         android:layout_height="100dp"
         android:layout_marginTop="50dp"
         android:foreground="@drawable/icon_circle"
-        android:src="@drawable/icon_animal_cat0" />
+        android:src="@drawable/icon_animal" />
 
     <TextView
         android:id="@+id/textView17"
