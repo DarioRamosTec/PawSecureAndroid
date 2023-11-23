@@ -4,7 +4,10 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
+
+import java.util.Locale;
 
 public class StartActivity extends AppCompatActivity {
 
@@ -24,6 +27,9 @@ public class StartActivity extends AppCompatActivity {
                 startIntent(RegisterActivity.class);
             }
         });
+
+        //
+        Log.d("UTT", Locale.getDefault().getLanguage());
     }
 
     void startIntent(Class<?> cls) {
