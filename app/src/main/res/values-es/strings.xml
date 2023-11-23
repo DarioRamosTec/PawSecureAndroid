@@ -46,4 +46,5 @@
     <string name="decide_hello">Tus nuevas mascotas</string>
     <string name="decide_msg">Escogamos las mascotas para tu grupo.</string>
     <string name="done">Hecho</string>
+    <string name="account_name">Nombre</string>
 </resources>

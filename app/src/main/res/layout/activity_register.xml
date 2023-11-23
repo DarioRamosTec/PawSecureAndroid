@@ -49,11 +49,32 @@
             android:orientation="vertical">
 
             <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/textInputNameRegister"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginStart="32dp"
+                android:layout_marginEnd="32dp"
+                app:errorEnabled="true"
+                android:hint="@string/account_name">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <View
+                android:id="@+id/view8"
+                android:layout_width="match_parent"
+                android:layout_height="0dp" />
+
+            <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/textInputEmailRegister"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="32dp"
                 android:layout_marginEnd="32dp"
+                app:errorEnabled="true"
                 android:hint="@string/account_email">
 
                 <com.google.android.material.textfield.TextInputEditText
@@ -65,7 +86,7 @@
             <View
                 android:id="@+id/view3"
                 android:layout_width="wrap_content"
-                android:layout_height="27dp" />
+                android:layout_height="0dp" />
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/textInputPasswordRegister"
@@ -74,6 +95,7 @@
                 android:layout_marginStart="32dp"
                 android:layout_marginEnd="32dp"
                 android:hint="@string/account_password"
+                app:errorEnabled="true"
                 app:endIconMode="none">
 
                 <com.google.android.material.textfield.TextInputEditText
@@ -86,7 +108,7 @@
             <View
                 android:id="@+id/view6"
                 android:layout_width="match_parent"
-                android:layout_height="27dp" />
+                android:layout_height="0dp" />
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/textInputPasswordAgainRegister"
@@ -95,6 +117,7 @@
                 android:layout_marginStart="32dp"
                 android:layout_marginEnd="32dp"
                 android:hint="@string/account_password_again"
+                app:errorEnabled="true"
                 app:endIconMode="password_toggle">
 
                 <com.google.android.material.textfield.TextInputEditText
@@ -109,7 +132,7 @@
         <View
             android:id="@+id/view5"
             android:layout_width="match_parent"
-            android:layout_height="30dp" />
+            android:layout_height="10dp" />
 
         <Button
             android:id="@+id/buttonSignUpRegister"

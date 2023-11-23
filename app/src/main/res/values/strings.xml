@@ -45,4 +45,5 @@
     <string name="decide_hello">Your pets</string>
     <string name="decide_msg">Let\'s choose your pets for the group.</string>
     <string name="done">Done</string>
+    <string name="account_name">Name</string>
 </resources>
