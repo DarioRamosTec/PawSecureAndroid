@@ -8,11 +8,8 @@ import android.util.Log;
 import android.view.View;
 
 import com.example.pawsecure.models.Message;
-import com.example.pawsecure.models.User;
-import com.example.pawsecure.requests.UsersRequest;
-
-import org.json.JSONException;
-import org.json.JSONObject;
+import com.example.pawsecure.services.UsersService;
+import com.google.gson.Gson;
 
 import java.io.IOException;
 
@@ -54,15 +51,19 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
                 .baseUrl("https://paw-secure.jafetguzman.com/api/v1/")
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
-        UsersRequest usersRequest = retrofit.create(UsersRequest.class);
+        UsersService usersRequest = retrofit.create(UsersService.class);
         usersRequest.register().enqueue(new Callback<Message>() {
             @Override
             public void onResponse(Call<Message> call, Response<Message> response) {
                 if (response.isSuccessful()) {
                     Message message = response.body();
-                    Log.d("UTT", message.toString());
                 } else {
-                    response.errorBody();
+                    try {
+                        Message message = new Gson().fromJson(response.errorBody().string(), Message.class);
+                        Log.d("UTT", message.toString());
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
                 }
             }
 

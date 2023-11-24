@@ -1,8 +1,11 @@
 package com.example.pawsecure.models;
 
-public class Message {
-    String Msg;
-    String[] Data;
+import androidx.recyclerview.widget.RecyclerView;
 
-    String[] Errors;
+import java.util.Dictionary;
+
+public class Message {
+    public String msg;
+    public String[] data;
+    public Object errors;
 }
