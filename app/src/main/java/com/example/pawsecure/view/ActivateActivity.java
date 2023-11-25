@@ -1,14 +1,16 @@
-package com.example.pawsecure;
+package com.example.pawsecure.view;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
 
-public class AddActivity extends AppCompatActivity {
+import com.example.pawsecure.R;
+
+public class ActivateActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_add);
+        setContentView(R.layout.activity_activate);
     }
 }

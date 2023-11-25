@@ -1,4 +1,4 @@
-package com.example.pawsecure;
+package com.example.pawsecure.view;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -6,6 +6,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+
+import com.example.pawsecure.R;
 
 import java.util.Locale;
 
@@ -27,9 +29,6 @@ public class StartActivity extends AppCompatActivity {
                 startIntent(RegisterActivity.class);
             }
         });
-
-        //
-        Log.d("UTT", Locale.getDefault().getLanguage());
     }
 
     void startIntent(Class<?> cls) {

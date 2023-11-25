@@ -1,14 +1,16 @@
-package com.example.pawsecure;
+package com.example.pawsecure.view;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
 
-public class ForgetPasswordActivity extends AppCompatActivity {
+import com.example.pawsecure.R;
+
+public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_forget_password);
+        setContentView(R.layout.activity_main);
     }
 }

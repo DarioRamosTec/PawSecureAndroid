@@ -15,55 +15,55 @@
         android:theme="@style/Theme.PawSecure"
         tools:targetApi="31">
         <activity
-            android:name=".DecideActivity"
+            android:name=".view.DecideActivity"
             android:exported="false" />
         <activity
-            android:name=".AddActivity"
+            android:name=".view.AddActivity"
             android:exported="false" />
         <activity
-            android:name=".ChangedPasswordActivity"
+            android:name=".view.ChangedPasswordActivity"
             android:exported="false" />
         <activity
-            android:name=".ForgetPasswordActivity"
+            android:name=".view.ForgetPasswordActivity"
             android:exported="false" />
         <activity
-            android:name=".MainActivity"
+            android:name=".view.MainActivity"
             android:exported="false" />
         <activity
-            android:name=".AnimalActivity"
+            android:name=".view.AnimalActivity"
             android:exported="false" />
         <activity
-            android:name=".ChangePasswordActivity"
+            android:name=".view.ChangePasswordActivity"
             android:exported="false" />
         <activity
-            android:name=".SettingsActivity"
+            android:name=".view.SettingsActivity"
             android:exported="false" />
         <activity
-            android:name=".ProfileActivity"
+            android:name=".view.ProfileActivity"
             android:exported="false" />
         <activity
-            android:name=".NotFoundActivity"
+            android:name=".view.NotFoundActivity"
             android:exported="false" />
         <activity
-            android:name=".ActivateActivity"
+            android:name=".view.ActivateActivity"
             android:exported="false" />
         <activity
-            android:name=".LoadingActivity"
+            android:name=".view.LoadingActivity"
             android:exported="false" />
         <activity
-            android:name=".NexusActivity"
+            android:name=".view.NexusActivity"
             android:exported="false" />
         <activity
-            android:name=".EmailActivity"
+            android:name=".view.EmailActivity"
             android:exported="false" />
         <activity
-            android:name=".RegisterActivity"
+            android:name=".view.RegisterActivity"
             android:exported="false" />
         <activity
-            android:name=".LoginActivity"
+            android:name=".view.LoginActivity"
             android:exported="false" />
         <activity
-            android:name=".StartActivity"
+            android:name=".view.StartActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
