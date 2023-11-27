@@ -84,6 +84,14 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
                         textInputPasswordAgainRegister.setError(errorPasswordAgain);
                         textInputPasswordAgainRegister.setErrorContentDescription(errorPasswordAgain);
                     } else {
+                        textInputNameRegister.setError(null);
+                        textInputNameRegister.setErrorContentDescription(null);
+                        textInputEmailRegister.setError(null);
+                        textInputEmailRegister.setErrorContentDescription(null);
+                        textInputPasswordRegister.setError(null);
+                        textInputPasswordRegister.setErrorContentDescription(null);
+                        textInputPasswordAgainRegister.setError(null);
+                        textInputPasswordAgainRegister.setErrorContentDescription(null);
                         goToEmail();
                     }
         });
