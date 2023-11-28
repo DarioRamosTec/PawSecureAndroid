@@ -9,7 +9,7 @@ public class RetrofitRequest {
     public static Retrofit obtainRetrofit() {
         if (retrofit == null) {
             retrofit = new Retrofit.Builder()
-                    .baseUrl("https://paw-secure.jafetguzman.com/api/v1/")
+                    .baseUrl("http://18.234.60.24/api/v1/")
                     .addConverterFactory(GsonConverterFactory.create())
                     .build();
         }
