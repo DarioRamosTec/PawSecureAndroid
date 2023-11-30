@@ -1,5 +1,6 @@
 package com.example.pawsecure.view;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
@@ -7,6 +8,7 @@ import android.os.Bundle;
 import android.view.View;
 
 import com.example.pawsecure.R;
+import com.google.android.material.progressindicator.CircularProgressIndicator;
 
 public class EmailActivity extends AppCompatActivity {
 
@@ -25,6 +27,14 @@ public class EmailActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 goToActivate();
+            }
+        });
+
+        this.getOnBackPressedDispatcher().addCallback(this, new OnBackPressedCallback(true) {
+            @Override
+            public void handleOnBackPressed() {
+                startActivity(new Intent(getApplicationContext(), StartActivity.class));
+                finish();
             }
         });
     }

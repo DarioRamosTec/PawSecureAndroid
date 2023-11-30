@@ -6,6 +6,33 @@
     android:layout_height="match_parent"
     tools:context=".view.RegisterActivity">
 
+    <com.google.android.material.progressindicator.CircularProgressIndicator
+        android:id="@+id/progressIndicatorRegister"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:indeterminate="true"
+        android:visibility="invisible"
+        app:hideAnimationBehavior="inward"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:showAnimationBehavior="outward"
+        app:trackCornerRadius="2dp" />
+
+    <View
+        android:id="@+id/viewBlackRegister"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:alpha="0"
+        android:background="@color/md_theme_dark_outlineVariant"
+        android:backgroundTint="@color/md_theme_dark_outlineVariant"
+        android:visibility="visible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <TextView
         android:id="@+id/textView3"
         android:layout_width="300dp"
@@ -33,6 +60,7 @@
         app:layout_constraintVertical_bias="0.1" />
 
     <LinearLayout
+        android:id="@+id/linearLayout3"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:orientation="vertical"
@@ -54,8 +82,9 @@
                 android:layout_height="match_parent"
                 android:layout_marginStart="32dp"
                 android:layout_marginEnd="32dp"
-                app:errorEnabled="true"
-                android:hint="@string/account_name">
+                android:hint="@string/account_name"
+                android:inputType="textPersonName"
+                app:errorEnabled="true">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/editTextName"
@@ -75,8 +104,9 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="32dp"
                 android:layout_marginEnd="32dp"
-                app:errorEnabled="true"
-                android:hint="@string/account_email">
+                android:hint="@string/account_email"
+                android:inputType="textEmailAddress"
+                app:errorEnabled="true">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/editTextEmail"
@@ -97,8 +127,9 @@
                 android:layout_marginStart="32dp"
                 android:layout_marginEnd="32dp"
                 android:hint="@string/account_password"
-                app:errorEnabled="true"
-                app:endIconMode="none">
+                android:inputType="textPassword"
+                app:endIconMode="none"
+                app:errorEnabled="true">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/editTextPassword"
@@ -120,8 +151,9 @@
                 android:layout_marginStart="32dp"
                 android:layout_marginEnd="32dp"
                 android:hint="@string/account_password_again"
-                app:errorEnabled="true"
-                app:endIconMode="password_toggle">
+                android:inputType="textPassword"
+                app:endIconMode="password_toggle"
+                app:errorEnabled="true">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/editTextPasswordAgain"
