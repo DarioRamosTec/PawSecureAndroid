@@ -58,6 +58,7 @@ public class UserRepository {
             @Override
             public void onResponse(Call<TokenResponse> call, Response<TokenResponse> response) {
                 switch (response.code()) {
+                    case 403:
                     case 401:
                         TokenResponse tokenResponse = null;
                         try {
@@ -69,6 +70,29 @@ public class UserRepository {
                         break;
                     case 200:
                         mutableLiveData.setValue(response.body());
+                        break;
+                }
+            }
+
+            @Override
+            public void onFailure(Call<TokenResponse> call, Throwable t) {
+
+            }
+        });
+        return mutableLiveData;
+    }
+
+    public LiveData<TokenResponse> refresh (String email, String password) {
+        MutableLiveData<TokenResponse> mutableLiveData = new MutableLiveData<>();
+        userRequest.refresh().enqueue(new Callback<TokenResponse>() {
+            @Override
+            public void onResponse(Call<TokenResponse> call, Response<TokenResponse> response) {
+                switch (response.code()) {
+                    case 200:
+                        mutableLiveData.setValue(response.body());
+                        break;
+                    case 401:
+
                         break;
                 }
             }

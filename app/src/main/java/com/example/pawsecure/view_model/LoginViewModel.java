@@ -1,14 +1,17 @@
 package com.example.pawsecure.view_model;
 
+import android.util.Log;
+
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.example.pawsecure.repository.UserRepository;
 import com.example.pawsecure.response.GeneralResponse;
 import com.example.pawsecure.response.TokenResponse;
+import com.example.pawsecure.view.LoginActivity;
 
 public class LoginViewModel extends ViewModel {
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
 
     public LoginViewModel () {
         userRepository = new UserRepository();

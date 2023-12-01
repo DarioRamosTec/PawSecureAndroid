@@ -4,6 +4,7 @@ import androidx.activity.OnBackPressedCallback;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.interpolator.view.animation.FastOutSlowInInterpolator;
 import androidx.interpolator.view.animation.LinearOutSlowInInterpolator;
+import androidx.lifecycle.ViewModelProvider;
 
 import android.animation.ObjectAnimator;
 import android.content.Intent;
@@ -46,7 +47,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
 
-        registerViewModel = new RegisterViewModel();
+        registerViewModel = new ViewModelProvider(this).get(RegisterViewModel.class);
         buttonLoginRegister = findViewById(R.id.buttonLoginRegister);
         buttonLoginRegister.setOnClickListener(new View.OnClickListener() {
             @Override

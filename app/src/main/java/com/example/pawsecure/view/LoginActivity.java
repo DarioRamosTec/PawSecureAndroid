@@ -1,8 +1,9 @@
 package com.example.pawsecure.view;
 
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.interpolator.view.animation.FastOutSlowInInterpolator;
 import androidx.interpolator.view.animation.LinearOutSlowInInterpolator;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
 
 import android.animation.ObjectAnimator;
 import android.content.Intent;
@@ -11,12 +12,15 @@ import android.view.View;
 import android.widget.Button;
 
 import com.example.pawsecure.R;
+import com.example.pawsecure.implementation.PawSecureActivity;
+import com.example.pawsecure.implementation.PawSecureObserver;
+import com.example.pawsecure.response.TokenResponse;
 import com.example.pawsecure.view_model.LoginViewModel;
 import com.google.android.material.progressindicator.CircularProgressIndicator;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 
-public class LoginActivity extends AppCompatActivity implements View.OnClickListener {
+public class LoginActivity extends PawSecureActivity implements View.OnClickListener {
 
     TextInputEditText editTextPasswordLogin;
     TextInputEditText editTextEmailLogin;
@@ -32,7 +36,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        loginViewModel = new LoginViewModel();
+        loginViewModel = new ViewModelProvider(this).get(LoginViewModel.class);
 
         findViewById(R.id.buttonSignUpLogin).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -71,28 +75,33 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         buttonLoginLogin.setEnabled(false);
 
         loginViewModel.getLoginData(editTextEmailLogin.getText().toString(),
-                editTextPasswordLogin.getText().toString()).observe(this, loginData -> {
+                editTextPasswordLogin.getText().toString()).observe(this, new PawSecureObserver<TokenResponse>(this, new ObserveLogin()));
+    }
 
-                    ObjectAnimator animationFinal = ObjectAnimator.ofFloat(viewBlackLogin, "alpha", 0f).setDuration(200);
-                    animationFinal.setInterpolator(new FastOutSlowInInterpolator());
-                    animationFinal.start();
-                    progressIndicatorLogin.hide();
-                    progressIndicatorLogin.setContentDescription(null);
-                    buttonLoginLogin.setEnabled(true);
+    class ObserveLogin implements PawSecureObserver.PawSecureOnChanged<TokenResponse> {
 
-                    if (loginData.error == null) {
-                        textInputEmailLogin.setError(null);
-                        textInputEmailLogin.setErrorContentDescription(null);
-                        textInputPasswordLogin.setError(null);
-                        textInputPasswordLogin.setErrorContentDescription(null);
-                        goToNexus();
-                    } else {
-                        textInputEmailLogin.setError(getText(R.string.login_validation_error));
-                        textInputEmailLogin.setErrorContentDescription(getText(R.string.login_validation_error));
-                        textInputPasswordLogin.setError(getText(R.string.login_validation_error));
-                        textInputPasswordLogin.setErrorContentDescription(getText(R.string.login_validation_error));
-                        editTextPasswordLogin.setText("");
-                    }
-        });
+        @Override
+        public void onChanged(TokenResponse tokenResponse) {
+            ObjectAnimator animationFinal = ObjectAnimator.ofFloat(viewBlackLogin, "alpha", 0f).setDuration(200);
+            animationFinal.setInterpolator(new FastOutSlowInInterpolator());
+            animationFinal.start();
+            progressIndicatorLogin.hide();
+            progressIndicatorLogin.setContentDescription(null);
+            buttonLoginLogin.setEnabled(true);
+
+            if (tokenResponse.error == null) {
+                textInputEmailLogin.setError(null);
+                textInputEmailLogin.setErrorContentDescription(null);
+                textInputPasswordLogin.setError(null);
+                textInputPasswordLogin.setErrorContentDescription(null);
+                goToNexus();
+            } else {
+                textInputEmailLogin.setError(getText(R.string.login_validation_error));
+                textInputEmailLogin.setErrorContentDescription(getText(R.string.login_validation_error));
+                textInputPasswordLogin.setError(getText(R.string.login_validation_error));
+                textInputPasswordLogin.setErrorContentDescription(getText(R.string.login_validation_error));
+
+            }
+        }
     }
 }
