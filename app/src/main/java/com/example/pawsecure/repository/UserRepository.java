@@ -82,7 +82,7 @@ public class UserRepository {
         return mutableLiveData;
     }
 
-    public LiveData<TokenResponse> refresh (String email, String password) {
+    public LiveData<TokenResponse> refresh () {
         MutableLiveData<TokenResponse> mutableLiveData = new MutableLiveData<>();
         userRequest.refresh().enqueue(new Callback<TokenResponse>() {
             @Override

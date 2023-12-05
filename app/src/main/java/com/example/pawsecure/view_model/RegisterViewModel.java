@@ -7,7 +7,7 @@ import com.example.pawsecure.repository.UserRepository;
 import com.example.pawsecure.response.GeneralResponse;
 
 public class RegisterViewModel extends ViewModel {
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
 
     public RegisterViewModel () {
         userRepository = new UserRepository();

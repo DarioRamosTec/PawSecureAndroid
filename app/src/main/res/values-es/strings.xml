@@ -50,4 +50,6 @@
     <string name="login_validation_error">El correo electrónico o la contraseña son incorrectos.</string>
     <string name="wait">Espera a la respuesta del servidor.</string>
     <string name="sensor_light">Luz</string>
+    <string name="key_token">KEY_TOKEN</string>
+    <string name="key_directory">KEY_DIRECTORY</string>
 </resources>

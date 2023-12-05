@@ -1,5 +1,13 @@
 package com.example.pawsecure.token;
 
+import static android.app.PendingIntent.getActivity;
+import static android.provider.Settings.System.getString;
+
+import static androidx.core.content.res.TypedArrayUtils.getText;
+import static androidx.core.graphics.drawable.IconCompat.getResources;
+
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.CountDownTimer;
 
 import androidx.annotation.NonNull;
@@ -7,6 +15,7 @@ import androidx.lifecycle.Lifecycle;
 import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.Observer;
 
+import com.example.pawsecure.R;
 import com.example.pawsecure.repository.UserRepository;
 import com.example.pawsecure.response.TokenResponse;
 
@@ -20,6 +29,11 @@ public class Token {
     private static CountDownTimer countDownTimer;
     private static UserRepository userRepository;
     static boolean expired;
+
+    public static String getToken(Context context) {
+        SharedPreferences sharedPref = context.getSharedPreferences(context.getString(R.string.key_directory), Context.MODE_PRIVATE);
+        return sharedPref.getString(context.getString(R.string.key_token), "");
+    }
 
     public static String getToken() {
         if (expired) {
@@ -50,7 +64,7 @@ public class Token {
     }
 
     private static void refreshToken() {
-        userRepository.refresh("a", "b").observe(new LifecycleOwner() {
+        userRepository.refresh().observe(new LifecycleOwner() {
             @NonNull
             @Override
             public Lifecycle getLifecycle() {

@@ -4,7 +4,7 @@ import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
 
-public class ValidationEmailResponse {
+public class ValidationResponse {
 
     @SerializedName("email")
     public List<String> email;

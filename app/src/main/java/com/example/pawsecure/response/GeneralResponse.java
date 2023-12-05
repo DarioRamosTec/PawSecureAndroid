@@ -12,5 +12,5 @@ public class GeneralResponse {
     public JSONObject data;
 
     @SerializedName("errors")
-    public ValidationEmailResponse errors;
+    public ValidationResponse errors;
 }

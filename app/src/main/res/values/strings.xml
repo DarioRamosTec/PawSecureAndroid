@@ -49,4 +49,6 @@
     <string name="login_validation_error">The email nor the password are correct.</string>
     <string name="wait">Wait to the server\'s response.</string>
     <string name="sensor_light">Light</string>
+    <string name="key_token">KEY_TOKEN</string>
+    <string name="key_directory">KEY_DIRECTORY</string>
 </resources>

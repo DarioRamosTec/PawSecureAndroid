@@ -27,8 +27,6 @@ public class LoginActivity extends PawSecureActivity implements View.OnClickList
     TextInputLayout textInputEmailLogin;
     TextInputLayout textInputPasswordLogin;
     LoginViewModel loginViewModel;
-    CircularProgressIndicator progressIndicatorLogin;
-    View viewBlackLogin;
     Button buttonLoginLogin;
 
     @Override
@@ -49,10 +47,11 @@ public class LoginActivity extends PawSecureActivity implements View.OnClickList
         editTextEmailLogin = findViewById(R.id.editTextEmailLogin);
         textInputEmailLogin = findViewById(R.id.textInputEmailLogin);
         textInputPasswordLogin = findViewById(R.id.textInputPasswordLogin);
-        progressIndicatorLogin = findViewById(R.id.progressIndicatorLogin);
-        viewBlackLogin = findViewById(R.id.viewBlackLogin);
         buttonLoginLogin = findViewById(R.id.buttonLoginLogin);
         buttonLoginLogin.setOnClickListener(this);
+
+        circularProgressIndicatorCurtain = findViewById(R.id.progressIndicatorLogin);
+        viewCurtain = findViewById(R.id.viewBlackLogin);
     }
 
     void goToRegister() {
@@ -67,12 +66,7 @@ public class LoginActivity extends PawSecureActivity implements View.OnClickList
 
     @Override
     public void onClick(View view) {
-        ObjectAnimator animationStart = ObjectAnimator.ofFloat(viewBlackLogin, "alpha", 0.15f).setDuration(200);
-        animationStart.setInterpolator(new LinearOutSlowInInterpolator());
-        animationStart.start();
-        progressIndicatorLogin.show();
-        progressIndicatorLogin.setContentDescription(getText(R.string.wait));
-        buttonLoginLogin.setEnabled(false);
+        //showCurtain();
 
         loginViewModel.getLoginData(editTextEmailLogin.getText().toString(),
                 editTextPasswordLogin.getText().toString()).observe(this, new PawSecureObserver<TokenResponse>(this, new ObserveLogin()));
