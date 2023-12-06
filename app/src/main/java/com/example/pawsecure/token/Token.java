@@ -4,11 +4,11 @@ import static android.app.PendingIntent.getActivity;
 import static android.provider.Settings.System.getString;
 
 import static androidx.core.content.res.TypedArrayUtils.getText;
-import static androidx.core.graphics.drawable.IconCompat.getResources;
 
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.CountDownTimer;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.Lifecycle;
@@ -24,57 +24,68 @@ import java.math.BigInteger;
 public class Token {
 
     private static String token;
-    private static long expires;
     private static String type;
+    private static long expires;
+    private static boolean expired = false;
+    private static String email;
+    private static String password;
     private static CountDownTimer countDownTimer;
-    private static UserRepository userRepository;
-    static boolean expired;
 
-    public static String getToken(Context context) {
+    public static boolean checkToken(Context context) {
         SharedPreferences sharedPref = context.getSharedPreferences(context.getString(R.string.key_directory), Context.MODE_PRIVATE);
-        return sharedPref.getString(context.getString(R.string.key_token), "");
+        token = sharedPref.getString(context.getString(R.string.key_token), "");
+        return !token.equals("");
     }
 
-    public static String getToken() {
-        if (expired) {
-            refreshToken();
-            token = null;
-        }
-        return token;
+    public static boolean checkUser(Context context) {
+        SharedPreferences sharedPref = context.getSharedPreferences(context.getString(R.string.data_directory), Context.MODE_PRIVATE);
+        email = sharedPref.getString(context.getString(R.string.data_email), "");
+        password = sharedPref.getString(context.getString(R.string.data_password), "");
+        return !email.equals("") && !password.equals("");
     }
 
-    public static void setToken(TokenResponse tokenResponse) {
-        if (token == null) {
-            new CountDownTimer(expires, 1000) {
+    public static String getBearer() {
+        return type + " " + token;
+    }
 
-                @Override
-                public void onTick(long l) {
+    public static String[] getData() {
+        return new String[] { email, password };
+    }
 
-                }
-
-                @Override
-                public void onFinish() {
-                    expired = false;
-                }
-            }.start();
+    public static void setToken(Context context, TokenResponse tokenResponse) {
+        if (countDownTimer != null) {
+            countDownTimer.cancel();
         }
         token = tokenResponse.access_token;
         expires = tokenResponse.expires_in;
         type = tokenResponse.token_type;
+        expired = false;
+
+        countDownTimer = new CountDownTimer(expires, expires/2) {
+            @Override
+            public void onTick(long l) {
+
+            }
+
+            @Override
+            public void onFinish() {
+                expired = true;
+            }
+        };
+        countDownTimer.start();
+        SharedPreferences sharedPref = context.getSharedPreferences(context.getString(R.string.key_directory), Context.MODE_PRIVATE);
+        SharedPreferences.Editor sharedPrefEditor = sharedPref.edit();
+        sharedPrefEditor.putString(context.getString(R.string.key_token), token);
+        sharedPrefEditor.apply();
     }
 
-    private static void refreshToken() {
-        userRepository.refresh().observe(new LifecycleOwner() {
-            @NonNull
-            @Override
-            public Lifecycle getLifecycle() {
-                return null;
-            }
-        }, new Observer<TokenResponse>() {
-            @Override
-            public void onChanged(TokenResponse tokenResponse) {
-                setToken(tokenResponse);
-            }
-        });
+    public static void setData(Context context, String email, String password) {
+        SharedPreferences sharedPref = context.getSharedPreferences(context.getString(R.string.data_directory), Context.MODE_PRIVATE);
+        SharedPreferences.Editor sharedPrefEditor = sharedPref.edit();
+        sharedPrefEditor.putString(context.getString(R.string.data_email), email);
+        sharedPrefEditor.putString(context.getString(R.string.data_password), password);
+        Token.email = email;
+        Token.password = password;
+        sharedPrefEditor.apply();
     }
 }

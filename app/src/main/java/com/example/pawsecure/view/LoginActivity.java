@@ -1,11 +1,7 @@
 package com.example.pawsecure.view;
 
-import androidx.interpolator.view.animation.FastOutSlowInInterpolator;
-import androidx.interpolator.view.animation.LinearOutSlowInInterpolator;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
-import android.animation.ObjectAnimator;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -15,8 +11,8 @@ import com.example.pawsecure.R;
 import com.example.pawsecure.implementation.PawSecureActivity;
 import com.example.pawsecure.implementation.PawSecureObserver;
 import com.example.pawsecure.response.TokenResponse;
+import com.example.pawsecure.token.Token;
 import com.example.pawsecure.view_model.LoginViewModel;
-import com.google.android.material.progressindicator.CircularProgressIndicator;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 
@@ -50,8 +46,7 @@ public class LoginActivity extends PawSecureActivity implements View.OnClickList
         buttonLoginLogin = findViewById(R.id.buttonLoginLogin);
         buttonLoginLogin.setOnClickListener(this);
 
-        circularProgressIndicatorCurtain = findViewById(R.id.progressIndicatorLogin);
-        viewCurtain = findViewById(R.id.viewBlackLogin);
+        establishCurtain(findViewById(R.id.progressIndicatorLogin), findViewById(R.id.viewBlackLogin));
     }
 
     void goToRegister() {
@@ -64,37 +59,50 @@ public class LoginActivity extends PawSecureActivity implements View.OnClickList
         finish();
     }
 
+    void goToEmail() {
+        Intent intent = new Intent(this, EmailActivity.class);
+        startActivity(intent);
+        finish();
+    }
+
     @Override
     public void onClick(View view) {
-        //showCurtain();
-
-        loginViewModel.getLoginData(editTextEmailLogin.getText().toString(),
-                editTextPasswordLogin.getText().toString()).observe(this, new PawSecureObserver<TokenResponse>(this, new ObserveLogin()));
+        String email = (editTextEmailLogin.getText() != null ? editTextEmailLogin.getText() : "").toString();
+        String password = (editTextPasswordLogin.getText() != null ? editTextPasswordLogin.getText() : "").toString();
+        showCurtain(new Button[]{buttonLoginLogin});
+        loginViewModel.login(email, password).observe(this, new PawSecureObserver<TokenResponse>(this, new ObserveLogin(email, password)));
     }
 
     class ObserveLogin implements PawSecureObserver.PawSecureOnChanged<TokenResponse> {
 
+        String email;
+        String password;
+
+        public ObserveLogin (String email, String password) {
+            this.email = email;
+            this.password = password;
+        }
+
         @Override
         public void onChanged(TokenResponse tokenResponse) {
-            ObjectAnimator animationFinal = ObjectAnimator.ofFloat(viewBlackLogin, "alpha", 0f).setDuration(200);
-            animationFinal.setInterpolator(new FastOutSlowInInterpolator());
-            animationFinal.start();
-            progressIndicatorLogin.hide();
-            progressIndicatorLogin.setContentDescription(null);
-            buttonLoginLogin.setEnabled(true);
-
+            hideCurtain(new Button[]{buttonLoginLogin});
             if (tokenResponse.error == null) {
                 textInputEmailLogin.setError(null);
                 textInputEmailLogin.setErrorContentDescription(null);
                 textInputPasswordLogin.setError(null);
                 textInputPasswordLogin.setErrorContentDescription(null);
+                Token.setToken(getBaseContext(), tokenResponse);
+                Token.setData(getBaseContext(), email, password);
                 goToNexus();
             } else {
-                textInputEmailLogin.setError(getText(R.string.login_validation_error));
-                textInputEmailLogin.setErrorContentDescription(getText(R.string.login_validation_error));
-                textInputPasswordLogin.setError(getText(R.string.login_validation_error));
-                textInputPasswordLogin.setErrorContentDescription(getText(R.string.login_validation_error));
-
+                if (tokenResponse.error.equals("403")) {
+                    goToEmail();
+                } else {
+                    textInputEmailLogin.setError(getText(R.string.login_validation_error));
+                    textInputEmailLogin.setErrorContentDescription(getText(R.string.login_validation_error));
+                    textInputPasswordLogin.setError(getText(R.string.login_validation_error));
+                    textInputPasswordLogin.setErrorContentDescription(getText(R.string.login_validation_error));
+                }
             }
         }
     }

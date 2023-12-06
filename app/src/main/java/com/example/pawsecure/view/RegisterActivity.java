@@ -16,6 +16,7 @@ import android.view.View;
 import android.widget.Button;
 
 import com.example.pawsecure.R;
+import com.example.pawsecure.implementation.PawSecureActivity;
 import com.example.pawsecure.view_model.RegisterViewModel;
 import com.google.android.material.progressindicator.CircularProgressIndicator;
 import com.google.android.material.textfield.TextInputEditText;
@@ -25,7 +26,7 @@ import java.util.Locale;
 
 import retrofit2.Call;
 
-public class RegisterActivity extends AppCompatActivity implements View.OnClickListener {
+public class RegisterActivity extends PawSecureActivity implements View.OnClickListener {
 
     TextInputLayout textInputNameRegister;
     TextInputLayout textInputEmailRegister;
@@ -65,8 +66,12 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
         editTextEmail = findViewById(R.id.editTextEmail);
         editTextPassword = findViewById(R.id.editTextPassword);
         editTextPasswordAgain = findViewById(R.id.editTextPasswordAgain);
+
         progressIndicatorRegister = findViewById(R.id.progressIndicatorRegister);
         viewBlackRegister = findViewById(R.id.viewBlackRegister);
+
+        establishCurtain(progressIndicatorRegister, viewBlackRegister);
+
         this.getOnBackPressedDispatcher().addCallback(this, new OnBackPressedCallback(true) {
             @Override
             public void handleOnBackPressed() {
@@ -90,25 +95,14 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
 
     @Override
     public void onClick(View view) {
-        ObjectAnimator animationStart = ObjectAnimator.ofFloat(viewBlackRegister, "alpha", 0.15f).setDuration(200);
-        animationStart.setInterpolator(new LinearOutSlowInInterpolator());
-        animationStart.start();
-        progressIndicatorRegister.show();
-        progressIndicatorRegister.setContentDescription(getText(R.string.wait));
-        buttonSignUpRegister.setEnabled(false);
+        showCurtain(new Button[]{buttonSignUpRegister});
 
         registerViewModel.getRegisterData(editTextName.getText().toString(),
                 editTextEmail.getText().toString(),
                 editTextPassword.getText().toString(),
                 editTextPasswordAgain.getText().toString(),
                 Locale.getDefault().getLanguage()).observe(this, registerData -> {
-
-                    ObjectAnimator animationFinal = ObjectAnimator.ofFloat(viewBlackRegister, "alpha", 0f).setDuration(200);
-                    animationFinal.setInterpolator(new FastOutSlowInInterpolator());
-                    animationFinal.start();
-                    progressIndicatorRegister.hide();
-                    progressIndicatorRegister.setContentDescription(null);
-                    buttonSignUpRegister.setEnabled(true);
+                    hideCurtain(new Button[]{buttonSignUpRegister});
 
                     if (registerData.errors != null) {
                         String errorName = registerData.errors.name != null && registerData.errors.name.size() > 0 ? registerData.errors.name.get(0) : null;

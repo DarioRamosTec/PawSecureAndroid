@@ -82,17 +82,28 @@ public class UserRepository {
         return mutableLiveData;
     }
 
-    public LiveData<TokenResponse> refresh () {
+    public LiveData<TokenResponse> refresh (String headerAuth) {
         MutableLiveData<TokenResponse> mutableLiveData = new MutableLiveData<>();
-        userRequest.refresh().enqueue(new Callback<TokenResponse>() {
+        userRequest.refresh(headerAuth).enqueue(new Callback<TokenResponse>() {
             @Override
             public void onResponse(Call<TokenResponse> call, Response<TokenResponse> response) {
                 switch (response.code()) {
+                    case 401:
+                        TokenResponse tokenResponse = null;
+                        try {
+                            tokenResponse = new Gson().fromJson(response.errorBody().string(), TokenResponse.class);
+                        } catch (IOException e) {
+                            throw new RuntimeException(e);
+                        }
+                        mutableLiveData.setValue(tokenResponse);
+                        break;
+                    case 405:
+                        TokenResponse tokenResponse405 = new TokenResponse();
+                        tokenResponse405.error = "405";
+                        mutableLiveData.setValue(tokenResponse405);
+                    break;
                     case 200:
                         mutableLiveData.setValue(response.body());
-                        break;
-                    case 401:
-
                         break;
                 }
             }

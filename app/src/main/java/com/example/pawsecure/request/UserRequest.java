@@ -7,6 +7,7 @@ import retrofit2.Call;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
+import retrofit2.http.Header;
 import retrofit2.http.POST;
 
 public interface UserRequest {
@@ -22,7 +23,6 @@ public interface UserRequest {
     Call<TokenResponse> login (@Field("email") String email,
                                @Field("password") String password);
 
-    @FormUrlEncoded
     @POST("auth/refresh")
-    Call<TokenResponse> refresh();
+    Call<TokenResponse> refresh(@Header("Authorization") String authorization);
 }

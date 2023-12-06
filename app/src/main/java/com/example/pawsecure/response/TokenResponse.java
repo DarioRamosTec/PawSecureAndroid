@@ -2,8 +2,6 @@ package com.example.pawsecure.response;
 
 import com.google.gson.annotations.SerializedName;
 
-import java.math.BigInteger;
-
 public class TokenResponse {
     @SerializedName("error")
     public String error;
