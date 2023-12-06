@@ -1,6 +1,7 @@
 package com.example.pawsecure.request;
 
 import com.example.pawsecure.response.GeneralResponse;
+import com.example.pawsecure.response.SpaceResponse;
 import com.example.pawsecure.response.TokenResponse;
 
 import retrofit2.Call;
@@ -25,4 +26,7 @@ public interface UserRequest {
 
     @POST("auth/refresh")
     Call<TokenResponse> refresh(@Header("Authorization") String authorization);
+
+    @GET("auth/refresh")
+    Call<SpaceResponse> spaces(@Header("Authorization") String authorization);
 }

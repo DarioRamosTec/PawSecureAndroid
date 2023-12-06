@@ -2,8 +2,6 @@ package com.example.pawsecure.implementation;
 
 import androidx.lifecycle.Observer;
 
-import com.example.pawsecure.token.TokenError;
-
 public class PawSecureObserver<T> implements Observer<T> {
 
     PawSecureActivity pawSecureActivity;
@@ -16,11 +14,7 @@ public class PawSecureObserver<T> implements Observer<T> {
 
     @Override
     public void onChanged(T t) {
-        if (t instanceof TokenError) {
-            pawSecureActivity.onNotAuth();
-        } else {
-            pawSecureOnChanged.onChanged(t);
-        }
+        pawSecureOnChanged.onChanged(t);
     }
 
     public interface PawSecureOnChanged<T> {

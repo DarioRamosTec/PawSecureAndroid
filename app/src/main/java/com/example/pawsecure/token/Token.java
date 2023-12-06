@@ -34,6 +34,7 @@ public class Token {
     public static boolean checkToken(Context context) {
         SharedPreferences sharedPref = context.getSharedPreferences(context.getString(R.string.key_directory), Context.MODE_PRIVATE);
         token = sharedPref.getString(context.getString(R.string.key_token), "");
+        type = sharedPref.getString(context.getString(R.string.key_type), "bearer");
         return !token.equals("");
     }
 
@@ -76,16 +77,17 @@ public class Token {
         SharedPreferences sharedPref = context.getSharedPreferences(context.getString(R.string.key_directory), Context.MODE_PRIVATE);
         SharedPreferences.Editor sharedPrefEditor = sharedPref.edit();
         sharedPrefEditor.putString(context.getString(R.string.key_token), token);
+        sharedPrefEditor.putString(context.getString(R.string.key_type), type);
         sharedPrefEditor.apply();
     }
 
     public static void setData(Context context, String email, String password) {
         SharedPreferences sharedPref = context.getSharedPreferences(context.getString(R.string.data_directory), Context.MODE_PRIVATE);
         SharedPreferences.Editor sharedPrefEditor = sharedPref.edit();
-        sharedPrefEditor.putString(context.getString(R.string.data_email), email);
-        sharedPrefEditor.putString(context.getString(R.string.data_password), password);
         Token.email = email;
         Token.password = password;
+        sharedPrefEditor.putString(context.getString(R.string.data_email), Token.email);
+        sharedPrefEditor.putString(context.getString(R.string.data_password), Token.password);
         sharedPrefEditor.apply();
     }
 }

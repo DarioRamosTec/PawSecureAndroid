@@ -74,7 +74,6 @@ public class LoginActivity extends PawSecureActivity implements View.OnClickList
     }
 
     class ObserveLogin implements PawSecureObserver.PawSecureOnChanged<TokenResponse> {
-
         String email;
         String password;
 
@@ -86,7 +85,7 @@ public class LoginActivity extends PawSecureActivity implements View.OnClickList
         @Override
         public void onChanged(TokenResponse tokenResponse) {
             hideCurtain(new Button[]{buttonLoginLogin});
-            if (tokenResponse.error == null) {
+            if (tokenResponse.code == null) {
                 textInputEmailLogin.setError(null);
                 textInputEmailLogin.setErrorContentDescription(null);
                 textInputPasswordLogin.setError(null);
@@ -95,7 +94,7 @@ public class LoginActivity extends PawSecureActivity implements View.OnClickList
                 Token.setData(getBaseContext(), email, password);
                 goToNexus();
             } else {
-                if (tokenResponse.error.equals("403")) {
+                if (tokenResponse.code.equals("403")) {
                     goToEmail();
                 } else {
                     textInputEmailLogin.setError(getText(R.string.login_validation_error));

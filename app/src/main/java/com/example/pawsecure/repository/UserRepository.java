@@ -5,10 +5,10 @@ import androidx.lifecycle.MutableLiveData;
 
 import com.example.pawsecure.request.UserRequest;
 import com.example.pawsecure.response.GeneralResponse;
+import com.example.pawsecure.response.SpaceResponse;
 import com.example.pawsecure.response.TokenResponse;
 import com.example.pawsecure.retrofit.RetrofitRequest;
 import com.google.gson.Gson;
-import com.google.gson.JsonSyntaxException;
 
 import java.io.IOException;
 
@@ -97,11 +97,6 @@ public class UserRepository {
                         }
                         mutableLiveData.setValue(tokenResponse);
                         break;
-                    case 405:
-                        TokenResponse tokenResponse405 = new TokenResponse();
-                        tokenResponse405.error = "405";
-                        mutableLiveData.setValue(tokenResponse405);
-                    break;
                     case 200:
                         mutableLiveData.setValue(response.body());
                         break;
@@ -110,6 +105,45 @@ public class UserRepository {
 
             @Override
             public void onFailure(Call<TokenResponse> call, Throwable t) {
+
+            }
+        });
+        return mutableLiveData;
+    }
+
+    public LiveData<SpaceResponse> spaces (String headerAuth) {
+        MutableLiveData<SpaceResponse> mutableLiveData = new MutableLiveData<>();
+        userRequest.spaces(headerAuth).enqueue(new Callback<SpaceResponse>() {
+            @Override
+            public void onResponse(Call<SpaceResponse> call, Response<SpaceResponse> response) {
+                SpaceResponse spaceResponse;
+                switch (response.code()) {
+                    case 403:
+                    case 401:
+                        spaceResponse = new SpaceResponse();
+                        spaceResponse.code = String.valueOf(response.code());
+                        break;
+                    case 400:
+                        try {
+                            spaceResponse = new Gson().fromJson(response.errorBody().string(), SpaceResponse.class);
+                        } catch (IOException e) {
+                            throw new RuntimeException(e);
+                        }
+                        spaceResponse.code = String.valueOf(response.code());
+                        mutableLiveData.setValue(spaceResponse);
+                        break;
+                    case 200:
+                        spaceResponse = response.body();
+                        if (spaceResponse != null) {
+                            spaceResponse.code = String.valueOf(response.code());
+                        }
+                        mutableLiveData.setValue(spaceResponse);
+                        break;
+                }
+            }
+
+            @Override
+            public void onFailure(Call<SpaceResponse> call, Throwable t) {
 
             }
         });
