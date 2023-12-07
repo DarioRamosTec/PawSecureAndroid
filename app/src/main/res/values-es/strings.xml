@@ -50,7 +50,7 @@
     <string name="login_validation_error">El correo electrónico o la contraseña son incorrectos.</string>
     <string name="wait">Espera a la respuesta del servidor.</string>
     <string name="sensor_light">Luz</string>
-    <string name="choose_hello">Escoge la mascota que quieras.</string>
-    <string name="choose_msg">Puedes escoger varias mascotas para asignarlas a un espacio.</string>
+    <string name="choose_hello">¡Crea un espacio para tus mascotas!</string>
+    <string name="choose_msg">Escoger las mascotas que quieras para tu espacio.</string>
     <string name="item_space_description">Una imagen de tu mascota</string>
 </resources>

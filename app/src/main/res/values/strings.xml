@@ -55,7 +55,7 @@
     <string name="data_email" translatable="false">DATA_EMAIL</string>
     <string name="data_password" translatable="false">DATA_PASSWORD</string>
     <string name="key_type" translatable="false">KEY_TYPE</string>
-    <string name="choose_hello">Choose your desired pet!</string>
-    <string name="choose_msg">You can choose any number of pets for your space.</string>
+    <string name="choose_hello">Create a space for your pets!</string>
+    <string name="choose_msg">Choose the pets you want for your space.</string>
     <string name="item_space_description">The image of your pet</string>
 </resources>

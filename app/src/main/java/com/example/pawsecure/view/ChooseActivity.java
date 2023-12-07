@@ -1,12 +1,13 @@
 package com.example.pawsecure.view;
 
-import androidx.appcompat.app.AppCompatActivity;
+import androidx.activity.OnBackPressedCallback;
+import androidx.appcompat.widget.Toolbar;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -14,18 +15,14 @@ import android.widget.TextView;
 
 import com.example.pawsecure.R;
 import com.example.pawsecure.adapter.PetAdapter;
-import com.example.pawsecure.adapter.SpaceAdapter;
 import com.example.pawsecure.implementation.PawSecureActivity;
 import com.example.pawsecure.implementation.PawSecureAnimator;
 import com.example.pawsecure.implementation.PawSecureObserver;
 import com.example.pawsecure.implementation.PawSecureOnChanged;
 import com.example.pawsecure.implementation.PawSecureViewModel;
-import com.example.pawsecure.model.Pet;
 import com.example.pawsecure.response.PetResponse;
-import com.example.pawsecure.response.SpaceResponse;
 import com.example.pawsecure.token.Token;
 import com.example.pawsecure.view_model.ChooseViewModel;
-import com.example.pawsecure.view_model.NexusViewModel;
 
 public class ChooseActivity extends PawSecureActivity {
 
@@ -33,6 +30,7 @@ public class ChooseActivity extends PawSecureActivity {
     RecyclerView recyclerGroupChoose;
     RecyclerView recyclerPetChoose;
     ChooseViewModel chooseViewModel;
+    Toolbar topAppBarChoose;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,9 +45,28 @@ public class ChooseActivity extends PawSecureActivity {
 
         chooseViewModel = new ViewModelProvider(this).get(ChooseViewModel.class);
         getPets();
+
+        OnBackPressedCallback callback = new OnBackPressedCallback(true) {
+            @Override
+            public void handleOnBackPressed() {
+                startActivity(new Intent(getApplicationContext(), NexusActivity.class));
+                finish();
+            }
+        };
+        this.getOnBackPressedDispatcher().addCallback(this, callback);
+
+        topAppBarChoose = findViewById(R.id.topAppBarChoose);
+        topAppBarChoose.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(getApplicationContext(), NexusActivity.class));
+                finish();
+            }
+        });
     }
 
     void getPets() {
+        showCurtain(new Button[] {});
         chooseViewModel.pets(Token.getBearer()).observe(this, new PawSecureObserver<PetResponse>(this, new SpacesOnChanged(this, this, chooseViewModel)));
     }
 

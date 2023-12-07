@@ -6,6 +6,31 @@
     android:layout_height="match_parent"
     tools:context=".view.ChooseActivity">
 
+        <androidx.coordinatorlayout.widget.CoordinatorLayout
+            android:id="@+id/coordinatorChoose"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.0">
+
+                <com.google.android.material.appbar.AppBarLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="#00FFFFFF">
+
+                        <com.google.android.material.appbar.MaterialToolbar
+                            android:id="@+id/topAppBarChoose"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            app:navigationIcon="?attr/actionModeCloseDrawable" />
+
+                </com.google.android.material.appbar.AppBarLayout>
+
+        </androidx.coordinatorlayout.widget.CoordinatorLayout>
+
         <TextView
             android:id="@+id/textNothingChoose"
             android:layout_width="wrap_content"
@@ -70,8 +95,8 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.075" />
+            app:layout_constraintTop_toBottomOf="@+id/coordinatorChoose"
+            app:layout_constraintVertical_bias="0.0" />
 
         <com.google.android.material.divider.MaterialDivider
             android:id="@+id/materialDivider"
@@ -88,6 +113,7 @@
             android:id="@+id/recyclerGroupChoose"
             android:layout_width="0dp"
             android:layout_height="45dp"
+            android:layout_marginStart="10dp"
             android:layout_marginTop="15dp"
             android:layout_marginEnd="10dp"
             android:layout_marginBottom="5dp"
