@@ -1,5 +1,7 @@
 package com.example.pawsecure.repository;
 
+import android.util.Log;
+
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
@@ -28,18 +30,23 @@ public class UserRepository {
         userRequest.register(name, email, password, password_again, lang).enqueue(new Callback<GeneralResponse>() {
             @Override
             public void onResponse(Call<GeneralResponse> call, Response<GeneralResponse> response) {
+                GeneralResponse generalResponse;
                 switch (response.code()) {
                     case 400:
-                        GeneralResponse generalResponse = null;
                         try {
                             generalResponse = new Gson().fromJson(response.errorBody().string(), GeneralResponse.class);
                         } catch (IOException e) {
                             throw new RuntimeException(e);
                         }
+                        generalResponse.code = String.valueOf(response.code());
                         mutableLiveData.setValue(generalResponse);
                         break;
                     case 202:
-                        mutableLiveData.setValue(response.body());
+                        generalResponse = response.body();
+                        if (generalResponse != null) {
+                            generalResponse.code = String.valueOf(response.code());
+                        }
+                        mutableLiveData.setValue(generalResponse);
                         break;
                 }
             }
@@ -57,19 +64,20 @@ public class UserRepository {
         userRequest.login(email, password).enqueue(new Callback<TokenResponse>() {
             @Override
             public void onResponse(Call<TokenResponse> call, Response<TokenResponse> response) {
+                TokenResponse tokenResponse;
                 switch (response.code()) {
                     case 403:
                     case 401:
-                        TokenResponse tokenResponse = null;
-                        try {
-                            tokenResponse = new Gson().fromJson(response.errorBody().string(), TokenResponse.class);
-                        } catch (IOException e) {
-                            throw new RuntimeException(e);
-                        }
+                        tokenResponse = new TokenResponse();
+                        tokenResponse.code = String.valueOf(response.code());
                         mutableLiveData.setValue(tokenResponse);
                         break;
                     case 200:
-                        mutableLiveData.setValue(response.body());
+                        tokenResponse = response.body();
+                        if (tokenResponse != null) {
+                            tokenResponse.code = String.valueOf(response.code());
+                        }
+                        mutableLiveData.setValue(tokenResponse);
                         break;
                 }
             }
@@ -87,18 +95,19 @@ public class UserRepository {
         userRequest.refresh(headerAuth).enqueue(new Callback<TokenResponse>() {
             @Override
             public void onResponse(Call<TokenResponse> call, Response<TokenResponse> response) {
+                TokenResponse tokenResponse;
                 switch (response.code()) {
                     case 401:
-                        TokenResponse tokenResponse = null;
-                        try {
-                            tokenResponse = new Gson().fromJson(response.errorBody().string(), TokenResponse.class);
-                        } catch (IOException e) {
-                            throw new RuntimeException(e);
-                        }
+                        tokenResponse = new TokenResponse();
+                        tokenResponse.code = String.valueOf(response.code());
                         mutableLiveData.setValue(tokenResponse);
                         break;
                     case 200:
-                        mutableLiveData.setValue(response.body());
+                        tokenResponse = response.body();
+                        if (tokenResponse != null) {
+                            tokenResponse.code = String.valueOf(response.code());
+                        }
+                        mutableLiveData.setValue(tokenResponse);
                         break;
                 }
             }
@@ -122,6 +131,7 @@ public class UserRepository {
                     case 401:
                         spaceResponse = new SpaceResponse();
                         spaceResponse.code = String.valueOf(response.code());
+                        mutableLiveData.setValue(spaceResponse);
                         break;
                     case 400:
                         try {
@@ -144,7 +154,7 @@ public class UserRepository {
 
             @Override
             public void onFailure(Call<SpaceResponse> call, Throwable t) {
-
+                Log.d("UTT", "AAA");
             }
         });
         return mutableLiveData;

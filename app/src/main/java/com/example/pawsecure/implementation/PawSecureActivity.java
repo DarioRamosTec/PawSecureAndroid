@@ -13,12 +13,13 @@ import com.example.pawsecure.R;
 import com.example.pawsecure.view.LoginActivity;
 import com.google.android.material.progressindicator.CircularProgressIndicator;
 
-public class PawSecureActivity extends AppCompatActivity {
+public class PawSecureActivity extends AppCompatActivity implements PawSecureInterface {
 
     protected CircularProgressIndicator circularProgressIndicatorCurtain;
     protected View viewCurtain;
     protected float amountDarkCurtain = 0.15f;
 
+    @Override
     public void onNotAuth() {
         startActivity(new Intent(this, LoginActivity.class));
         finish();
@@ -49,5 +50,10 @@ public class PawSecureActivity extends AppCompatActivity {
     protected void establishCurtain(CircularProgressIndicator circularProgressIndicatorCurtain, View viewCurtain) {
         this.circularProgressIndicatorCurtain = circularProgressIndicatorCurtain;
         this.viewCurtain = viewCurtain;
+    }
+
+    @Override
+    public void onAuth() {
+
     }
 }

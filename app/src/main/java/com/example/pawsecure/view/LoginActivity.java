@@ -85,7 +85,7 @@ public class LoginActivity extends PawSecureActivity implements View.OnClickList
         @Override
         public void onChanged(TokenResponse tokenResponse) {
             hideCurtain(new Button[]{buttonLoginLogin});
-            if (tokenResponse.code == null) {
+            if (tokenResponse.code.equals("200")) {
                 textInputEmailLogin.setError(null);
                 textInputEmailLogin.setErrorContentDescription(null);
                 textInputPasswordLogin.setError(null);

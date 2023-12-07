@@ -27,6 +27,6 @@ public interface UserRequest {
     @POST("auth/refresh")
     Call<TokenResponse> refresh(@Header("Authorization") String authorization);
 
-    @GET("auth/refresh")
+    @GET("auth/spaces")
     Call<SpaceResponse> spaces(@Header("Authorization") String authorization);
 }

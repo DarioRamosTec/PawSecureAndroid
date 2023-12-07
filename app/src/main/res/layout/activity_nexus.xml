@@ -7,6 +7,42 @@
     tools:context=".view.NexusActivity">
 
     <TextView
+        android:id="@+id/textNothingNexus"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/recyclerNexus" />
+
+    <com.google.android.material.progressindicator.CircularProgressIndicator
+        android:id="@+id/progressCurtainNexus"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:indeterminate="true"
+        android:visibility="invisible"
+        app:hideAnimationBehavior="inward"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/recyclerNexus"
+        app:showAnimationBehavior="outward"
+        app:trackCornerRadius="2dp" />
+
+    <View
+        android:id="@+id/viewCurtainNexus"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:alpha="0"
+        android:background="@color/md_theme_dark_outlineVariant"
+        android:backgroundTint="@color/md_theme_dark_outlineVariant"
+        android:visibility="visible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
         android:id="@+id/textView16"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -58,6 +94,7 @@
         app:srcCompat="@drawable/icon_add" />
 
     <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerNexus"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_marginTop="16dp"

@@ -104,7 +104,7 @@ public class RegisterActivity extends PawSecureActivity implements View.OnClickL
                 Locale.getDefault().getLanguage()).observe(this, registerData -> {
                     hideCurtain(new Button[]{buttonSignUpRegister});
 
-                    if (registerData.errors != null) {
+                    if (!registerData.code.equals("202")) {
                         String errorName = registerData.errors.name != null && registerData.errors.name.size() > 0 ? registerData.errors.name.get(0) : null;
                         textInputNameRegister.setError(errorName);
                         textInputNameRegister.setErrorContentDescription(errorName);

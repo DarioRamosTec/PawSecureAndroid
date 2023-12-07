@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModelProvider;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -99,17 +100,14 @@ public class StartActivity extends PawSecureActivity {
 
         @Override
         public void onChanged(TokenResponse tokenResponse) {
-            hideCurtain(new Button[]{buttonLogin, buttonSignUp});
-            if (tokenResponse.code == null) {
+            if (tokenResponse.code.equals("200")) {
                 Token.setToken(getBaseContext(), tokenResponse);
-                if (refresh) {
-                    Token.setData(getBaseContext(), this.email, this.password);
-                }
                 startIntent(NexusActivity.class, true);
             } else {
                 if (refresh) {
                     startViewModel.login(Token.getData()[0], Token.getData()[1]).observe(pawSecureActivity, new PawSecureObserver<TokenResponse>(pawSecureActivity, new ObserveReadyToUse(false, pawSecureActivity)));
                 } else {
+                    hideCurtain(new Button[]{buttonLogin, buttonSignUp});
                     ((StartActivity) pawSecureActivity).becameVisible(true);
                 }
             }

@@ -6,7 +6,7 @@
     android:orientation="vertical">
 
     <ImageView
-        android:id="@+id/imageView3"
+        android:id="@+id/imageItemSpace"
         android:layout_width="100dp"
         android:layout_height="100dp"
         android:layout_marginTop="50dp"
@@ -14,7 +14,7 @@
         android:src="@drawable/icon_animal" />
 
     <TextView
-        android:id="@+id/textView17"
+        android:id="@+id/textItemSpace"
         android:layout_width="wrap_content"
         android:layout_height="0dp"
         android:layout_marginTop="5dp"
