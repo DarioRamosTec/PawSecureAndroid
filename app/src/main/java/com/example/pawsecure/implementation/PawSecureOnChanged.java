@@ -12,6 +12,16 @@ import com.example.pawsecure.view.NexusActivity;
 import com.example.pawsecure.view.StartActivity;
 
 public class PawSecureOnChanged {
+
+    public Context context;
+    public PawSecureActivity pawSecureActivity;
+    public PawSecureViewModel pawSecureViewModel;
+    public PawSecureOnChanged (Context context, PawSecureActivity pawSecureActivity, PawSecureViewModel pawSecureViewModel) {
+        this.context = context;
+        this.pawSecureActivity = pawSecureActivity;
+        this.pawSecureViewModel = pawSecureViewModel;
+    }
+
     public void checkAuth(Context context, PawSecureViewModel viewModel, PawSecureActivity pawSecureActivity) {
         boolean checkedData = Token.checkUser(context);
         if (Token.checkToken(context)) {

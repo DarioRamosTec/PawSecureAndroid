@@ -5,8 +5,10 @@ import android.util.Log;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
+import com.example.pawsecure.model.Pet;
 import com.example.pawsecure.request.UserRequest;
 import com.example.pawsecure.response.GeneralResponse;
+import com.example.pawsecure.response.PetResponse;
 import com.example.pawsecure.response.SpaceResponse;
 import com.example.pawsecure.response.TokenResponse;
 import com.example.pawsecure.retrofit.RetrofitRequest;
@@ -133,15 +135,6 @@ public class UserRepository {
                         spaceResponse.code = String.valueOf(response.code());
                         mutableLiveData.setValue(spaceResponse);
                         break;
-                    case 400:
-                        try {
-                            spaceResponse = new Gson().fromJson(response.errorBody().string(), SpaceResponse.class);
-                        } catch (IOException e) {
-                            throw new RuntimeException(e);
-                        }
-                        spaceResponse.code = String.valueOf(response.code());
-                        mutableLiveData.setValue(spaceResponse);
-                        break;
                     case 200:
                         spaceResponse = response.body();
                         if (spaceResponse != null) {
@@ -153,9 +146,36 @@ public class UserRepository {
             }
 
             @Override
-            public void onFailure(Call<SpaceResponse> call, Throwable t) {
-                Log.d("UTT", "AAA");
+            public void onFailure(Call<SpaceResponse> call, Throwable t) { }
+        });
+        return mutableLiveData;
+    }
+
+    public LiveData<PetResponse> pets (String headerAuth) {
+        MutableLiveData<PetResponse> mutableLiveData = new MutableLiveData<>();
+        userRequest.pets(headerAuth).enqueue(new Callback<PetResponse>() {
+            @Override
+            public void onResponse(Call<PetResponse> call, Response<PetResponse> response) {
+                PetResponse petResponse;
+                switch (response.code()) {
+                    case 403:
+                    case 401:
+                        petResponse = new PetResponse();
+                        petResponse.code = String.valueOf(response.code());
+                        mutableLiveData.setValue(petResponse);
+                        break;
+                    case 200:
+                        petResponse = response.body();
+                        if (petResponse != null) {
+                            petResponse.code = String.valueOf(response.code());
+                        }
+                        mutableLiveData.setValue(petResponse);
+                        break;
+                }
             }
+
+            @Override
+            public void onFailure(Call<PetResponse> call, Throwable t) { }
         });
         return mutableLiveData;
     }

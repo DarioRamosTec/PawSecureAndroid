@@ -1,6 +1,7 @@
 package com.example.pawsecure.request;
 
 import com.example.pawsecure.response.GeneralResponse;
+import com.example.pawsecure.response.PetResponse;
 import com.example.pawsecure.response.SpaceResponse;
 import com.example.pawsecure.response.TokenResponse;
 
@@ -29,4 +30,7 @@ public interface UserRequest {
 
     @GET("auth/spaces")
     Call<SpaceResponse> spaces(@Header("Authorization") String authorization);
+
+    @GET("auth/pets")
+    Call<PetResponse> pets(@Header("Authorization") String authorization);
 }

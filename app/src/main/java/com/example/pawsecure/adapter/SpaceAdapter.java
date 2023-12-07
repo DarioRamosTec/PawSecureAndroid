@@ -58,7 +58,6 @@ public class SpaceAdapter extends RecyclerView.Adapter<SpaceAdapter.ViewHolder> 
             textItemSpace.setText(space.name);
             recyclerViewCarouselSpace.setAdapter(new SpaceCarouselAdapter(space.pets));
             recyclerViewCarouselSpace.setLayoutManager(new CarouselLayoutManager());
-            //imageItemSpace
         }
     }
 }

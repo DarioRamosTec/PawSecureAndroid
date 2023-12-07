@@ -16,6 +16,7 @@ import com.example.pawsecure.implementation.PawSecureActivity;
 import com.example.pawsecure.implementation.PawSecureAnimator;
 import com.example.pawsecure.implementation.PawSecureObserver;
 import com.example.pawsecure.implementation.PawSecureOnChanged;
+import com.example.pawsecure.implementation.PawSecureViewModel;
 import com.example.pawsecure.response.SpaceResponse;
 import com.example.pawsecure.token.Token;
 import com.example.pawsecure.view_model.NexusViewModel;
@@ -53,15 +54,13 @@ public class NexusActivity extends PawSecureActivity {
 
     void getSpaces() {
         showCurtain(new Button[] {});
-        nexusViewModel.spaces(Token.getBearer()).observe(this, new PawSecureObserver<SpaceResponse>(this, new NexusActivity.ObserveSpaces(this, this)));
+        nexusViewModel.spaces(Token.getBearer()).observe(this, new PawSecureObserver<SpaceResponse>(this, new NexusActivity.ObserveSpaces(this, this, nexusViewModel)));
     }
 
     class ObserveSpaces extends PawSecureOnChanged implements PawSecureObserver.PawSecureOnChanged<SpaceResponse> {
-        Context context;
-        NexusActivity nexusActivity;
-        public ObserveSpaces (Context context, NexusActivity nexusActivity) {
-            this.context = context;
-            this.nexusActivity = nexusActivity;
+
+        public ObserveSpaces(Context context, PawSecureActivity pawSecureActivity, PawSecureViewModel pawSecureViewModel) {
+            super(context, pawSecureActivity, pawSecureViewModel);
         }
 
         @Override
@@ -69,7 +68,7 @@ public class NexusActivity extends PawSecureActivity {
             switch (spaceResponse.code) {
                 case "403":
                 case "401":
-                    checkAuth(context, nexusViewModel, nexusActivity);
+                    checkAuth(context, pawSecureViewModel, pawSecureActivity);
                     break;
                 case "200":
                     hideCurtain(new Button[] {});

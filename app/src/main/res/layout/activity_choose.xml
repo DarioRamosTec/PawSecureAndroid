@@ -6,22 +6,31 @@
     android:layout_height="match_parent"
     tools:context=".view.ChooseActivity">
 
+        <TextView
+            android:id="@+id/textNothingChoose"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="@+id/recyclerPetChoose"
+            app:layout_constraintStart_toStartOf="@+id/recyclerPetChoose"
+            app:layout_constraintTop_toBottomOf="@+id/materialDivider" />
+
         <com.google.android.material.progressindicator.CircularProgressIndicator
-            android:id="@+id/progressIndicatorLogin"
+            android:id="@+id/progressIndicatorChoose"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:indeterminate="true"
             android:visibility="invisible"
             app:hideAnimationBehavior="inward"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="@+id/recyclerPetChoose"
+            app:layout_constraintEnd_toEndOf="@+id/recyclerPetChoose"
+            app:layout_constraintStart_toStartOf="@+id/recyclerPetChoose"
+            app:layout_constraintTop_toTopOf="@+id/recyclerPetChoose"
             app:showAnimationBehavior="outward"
             app:trackCornerRadius="2dp" />
 
         <View
-            android:id="@+id/viewBlackLogin"
+            android:id="@+id/viewBlackChoose"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:alpha="0"
@@ -79,12 +88,11 @@
             android:id="@+id/recyclerGroupChoose"
             android:layout_width="0dp"
             android:layout_height="45dp"
-            android:layout_marginStart="10dp"
             android:layout_marginTop="15dp"
             android:layout_marginEnd="10dp"
             android:layout_marginBottom="5dp"
             app:layout_constraintBottom_toTopOf="@id/materialDivider"
-            app:layout_constraintEnd_toEndOf="@+id/viewBlackLogin"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textView6" />
 

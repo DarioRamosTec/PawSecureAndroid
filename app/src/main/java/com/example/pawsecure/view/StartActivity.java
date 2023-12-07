@@ -74,17 +74,18 @@ public class StartActivity extends PawSecureActivity {
 
     class ObserveReadyToUse extends PawSecureOnChanged implements PawSecureObserver.PawSecureOnChanged<TokenResponse> {
 
-        PawSecureActivity pawSecureActivity;
         String email;
         String password;
         boolean refresh;
 
         public ObserveReadyToUse (boolean refresh, PawSecureActivity pawSecureActivity) {
+            super(null, pawSecureActivity, null);
             this.refresh = refresh;
             this.pawSecureActivity = pawSecureActivity;
         }
 
         public ObserveReadyToUse (boolean refresh, PawSecureActivity pawSecureActivity, String email, String password) {
+            super(null, pawSecureActivity, null);
             this.refresh = refresh;
             this.pawSecureActivity = pawSecureActivity;
             this.email = email;
