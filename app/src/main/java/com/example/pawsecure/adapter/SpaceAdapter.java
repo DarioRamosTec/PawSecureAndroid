@@ -7,10 +7,12 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.pawsecure.R;
 import com.example.pawsecure.model.Space;
+import com.google.android.material.carousel.CarouselLayoutManager;
 
 import java.util.List;
 
@@ -43,15 +45,19 @@ public class SpaceAdapter extends RecyclerView.Adapter<SpaceAdapter.ViewHolder> 
 
         TextView textItemSpace;
         ImageView imageItemSpace;
+        RecyclerView recyclerViewCarouselSpace;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             textItemSpace = itemView.findViewById(R.id.textItemSpace);
             imageItemSpace = itemView.findViewById(R.id.imageItemSpace);
+            recyclerViewCarouselSpace = itemView.findViewById(R.id.recyclerViewCarouselSpace);
         }
 
         public void setData(Space space) {
             textItemSpace.setText(space.name);
+            recyclerViewCarouselSpace.setAdapter(new SpaceCarouselAdapter(space.pets));
+            recyclerViewCarouselSpace.setLayoutManager(new CarouselLayoutManager());
             //imageItemSpace
         }
     }

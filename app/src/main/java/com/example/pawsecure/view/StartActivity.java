@@ -64,13 +64,6 @@ public class StartActivity extends PawSecureActivity {
         }
     }
 
-    void startIntent(Class<?> cls, boolean close) {
-        startActivity(new Intent(this, cls));
-        if (close) {
-            finish();
-        }
-    }
-
     public void becameVisible(boolean visible) {
         int visibility = visible ? View.VISIBLE : View.INVISIBLE;
         buttonLogin.setVisibility(visibility);

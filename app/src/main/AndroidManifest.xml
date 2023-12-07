@@ -2,19 +2,28 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.INTERNET" />
 
     <application
-        android:networkSecurityConfig="@xml/network_security_config"
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
         android:icon="@drawable/logo_paw_secure_beta"
         android:label="@string/app_name"
+        android:networkSecurityConfig="@xml/network_security_config"
         android:roundIcon="@drawable/logo_paw_secure_beta"
         android:supportsRtl="true"
         android:theme="@style/Theme.PawSecure"
         tools:targetApi="31">
+        <activity
+            android:name=".view.PetActivity"
+            android:exported="false" />
+        <activity
+            android:name=".view.MakePetActivity"
+            android:exported="false" />
+        <activity
+            android:name=".view.ChooseActivity"
+            android:exported="false" />
         <activity
             android:name=".view.NewPasswordActivity"
             android:exported="false" />

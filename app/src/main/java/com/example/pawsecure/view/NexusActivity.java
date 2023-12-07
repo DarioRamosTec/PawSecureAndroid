@@ -1,31 +1,32 @@
 package com.example.pawsecure.view;
 
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.util.Log;
+import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
 import com.example.pawsecure.R;
 import com.example.pawsecure.adapter.SpaceAdapter;
 import com.example.pawsecure.implementation.PawSecureActivity;
+import com.example.pawsecure.implementation.PawSecureAnimator;
 import com.example.pawsecure.implementation.PawSecureObserver;
 import com.example.pawsecure.implementation.PawSecureOnChanged;
 import com.example.pawsecure.response.SpaceResponse;
-import com.example.pawsecure.response.TokenResponse;
 import com.example.pawsecure.token.Token;
 import com.example.pawsecure.view_model.NexusViewModel;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 public class NexusActivity extends PawSecureActivity {
 
     NexusViewModel nexusViewModel;
     TextView textNothingNexus;
     RecyclerView recyclerNexus;
+    FloatingActionButton fabNexus;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,6 +41,14 @@ public class NexusActivity extends PawSecureActivity {
 
         nexusViewModel = new ViewModelProvider(this).get(NexusViewModel.class);
         getSpaces();
+
+        fabNexus = findViewById(R.id.fabNexus);
+        fabNexus.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startIntent(ChooseActivity.class, false);
+            }
+        });
     }
 
     void getSpaces() {
@@ -66,9 +75,9 @@ public class NexusActivity extends PawSecureActivity {
                     hideCurtain(new Button[] {});
                     if (spaceResponse.data.size() == 0) {
                         textNothingNexus.setText(spaceResponse.message);
-                        //ANIMACION DE APAREACION DE TEXTO !!
+                        PawSecureAnimator.alpha(textNothingNexus, 1, 1200, 0).start();
+                        PawSecureAnimator.translateY(textNothingNexus, 0, 1200, -150).start();
                     } else {
-                        //CARROUSEL CON IMAGEN SUBIDA E ICONO (CARDS)
                         recyclerNexus.setAdapter(new SpaceAdapter(spaceResponse.data));
                         recyclerNexus.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false));
                         recyclerNexus.setHasFixedSize(true);

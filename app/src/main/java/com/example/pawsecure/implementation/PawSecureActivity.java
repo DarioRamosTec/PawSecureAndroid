@@ -56,4 +56,11 @@ public class PawSecureActivity extends AppCompatActivity implements PawSecureInt
     public void onAuth() {
 
     }
+
+    public void startIntent(Class<?> cls, boolean close) {
+        startActivity(new Intent(this, cls));
+        if (close) {
+            finish();
+        }
+    }
 }
