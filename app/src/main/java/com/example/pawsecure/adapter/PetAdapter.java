@@ -12,9 +12,10 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.pawsecure.R;
 import com.example.pawsecure.implementation.PawSecureActivity;
-import com.example.pawsecure.singletone.ImagePet;
+import com.example.pawsecure.singletone.ImagePetManager;
 import com.example.pawsecure.model.Pet;
-import com.example.pawsecure.view.MakePetActivity;
+import com.example.pawsecure.view.ChooseActivity;
+import com.example.pawsecure.view.CreatePetActivity;
 import com.google.android.material.card.MaterialCardView;
 import com.squareup.picasso.Picasso;
 
@@ -67,18 +68,18 @@ public class PetAdapter extends RecyclerView.Adapter<PetAdapter.ViewHolder> {
 
         void getData(Pet pet, PawSecureActivity pawSecureActivity) {
             if (pet instanceof Pet.PetCreate) {
-                imageIconPet.setImageDrawable(AppCompatResources.getDrawable(pawSecureActivity, ImagePet.getIdIconPet(-1)));
+                imageIconPet.setImageDrawable(AppCompatResources.getDrawable(pawSecureActivity, ImagePetManager.getIdIconPet(-1)));
                 textNamePet.setText(pawSecureActivity.getString(R.string.choose_create_pet));
                 textDescriptionPet.setText(pawSecureActivity.getString(R.string.choose_create_msg));
                 card.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        pawSecureActivity.startIntent(MakePetActivity.class, false);
+                        pawSecureActivity.startIntentForResult(CreatePetActivity.class);
                     }
                 });
             } else {
                 Picasso.get().load(pet.image).into(imageBackgroundPet);
-                imageIconPet.setImageDrawable(AppCompatResources.getDrawable(pawSecureActivity, ImagePet.getIdIconPet(pet.icon)));
+                imageIconPet.setImageDrawable(AppCompatResources.getDrawable(pawSecureActivity, ImagePetManager.getIdIconPet(pet.icon)));
                 textNamePet.setText(pet.name);
                 textDescriptionPet.setText(pet.description);
             }

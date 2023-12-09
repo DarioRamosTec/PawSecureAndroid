@@ -69,4 +69,8 @@
     <string name="icon">Icon</string>
     <string name="image">Image</string>
     <string name="create_pet_icon">Choose an icon</string>
+    <string name="create_pet_image">Change background image</string>
+    <string name="account_catchword">Catchword</string>
+    <string name="create_pet_error">Couldn\'t create profile.</string>
+    <string name="retry">Retry</string>
 </resources>

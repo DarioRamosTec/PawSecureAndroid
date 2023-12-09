@@ -6,6 +6,7 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
 import com.example.pawsecure.model.Pet;
+import com.example.pawsecure.request.PetRequest;
 import com.example.pawsecure.request.UserRequest;
 import com.example.pawsecure.response.GeneralResponse;
 import com.example.pawsecure.response.PetResponse;
@@ -22,14 +23,29 @@ import retrofit2.Response;
 
 public class UserRepository {
     private UserRequest userRequest;
+    private PetRequest petRequest;
 
     public UserRepository() {
-        userRequest = RetrofitRequest.obtainRetrofit().create(UserRequest.class);
+
+    }
+
+    UserRequest getUserRequest() {
+        if (userRequest == null) {
+            userRequest = RetrofitRequest.obtainRetrofit().create(UserRequest.class);
+        }
+        return userRequest;
+    }
+
+    PetRequest getPetRequest() {
+        if (petRequest == null) {
+            petRequest = RetrofitRequest.obtainRetrofit().create(PetRequest.class);
+        }
+        return petRequest;
     }
 
     public LiveData<GeneralResponse> signUp(String name, String email, String password, String password_again, String lang) {
         MutableLiveData<GeneralResponse> mutableLiveData = new MutableLiveData<>();
-        userRequest.register(name, email, password, password_again, lang).enqueue(new Callback<GeneralResponse>() {
+        getUserRequest().register(name, email, password, password_again, lang).enqueue(new Callback<GeneralResponse>() {
             @Override
             public void onResponse(Call<GeneralResponse> call, Response<GeneralResponse> response) {
                 GeneralResponse generalResponse;
@@ -63,7 +79,7 @@ public class UserRepository {
 
     public LiveData<TokenResponse> login (String email, String password) {
         MutableLiveData<TokenResponse> mutableLiveData = new MutableLiveData<>();
-        userRequest.login(email, password).enqueue(new Callback<TokenResponse>() {
+        getUserRequest().login(email, password).enqueue(new Callback<TokenResponse>() {
             @Override
             public void onResponse(Call<TokenResponse> call, Response<TokenResponse> response) {
                 TokenResponse tokenResponse;
@@ -94,7 +110,7 @@ public class UserRepository {
 
     public LiveData<TokenResponse> refresh (String headerAuth) {
         MutableLiveData<TokenResponse> mutableLiveData = new MutableLiveData<>();
-        userRequest.refresh(headerAuth).enqueue(new Callback<TokenResponse>() {
+        getUserRequest().refresh(headerAuth).enqueue(new Callback<TokenResponse>() {
             @Override
             public void onResponse(Call<TokenResponse> call, Response<TokenResponse> response) {
                 TokenResponse tokenResponse;
@@ -124,7 +140,7 @@ public class UserRepository {
 
     public LiveData<SpaceResponse> spaces (String headerAuth) {
         MutableLiveData<SpaceResponse> mutableLiveData = new MutableLiveData<>();
-        userRequest.spaces(headerAuth).enqueue(new Callback<SpaceResponse>() {
+        getUserRequest().spaces(headerAuth).enqueue(new Callback<SpaceResponse>() {
             @Override
             public void onResponse(Call<SpaceResponse> call, Response<SpaceResponse> response) {
                 SpaceResponse spaceResponse;
@@ -153,7 +169,7 @@ public class UserRepository {
 
     public LiveData<PetResponse> pets (String headerAuth) {
         MutableLiveData<PetResponse> mutableLiveData = new MutableLiveData<>();
-        userRequest.pets(headerAuth).enqueue(new Callback<PetResponse>() {
+        getUserRequest().pets(headerAuth).enqueue(new Callback<PetResponse>() {
             @Override
             public void onResponse(Call<PetResponse> call, Response<PetResponse> response) {
                 PetResponse petResponse;
@@ -179,4 +195,46 @@ public class UserRepository {
         });
         return mutableLiveData;
     }
+
+    public LiveData<PetResponse> storePet (String headerAuth, String name, String race,
+                                           String sex, int icon, String image, int animal,
+                                           String birthday, String description) {
+        MutableLiveData<PetResponse> mutableLiveData = new MutableLiveData<>();
+        getPetRequest().pet(headerAuth, name, race, sex, icon, image, animal, birthday, description)
+                .enqueue(new Callback<PetResponse>() {
+            @Override
+            public void onResponse(Call<PetResponse> call, Response<PetResponse> response) {
+                PetResponse petResponse;
+                switch (response.code()) {
+                    case 403:
+                    case 401:
+                        petResponse = new PetResponse();
+                        petResponse.code = String.valueOf(response.code());
+                        mutableLiveData.setValue(petResponse);
+                        break;
+                    case 400:
+                        try {
+                            petResponse = new Gson().fromJson(response.errorBody().string(), PetResponse.class);
+                        } catch (IOException e) {
+                            throw new RuntimeException(e);
+                        }
+                        petResponse.code = String.valueOf(response.code());
+                        mutableLiveData.setValue(petResponse);
+                        break;
+                    case 200:
+                        petResponse = response.body();
+                        if (petResponse != null) {
+                            petResponse.code = String.valueOf(response.code());
+                        }
+                        mutableLiveData.setValue(petResponse);
+                        break;
+                }
+            }
+
+            @Override
+            public void onFailure(Call<PetResponse> call, Throwable t) { }
+        });
+        return mutableLiveData;
+    }
+
 }

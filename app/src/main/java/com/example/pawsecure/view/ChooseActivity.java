@@ -1,6 +1,10 @@
 package com.example.pawsecure.view;
 
 import androidx.activity.OnBackPressedCallback;
+import androidx.activity.result.ActivityResult;
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.widget.Toolbar;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.GridLayoutManager;
@@ -9,7 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
+import android.util.Log;
 import android.widget.Button;
 import android.widget.TextView;
 
@@ -60,12 +64,23 @@ public class ChooseActivity extends PawSecureActivity {
         this.getOnBackPressedDispatcher().addCallback(this, callback);
 
         topAppBarChoose = findViewById(R.id.topAppBarChoose);
-        topAppBarChoose.setNavigationOnClickListener(new View.OnClickListener() {
+        topAppBarChoose.setNavigationOnClickListener(view -> finish());
+
+        activityResultLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), new ActivityResultCallback<ActivityResult>() {
             @Override
-            public void onClick(View view) {
-                finish();
+            public void onActivityResult(ActivityResult result) {
+                Intent intent = result.getData();
+                if (intent != null) {
+                    Bundle bundle = intent.getExtras();
+                    if (bundle != null) {
+                        if (bundle.getBoolean("CHECK_PETS")) {
+                            getPets();
+                        }
+                    }
+                }
             }
         });
+
     }
 
     void getPets() {

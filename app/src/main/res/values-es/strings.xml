@@ -64,4 +64,8 @@
     <string name="image">Imagen</string>
     <string name="icon">Ícono</string>
     <string name="create_pet_icon">Escoge un ícono</string>
+    <string name="create_pet_image">Cambiar imagen de fondo</string>
+    <string name="account_catchword">Lema</string>
+    <string name="create_pet_error">No se pudo crear el perfil.</string>
+    <string name="retry">Reintentar</string>
 </resources>

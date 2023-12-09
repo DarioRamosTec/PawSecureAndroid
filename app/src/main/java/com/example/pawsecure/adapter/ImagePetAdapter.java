@@ -1,7 +1,5 @@
 package com.example.pawsecure.adapter;
 
-import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,21 +10,20 @@ import androidx.appcompat.content.res.AppCompatResources;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.pawsecure.R;
-import com.example.pawsecure.fragment.ImagePetBottomSheet;
-import com.example.pawsecure.implementation.PawSecureActivity;
-import com.example.pawsecure.singletone.ImagePet;
+import com.example.pawsecure.singletone.ImagePetManager;
+import com.example.pawsecure.view.CreatePetActivity;
+import com.google.android.material.card.MaterialCardView;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class ImagePetAdapter extends RecyclerView.Adapter<ImagePetAdapter.ViewHolder> {
 
-    List<Integer> list;
-    PawSecureActivity pawSecureActivity;
+    List<ImagePetManager.ImagePet> list;
+    CreatePetActivity createPetActivity;
 
-    public ImagePetAdapter (PawSecureActivity pawSecureActivity) {
-        this.list = ImagePet.getList();
-        this.pawSecureActivity = pawSecureActivity;
+    public ImagePetAdapter (CreatePetActivity createPetActivity) {
+        this.list = ImagePetManager.getList();
+        this.createPetActivity = createPetActivity;
     }
 
     @NonNull
@@ -39,7 +36,7 @@ public class ImagePetAdapter extends RecyclerView.Adapter<ImagePetAdapter.ViewHo
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        holder.setData(position, list.get(position), this.pawSecureActivity);
+        holder.setData(position, list.get(position), this.createPetActivity);
     }
 
     @Override
@@ -47,18 +44,22 @@ public class ImagePetAdapter extends RecyclerView.Adapter<ImagePetAdapter.ViewHo
         return this.list.size();
     }
 
-    public static class ViewHolder extends RecyclerView.ViewHolder {
+    public static class ViewHolder extends RecyclerView.ViewHolder  {
 
         ImageView imagePetImage;
+        MaterialCardView card;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             imagePetImage = itemView.findViewById(R.id.imagePetImage);
+            card = itemView.findViewById(R.id.card);
         }
 
-        void setData(Integer position, Integer icon, PawSecureActivity pawSecureActivity) {
-            Log.d("UTT", "A");
-            imagePetImage.setImageDrawable(AppCompatResources.getDrawable(pawSecureActivity, icon));
+        void setData(Integer position, ImagePetManager.ImagePet imagePet, CreatePetActivity createPetActivity) {
+            imagePetImage.setImageDrawable(AppCompatResources.getDrawable(createPetActivity, imagePet.icon));
+            card.setOnClickListener(view -> {
+                createPetActivity.changeIcon(position, imagePet.icon, imagePet.animal);
+            });
         }
     }
 }

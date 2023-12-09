@@ -13,5 +13,5 @@ public class GeneralResponse extends PawSecureResponse {
     public JSONObject data;
 
     @SerializedName("errors")
-    public ValidationResponse errors;
+    public ValidationUserResponse errors;
 }

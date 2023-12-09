@@ -19,7 +19,7 @@
             android:name=".view.PetActivity"
             android:exported="false" />
         <activity
-            android:name=".view.MakePetActivity"
+            android:name=".view.CreatePetActivity"
             android:exported="false" />
         <activity
             android:name=".view.ChooseActivity"

@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.view.View;
 import android.widget.Button;
 
+import androidx.activity.result.ActivityResultLauncher;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.interpolator.view.animation.FastOutSlowInInterpolator;
 import androidx.interpolator.view.animation.LinearOutSlowInInterpolator;
@@ -18,6 +19,7 @@ public class PawSecureActivity extends AppCompatActivity implements PawSecureInt
     protected CircularProgressIndicator circularProgressIndicatorCurtain;
     protected View viewCurtain;
     protected float amountDarkCurtain = 0.15f;
+    public ActivityResultLauncher<Intent> activityResultLauncher;
 
     @Override
     public void onNotAuth() {
@@ -62,5 +64,9 @@ public class PawSecureActivity extends AppCompatActivity implements PawSecureInt
         if (close) {
             finish();
         }
+    }
+
+    public void startIntentForResult(Class<?> cls) {
+        activityResultLauncher.launch(new Intent(this, cls));
     }
 }

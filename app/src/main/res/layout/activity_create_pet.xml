@@ -2,36 +2,10 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/constraintCreatePet"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".view.MakePetActivity">
-
-    <com.google.android.material.progressindicator.CircularProgressIndicator
-        android:id="@+id/progressMakePet"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:indeterminate="true"
-        android:visibility="invisible"
-        app:hideAnimationBehavior="inward"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:showAnimationBehavior="outward"
-        app:trackCornerRadius="2dp" />
-
-    <View
-        android:id="@+id/curtainMakePet"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:alpha="0"
-        android:background="@color/md_theme_dark_outlineVariant"
-        android:backgroundTint="@color/md_theme_dark_outlineVariant"
-        android:visibility="visible"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+    tools:context=".view.CreatePetActivity">
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:id="@+id/coordinatorMakePet"
@@ -71,6 +45,21 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
+            <Button
+                android:id="@+id/textButton2"
+                style="@style/Widget.Material3.Button.TextButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end"
+                android:layout_weight="3"
+                android:gravity="center|end"
+                android:text="@string/create_pet_image"
+                android:textAlignment="viewEnd"
+                app:layout_constraintBottom_toTopOf="@+id/linearLayout3"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/imageMakePet" />
+
             <com.google.android.material.floatingactionbutton.FloatingActionButton
                 android:id="@+id/fabMakePet"
                 style="?attr/floatingActionButtonSmallStyle"
@@ -78,6 +67,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="70dp"
                 android:layout_marginTop="70dp"
+                android:contentDescription="@string/make_pet_description"
                 app:layout_constraintBottom_toBottomOf="@+id/imageMakePet"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
@@ -85,8 +75,7 @@
                 app:layout_constraintTop_toTopOf="@+id/iconMakePet"
                 app:layout_constraintVertical_bias="0.0"
                 app:srcCompat="@drawable/icon_create"
-                app:tint="?attr/colorOnPrimaryContainer"
-                android:contentDescription="@string/make_pet_description" />
+                app:tint="?attr/colorOnPrimaryContainer" />
 
             <TextView
                 android:id="@+id/textView18"
@@ -167,13 +156,13 @@
                         android:layout_height="wrap_content"
                         android:layout_marginStart="32dp"
                         android:layout_marginEnd="32dp"
-                        android:hint="@string/account_description">
+                        android:hint="@string/account_catchword">
 
                         <com.google.android.material.textfield.TextInputEditText
                             android:id="@+id/editDescriptionMakePet"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:inputType="textPassword" />
+                            android:inputType="textImeMultiLine" />
 
                     </com.google.android.material.textfield.TextInputLayout>
 
@@ -194,9 +183,9 @@
                             android:id="@+id/editDateMakePet"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:inputType="date"
                             android:clickable="true"
-                            android:focusable="false" />
+                            android:focusable="false"
+                            android:inputType="date" />
 
                     </com.google.android.material.textfield.TextInputLayout>
 
@@ -224,5 +213,31 @@
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>
+
+    <com.google.android.material.progressindicator.CircularProgressIndicator
+        android:id="@+id/progressMakePet"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:indeterminate="true"
+        android:visibility="invisible"
+        app:hideAnimationBehavior="inward"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:showAnimationBehavior="outward"
+        app:trackCornerRadius="2dp" />
+
+    <View
+        android:id="@+id/curtainMakePet"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:alpha="0"
+        android:background="@color/md_theme_dark_outlineVariant"
+        android:backgroundTint="@color/md_theme_dark_outlineVariant"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

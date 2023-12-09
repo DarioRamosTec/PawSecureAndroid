@@ -1,15 +1,12 @@
 package com.example.pawsecure.implementation;
 
 import android.content.Context;
-import android.widget.Button;
 
-import androidx.lifecycle.ViewModel;
-
-import com.example.pawsecure.response.SpaceResponse;
 import com.example.pawsecure.response.TokenResponse;
 import com.example.pawsecure.token.Token;
-import com.example.pawsecure.view.NexusActivity;
-import com.example.pawsecure.view.StartActivity;
+import com.google.android.material.textfield.TextInputLayout;
+
+import java.util.List;
 
 public class PawSecureOnChanged {
 
@@ -25,21 +22,32 @@ public class PawSecureOnChanged {
     public void checkAuth(Context context, PawSecureViewModel viewModel, PawSecureActivity pawSecureActivity) {
         boolean checkedData = Token.checkUser(context);
         if (Token.checkToken(context)) {
-            viewModel.refresh(Token.getBearer()).observe(pawSecureActivity, new PawSecureObserver<TokenResponse>(pawSecureActivity, new ObserveAuth(context, true, viewModel, pawSecureActivity)));
+            viewModel.refresh(Token.getBearer()).observe(pawSecureActivity, new PawSecureObserver<TokenResponse>(pawSecureActivity, new AuthOnChanged(context, true, viewModel, pawSecureActivity)));
         } else if (checkedData) {
             String email = Token.getData()[0];
             String password = Token.getData()[1];
-            viewModel.login(email, password).observe(pawSecureActivity, new PawSecureObserver<TokenResponse>(pawSecureActivity, new ObserveAuth(context, false, viewModel, pawSecureActivity)));
+            viewModel.login(email, password).observe(pawSecureActivity, new PawSecureObserver<TokenResponse>(pawSecureActivity, new AuthOnChanged(context, false, viewModel, pawSecureActivity)));
         }
     }
 
-    class ObserveAuth implements PawSecureObserver.PawSecureOnChanged<TokenResponse> {
+    public void checkValidationTextInput (List<String> field, TextInputLayout inputLayout) {
+        String errorField = field != null && field.size() > 0 ? field.get(0) : null;
+        inputLayout.setError(errorField);
+        inputLayout.setErrorContentDescription(errorField);
+    }
+
+    public void setNullTextInput (TextInputLayout inputLayout) {
+        inputLayout.setError(null);
+        inputLayout.setErrorContentDescription(null);
+    }
+
+    class AuthOnChanged implements PawSecureObserver.PawSecureOnChanged<TokenResponse> {
         Context context;
         boolean refresh;
         PawSecureViewModel viewModel;
         PawSecureActivity pawSecureActivity;
 
-        public ObserveAuth (Context context, boolean refresh, PawSecureViewModel viewModel, PawSecureActivity pawSecureActivity) {
+        public AuthOnChanged(Context context, boolean refresh, PawSecureViewModel viewModel, PawSecureActivity pawSecureActivity) {
             this.context = context;
             this.refresh = refresh;
             this.viewModel = viewModel;
@@ -53,7 +61,7 @@ public class PawSecureOnChanged {
                 pawSecureActivity.onAuth();
             } else {
                 if (refresh) {
-                    viewModel.login(Token.getData()[0], Token.getData()[1]).observe(pawSecureActivity, new PawSecureObserver<TokenResponse>(pawSecureActivity, new ObserveAuth(context, false, viewModel, pawSecureActivity)));
+                    viewModel.login(Token.getData()[0], Token.getData()[1]).observe(pawSecureActivity, new PawSecureObserver<TokenResponse>(pawSecureActivity, new AuthOnChanged(context, false, viewModel, pawSecureActivity)));
                 } else {
                     pawSecureActivity.onNotAuth();
                 }

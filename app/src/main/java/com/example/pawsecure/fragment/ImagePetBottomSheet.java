@@ -1,5 +1,6 @@
 package com.example.pawsecure.fragment;
 
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.renderscript.ScriptGroup;
 import android.util.Log;
@@ -15,15 +16,28 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.pawsecure.R;
 import com.example.pawsecure.adapter.ImagePetAdapter;
 import com.example.pawsecure.implementation.PawSecureActivity;
+import com.example.pawsecure.view.CreatePetActivity;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 
 public class ImagePetBottomSheet extends BottomSheetDialogFragment {
 
     RecyclerView recyclerView;
-    PawSecureActivity pawSecureActivity;
+    CreatePetActivity pawSecureActivity;
 
-    public ImagePetBottomSheet (PawSecureActivity pawSecureActivity) {
+    public ImagePetBottomSheet (CreatePetActivity pawSecureActivity) {
         this.pawSecureActivity = pawSecureActivity;
+    }
+
+    @Override
+    public void onDismiss(@NonNull DialogInterface dialog) {
+        super.onDismiss(dialog);
+        pawSecureActivity.notUseFab = true;
+    }
+
+    @Override
+    public void onCancel(@NonNull DialogInterface dialog) {
+        super.onCancel(dialog);
+        pawSecureActivity.notUseFab = true;
     }
 
     @Override
