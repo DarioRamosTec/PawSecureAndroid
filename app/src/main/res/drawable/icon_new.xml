@@ -4,11 +4,6 @@
     android:viewportWidth="102"
     android:viewportHeight="102">
   <path
-      android:pathData="M51,51m-50,0a50,50 0,1 1,100 0a50,50 0,1 1,-100 0"
-      android:strokeWidth="0.75"
-      android:fillColor="#00000000"
-      android:strokeColor="#000000"/>
-  <path
       android:pathData="M48.29,48.29L40.71,48.29C39.21,48.29 38,49.5 38,51C38,52.5 39.21,53.71 40.71,53.71H48.29V61.29C48.29,62.79 49.5,64 51,64C52.5,64 53.71,62.79 53.71,61.29V53.71L61.29,53.71C62.79,53.71 64,52.5 64,51C64,49.5 62.79,48.29 61.29,48.29L53.71,48.29V40.71C53.71,39.21 52.5,38 51,38C49.5,38 48.29,39.21 48.29,40.71V48.29Z"
       android:strokeLineJoin="round"
       android:strokeWidth="0.75"

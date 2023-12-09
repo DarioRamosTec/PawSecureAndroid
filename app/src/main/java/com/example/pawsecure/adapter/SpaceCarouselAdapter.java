@@ -55,7 +55,7 @@ public class SpaceCarouselAdapter extends RecyclerView.Adapter<SpaceCarouselAdap
 
         public void getData(Pet pet) {
             //pet.image;
-            Picasso.get().load("https://0.soompi.io/wp-content/uploads/sites/8/2018/01/16162544/Yeojin1.jpg").into(imageCarouselSpace);
+
         }
     }
 }

@@ -33,11 +33,7 @@
     <path
         android:pathData="M60,80.5a1.5,3.5 0,1 0,3 0a1.5,3.5 0,1 0,-3 0z"
         android:fillColor="#000000"/>
-    <path
-        android:pathData="M50,50m-49.63,0a49.63,49.63 0,1 1,99.25 0a49.63,49.63 0,1 1,-99.25 0"
-        android:strokeWidth="0.75"
-        android:fillColor="#00000000"
-        android:strokeColor="#000000"/>
+
     <path
         android:pathData="M21,41C13.5,48.5 20.5,66.83 24.33,73C27.53,65 36.33,62.33 40.33,62C36.5,50 21,41 21,41Z"
         android:strokeWidth="0.5"

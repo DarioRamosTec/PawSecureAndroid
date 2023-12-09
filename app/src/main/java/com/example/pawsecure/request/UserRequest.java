@@ -33,4 +33,7 @@ public interface UserRequest {
 
     @GET("auth/pets")
     Call<PetResponse> pets(@Header("Authorization") String authorization);
+
+    @GET("auth/lang")
+    Call<GeneralResponse> lang(@Header("Authorization") String authorization);
 }

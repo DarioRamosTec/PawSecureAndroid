@@ -19,4 +19,8 @@ public class Pet {
     public String image;
 
     public int animal;
+
+    public static class PetCreate extends Pet {
+
+    }
 }

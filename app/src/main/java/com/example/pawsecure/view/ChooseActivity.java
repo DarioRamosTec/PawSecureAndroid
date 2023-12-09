@@ -16,13 +16,16 @@ import android.widget.TextView;
 import com.example.pawsecure.R;
 import com.example.pawsecure.adapter.PetAdapter;
 import com.example.pawsecure.implementation.PawSecureActivity;
-import com.example.pawsecure.implementation.PawSecureAnimator;
 import com.example.pawsecure.implementation.PawSecureObserver;
 import com.example.pawsecure.implementation.PawSecureOnChanged;
 import com.example.pawsecure.implementation.PawSecureViewModel;
+import com.example.pawsecure.model.Pet;
 import com.example.pawsecure.response.PetResponse;
 import com.example.pawsecure.token.Token;
 import com.example.pawsecure.view_model.ChooseViewModel;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class ChooseActivity extends PawSecureActivity {
 
@@ -43,6 +46,7 @@ public class ChooseActivity extends PawSecureActivity {
         recyclerPetChoose = findViewById(R.id.recyclerPetChoose);
         textNothingChoose.setText("");
 
+        amountDarkCurtain = 0f;
         chooseViewModel = new ViewModelProvider(this).get(ChooseViewModel.class);
         getPets();
 
@@ -59,7 +63,6 @@ public class ChooseActivity extends PawSecureActivity {
         topAppBarChoose.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(getApplicationContext(), NexusActivity.class));
                 finish();
             }
         });
@@ -86,14 +89,15 @@ public class ChooseActivity extends PawSecureActivity {
                 case "200":
                     hideCurtain(new Button[] {});
                     if (petResponse.data.size() == 0) {
-                        textNothingChoose.setText(petResponse.message);
-                        PawSecureAnimator.alpha(textNothingChoose, 1, 1200, 0).start();
-                        PawSecureAnimator.translateY(textNothingChoose, 0, 1200, -150).start();
+                        List<Pet> petListCreate = new ArrayList<Pet>();
+                        petListCreate.add(new Pet.PetCreate());
+                        recyclerPetChoose.setAdapter(new PetAdapter(petListCreate, pawSecureActivity));
                     } else {
+                        petResponse.data.add(0, new Pet.PetCreate());
                         recyclerPetChoose.setAdapter(new PetAdapter(petResponse.data, pawSecureActivity));
-                        recyclerPetChoose.setLayoutManager(new GridLayoutManager(pawSecureActivity, 2, RecyclerView.VERTICAL, false));
-                        recyclerPetChoose.setHasFixedSize(true);
                     }
+                    recyclerPetChoose.setLayoutManager(new GridLayoutManager(pawSecureActivity, 2, RecyclerView.VERTICAL, false));
+                    recyclerPetChoose.setHasFixedSize(true);
                     break;
             }
         }

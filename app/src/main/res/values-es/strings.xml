@@ -33,8 +33,8 @@
     <string name="changed_password_hello">¡Cambio exitoso!</string>
     <string name="changed_password_msg">Tu contraseña ha cambiado, serás redirigido de vuelta a tu perfil.</string>
     <string name="changed_password_return">Regrésame</string>
-    <string name="nexus_home">Inicio</string>
-    <string name="nexus_add_description">Añadir PawSecure</string>
+    <string name="nexus_home">Início</string>
+    <string name="nexus_add_description">Añadir espacio</string>
     <string name="nexus_icon_description">Icono de tu animal</string>
     <string name="add_hello">¡Vamos a crear!</string>
     <string name="add_msg">Hora de crear una nueva PawSecure.</string>
@@ -53,4 +53,15 @@
     <string name="choose_hello">¡Crea un espacio para tus mascotas!</string>
     <string name="choose_msg">Escoger las mascotas que quieras para tu espacio.</string>
     <string name="item_space_description">Una imagen de tu mascota</string>
+    <string name="choose_create_pet">Crear perfil de mascota</string>
+    <string name="choose_create_msg">¡Crea un perfl para tu mascota!</string>
+    <string name="make_pet_description">Editar icono de mascota</string>
+    <string name="account_description">Descripción</string>
+    <string name="create">Crear</string>
+    <string name="account_birthday">Fecha de nacimiento</string>
+    <string name="make_pet_hello">¡Crea el perfil de tu mascota!</string>
+    <string name="date_picker_title">Escoge una fecha</string>
+    <string name="image">Imagen</string>
+    <string name="icon">Ícono</string>
+    <string name="create_pet_icon">Escoge un ícono</string>
 </resources>

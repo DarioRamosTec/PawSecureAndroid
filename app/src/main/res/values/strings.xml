@@ -33,7 +33,7 @@
     <string name="changed_password_msg">Your password was changed! You will be redirect to your profile in few seconds.</string>
     <string name="changed_password_return">Return me</string>
     <string name="nexus_home">Home</string>
-    <string name="nexus_add_description">Add PawSecure</string>
+    <string name="nexus_add_description">Add space</string>
     <string name="nexus_icon_description">Your animal icon</string>
     <string name="add_hello">Let\'s create!</string>
     <string name="add_msg">Time to create a PawSecure!</string>
@@ -58,4 +58,15 @@
     <string name="choose_hello">Create a space for your pets!</string>
     <string name="choose_msg">Choose the pets you want for your space.</string>
     <string name="item_space_description">The image of your pet</string>
+    <string name="choose_create_pet">Create pet\'s profile</string>
+    <string name="choose_create_msg">Create a profile for your pet!</string>
+    <string name="make_pet_description">Edit pet\'s icon</string>
+    <string name="account_description">Description</string>
+    <string name="create">Create</string>
+    <string name="account_birthday">Birthday</string>
+    <string name="make_pet_hello">Create your pet\'s profile!</string>
+    <string name="date_picker_title">Select a date</string>
+    <string name="icon">Icon</string>
+    <string name="image">Image</string>
+    <string name="create_pet_icon">Choose an icon</string>
 </resources>
