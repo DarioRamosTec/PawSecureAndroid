@@ -85,7 +85,9 @@ public class PetAdapter extends RecyclerView.Adapter<PetAdapter.ViewHolder> {
                 imageIconPet.setImageDrawable(AppCompatResources.getDrawable(pawSecureActivity, ImagePetManager.getIdIconPet(pet.icon)));
                 textNamePet.setText(pet.name);
                 textDescriptionPet.setText(pet.description);
-                card.setOnClickListener(null);
+                card.setOnClickListener(view -> {
+                    ((ChooseActivity)pawSecureActivity).selectPet(pet);
+                });
             }
         }
 

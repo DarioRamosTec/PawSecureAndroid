@@ -42,39 +42,6 @@
             app:layout_constraintStart_toStartOf="@+id/recyclerPetChoose"
             app:layout_constraintTop_toBottomOf="@+id/linearChoose" />
 
-        <TextView
-            android:id="@+id/textView6"
-            android:layout_width="300dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="32dp"
-            android:layout_marginTop="8dp"
-            android:layout_marginEnd="32dp"
-            android:text="@string/choose_msg"
-            android:textAlignment="center"
-            android:textSize="16sp"
-            android:visibility="gone"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView5"
-            app:layout_constraintVertical_bias="0.0" />
-
-        <TextView
-            android:id="@+id/textView5"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="32dp"
-            android:layout_marginEnd="32dp"
-            android:text="@string/choose_hello"
-            android:textAlignment="center"
-            android:textSize="24sp"
-            android:visibility="gone"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/coordinatorChoose"
-            app:layout_constraintVertical_bias="0.0" />
-
         <LinearLayout
             android:id="@+id/linearChoose"
             android:layout_width="0dp"

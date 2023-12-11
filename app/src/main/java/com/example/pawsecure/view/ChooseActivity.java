@@ -15,7 +15,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.example.pawsecure.R;
@@ -39,6 +41,7 @@ public class ChooseActivity extends PawSecureActivity {
     RecyclerView recyclerPetChoose;
     ChooseViewModel chooseViewModel;
     Toolbar topAppBarChoose;
+    LinearLayout linearChoose;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,6 +52,7 @@ public class ChooseActivity extends PawSecureActivity {
         textNothingChoose = findViewById(R.id.textNothingChoose);
         recyclerGroupChoose = findViewById(R.id.recyclerGroupChoose);
         recyclerPetChoose = findViewById(R.id.recyclerPetChoose);
+        linearChoose = findViewById(R.id.linearChoose);
         textNothingChoose.setText("");
 
         amountDarkCurtain = 0f;
@@ -86,6 +90,13 @@ public class ChooseActivity extends PawSecureActivity {
     void getPets() {
         showCurtain(new Button[] {});
         chooseViewModel.pets(Token.getBearer()).observe(this, new PawSecureObserver<PetResponse>(this, new SpacesOnChanged(this, this, chooseViewModel)));
+    }
+
+    public void selectPet(Pet pet) {
+        if (linearChoose.getVisibility() == View.GONE) {
+            linearChoose.setVisibility(View.VISIBLE);
+
+        }
     }
 
     class SpacesOnChanged extends PawSecureOnChanged implements PawSecureObserver.PawSecureOnChanged<PetResponse> {
