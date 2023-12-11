@@ -20,4 +20,16 @@ public class PawSecureAnimator {
         return animationStart;
     }
 
+    public static ObjectAnimator[] scale (View view, float value, int time, float startPosition) {
+        view.setScaleX(startPosition);
+        view.setScaleY(startPosition);
+        ObjectAnimator objectAnimator1 = ObjectAnimator.ofFloat(view, "scaleX", value)
+                .setDuration(time);
+        objectAnimator1.setInterpolator(new LinearOutSlowInInterpolator());
+        ObjectAnimator objectAnimator2 = ObjectAnimator.ofFloat(view, "scaleY", value)
+                .setDuration(time);
+        objectAnimator2.setInterpolator(new LinearOutSlowInInterpolator());
+        return new ObjectAnimator[] { objectAnimator1, objectAnimator2 };
+    }
+
 }

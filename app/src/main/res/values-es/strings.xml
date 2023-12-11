@@ -73,4 +73,7 @@
     <string name="create_space_title">Crea un espacio</string>
     <string name="choose_subtitle">Selecciona tus mascotas deseadas</string>
     <string name="create_pet_title">Crea una mascota</string>
+    <string name="sensors">Sensores</string>
+    <string name="records">Registros</string>
+    <string name="create_space_subtitle">Define la información</string>
 </resources>

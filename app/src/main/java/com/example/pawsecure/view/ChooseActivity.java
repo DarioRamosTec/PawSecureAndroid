@@ -9,6 +9,7 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Context;
@@ -22,6 +23,7 @@ import android.widget.TextView;
 
 import com.example.pawsecure.R;
 import com.example.pawsecure.adapter.PetAdapter;
+import com.example.pawsecure.adapter.PetIconAdapter;
 import com.example.pawsecure.implementation.PawSecureActivity;
 import com.example.pawsecure.implementation.PawSecureObserver;
 import com.example.pawsecure.implementation.PawSecureOnChanged;
@@ -30,6 +32,8 @@ import com.example.pawsecure.model.Pet;
 import com.example.pawsecure.response.PetResponse;
 import com.example.pawsecure.token.Token;
 import com.example.pawsecure.view_model.ChooseViewModel;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.snackbar.Snackbar;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -42,6 +46,8 @@ public class ChooseActivity extends PawSecureActivity {
     ChooseViewModel chooseViewModel;
     Toolbar topAppBarChoose;
     LinearLayout linearChoose;
+    List<Pet> petListGroup;
+    FloatingActionButton fabChoose;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,6 +59,7 @@ public class ChooseActivity extends PawSecureActivity {
         recyclerGroupChoose = findViewById(R.id.recyclerGroupChoose);
         recyclerPetChoose = findViewById(R.id.recyclerPetChoose);
         linearChoose = findViewById(R.id.linearChoose);
+        fabChoose = findViewById(R.id.fabChoose);
         textNothingChoose.setText("");
 
         amountDarkCurtain = 0f;
@@ -85,6 +92,21 @@ public class ChooseActivity extends PawSecureActivity {
             }
         });
 
+        recyclerGroupChoose.setAdapter(new PetIconAdapter(new ArrayList<>(), this));
+        recyclerGroupChoose.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
+        recyclerGroupChoose.setHasFixedSize(true);
+
+        fabChoose.setEnabled(false);
+        fabChoose.setOnClickListener(view -> {
+            Intent intent = new Intent(this, LinkActivity.class);
+            int[] ints = new int[petListGroup.size()];
+            for (int i = 0; i < petListGroup.size() ; i++) {
+                ints[i] = petListGroup.get(i).id;
+            }
+            intent.putExtra("IDS_SPACE", ints);
+            startActivity(intent);
+        });
+
     }
 
     void getPets() {
@@ -95,7 +117,21 @@ public class ChooseActivity extends PawSecureActivity {
     public void selectPet(Pet pet) {
         if (linearChoose.getVisibility() == View.GONE) {
             linearChoose.setVisibility(View.VISIBLE);
-
+        }
+        List<Pet> pets = ((PetIconAdapter)recyclerGroupChoose.getAdapter()).getPetList();
+        if (pets.contains(pet)) {
+            int index = pets.indexOf(pet);
+            pets.remove(index);
+            recyclerGroupChoose.getAdapter().notifyItemRemoved(index);
+        } else {
+            ((PetIconAdapter)recyclerGroupChoose.getAdapter()).getPetList().add(pet);
+            recyclerGroupChoose.getAdapter().notifyItemInserted(recyclerGroupChoose.getAdapter().getItemCount() - 1);
+        }
+        if (pets.size() == 0) {
+            linearChoose.setVisibility(View.GONE);
+            fabChoose.setEnabled(false);
+        } else {
+            fabChoose.setEnabled(true);
         }
     }
 

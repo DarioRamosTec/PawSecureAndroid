@@ -78,4 +78,12 @@
     <string name="create_space_title">Create space</string>
     <string name="choose_subtitle">Select pets for the space</string>
     <string name="create_pet_title">Create pet</string>
+    <string name="magnitude_sound" translatable="false">%</string>
+    <string name="magnitude_humidity" translatable="false">%</string>
+    <string name="magnitude_gas" translatable="false">%</string>
+    <string name="magnitude_temperature" translatable="false">°C</string>
+    <string name="magnitude_movement" translatable="false">%</string>
+    <string name="sensors">Sensors</string>
+    <string name="records">Records</string>
+    <string name="create_space_subtitle">Define your space\'s info</string>
 </resources>
