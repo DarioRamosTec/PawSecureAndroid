@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="center"
+    android:orientation="horizontal"
+    android:layout_marginTop="15dp"
+    android:layout_marginStart="15dp"
+    android:layout_marginEnd="15dp">
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="3"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/textNameItemPermission"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Camera"
+            android:textSize="16sp" />
+
+        <TextView
+            android:id="@+id/textDescriptionItemPermission"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/quicksand_light"
+            android:text="Esta funcion activa la camara"/>
+    </LinearLayout>
+
+    <View
+        android:layout_height="0dp"
+        android:layout_weight=".25"
+        android:layout_width="0dp"/>
+
+    <com.google.android.material.materialswitch.MaterialSwitch
+        android:id="@+id/switchItemPermission"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:scaleX=".85"
+        android:scaleY=".85" />
+
+</LinearLayout>

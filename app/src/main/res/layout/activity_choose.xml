@@ -25,7 +25,9 @@
                             android:id="@+id/topAppBarChoose"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            app:navigationIcon="?attr/actionModeCloseDrawable" />
+                            app:navigationIcon="?attr/actionModeCloseDrawable"
+                            app:subtitle="@string/choose_subtitle"
+                            app:title="@string/create_space_title" />
 
                 </com.google.android.material.appbar.AppBarLayout>
 
@@ -38,18 +40,19 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="@+id/recyclerPetChoose"
             app:layout_constraintStart_toStartOf="@+id/recyclerPetChoose"
-            app:layout_constraintTop_toBottomOf="@+id/materialDivider" />
+            app:layout_constraintTop_toBottomOf="@+id/linearChoose" />
 
         <TextView
             android:id="@+id/textView6"
             android:layout_width="300dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="32dp"
-            android:layout_marginTop="24dp"
+            android:layout_marginTop="8dp"
             android:layout_marginEnd="32dp"
             android:text="@string/choose_msg"
             android:textAlignment="center"
             android:textSize="16sp"
+            android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -65,35 +68,41 @@
             android:text="@string/choose_hello"
             android:textAlignment="center"
             android:textSize="24sp"
+            android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/coordinatorChoose"
             app:layout_constraintVertical_bias="0.0" />
 
-        <com.google.android.material.divider.MaterialDivider
-            android:id="@+id/materialDivider"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:dividerInsetEnd="10dp"
-            app:dividerInsetStart="10dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/recyclerGroupChoose"
-            app:layout_constraintBottom_toTopOf="@id/recyclerPetChoose"/>
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recyclerGroupChoose"
+        <LinearLayout
+            android:id="@+id/linearChoose"
             android:layout_width="0dp"
             android:layout_height="45dp"
             android:layout_marginStart="10dp"
-            android:layout_marginTop="15dp"
+            android:layout_marginTop="8dp"
             android:layout_marginEnd="10dp"
             android:layout_marginBottom="5dp"
-            app:layout_constraintBottom_toTopOf="@id/materialDivider"
+            android:orientation="vertical"
+            android:visibility="gone"
+            app:layout_constraintBottom_toTopOf="@id/recyclerPetChoose"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView6" />
+            app:layout_constraintTop_toBottomOf="@+id/coordinatorChoose">
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/recyclerGroupChoose"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+
+                <com.google.android.material.divider.MaterialDivider
+                    android:id="@+id/materialDivider"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:dividerInsetEnd="10dp"
+                    app:dividerInsetStart="10dp" />
+
+        </LinearLayout>
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerPetChoose"
@@ -105,7 +114,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/materialDivider" />
+            app:layout_constraintTop_toBottomOf="@+id/linearChoose" />
 
         <com.google.android.material.progressindicator.CircularProgressIndicator
             android:id="@+id/progressIndicatorChoose"

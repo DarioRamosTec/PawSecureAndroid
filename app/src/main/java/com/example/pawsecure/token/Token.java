@@ -49,6 +49,10 @@ public class Token {
         return type + " " + token;
     }
 
+    public static String getToken() {
+        return token;
+    }
+
     public static String[] getData() {
         return new String[] { email, password };
     }

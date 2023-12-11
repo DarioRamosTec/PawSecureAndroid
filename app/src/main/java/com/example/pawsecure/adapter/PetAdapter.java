@@ -12,8 +12,10 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.pawsecure.R;
 import com.example.pawsecure.implementation.PawSecureActivity;
+import com.example.pawsecure.retrofit.RetrofitRequest;
 import com.example.pawsecure.singletone.ImagePetManager;
 import com.example.pawsecure.model.Pet;
+import com.example.pawsecure.token.Token;
 import com.example.pawsecure.view.ChooseActivity;
 import com.example.pawsecure.view.CreatePetActivity;
 import com.google.android.material.card.MaterialCardView;
@@ -68,6 +70,7 @@ public class PetAdapter extends RecyclerView.Adapter<PetAdapter.ViewHolder> {
 
         void getData(Pet pet, PawSecureActivity pawSecureActivity) {
             if (pet instanceof Pet.PetCreate) {
+                imageBackgroundPet.setImageDrawable(null);
                 imageIconPet.setImageDrawable(AppCompatResources.getDrawable(pawSecureActivity, ImagePetManager.getIdIconPet(-1)));
                 textNamePet.setText(pawSecureActivity.getString(R.string.choose_create_pet));
                 textDescriptionPet.setText(pawSecureActivity.getString(R.string.choose_create_msg));
@@ -78,10 +81,11 @@ public class PetAdapter extends RecyclerView.Adapter<PetAdapter.ViewHolder> {
                     }
                 });
             } else {
-                Picasso.get().load(pet.image).into(imageBackgroundPet);
+                Picasso.get().load(RetrofitRequest.site+RetrofitRequest.mePets+pet.id+"?token="+Token.getToken()).into(imageBackgroundPet);
                 imageIconPet.setImageDrawable(AppCompatResources.getDrawable(pawSecureActivity, ImagePetManager.getIdIconPet(pet.icon)));
                 textNamePet.setText(pet.name);
                 textDescriptionPet.setText(pet.description);
+                card.setOnClickListener(null);
             }
         }
 

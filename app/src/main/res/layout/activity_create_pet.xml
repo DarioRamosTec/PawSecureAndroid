@@ -25,7 +25,8 @@
                 android:id="@+id/topBarMakePet"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:navigationIcon="?attr/actionModeCloseDrawable" />
+                app:navigationIcon="?attr/actionModeCloseDrawable"
+                app:title="@string/create_pet_title" />
 
         </com.google.android.material.appbar.AppBarLayout>
 
@@ -40,17 +41,18 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/coordinatorMakePet">
 
-
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
             <Button
-                android:id="@+id/textButton2"
+                android:id="@+id/buttonImageCreatePet"
                 style="@style/Widget.Material3.Button.TextButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="end"
+                android:layout_marginTop="2dp"
+                android:layout_marginBottom="2dp"
                 android:layout_weight="3"
                 android:gravity="center|end"
                 android:text="@string/create_pet_image"
@@ -58,7 +60,8 @@
                 app:layout_constraintBottom_toTopOf="@+id/linearLayout3"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/imageMakePet" />
+                app:layout_constraintTop_toBottomOf="@+id/imageMakePet"
+                app:layout_constraintVertical_bias="0.0" />
 
             <com.google.android.material.floatingactionbutton.FloatingActionButton
                 android:id="@+id/fabMakePet"
@@ -86,6 +89,7 @@
                 android:text="@string/make_pet_hello"
                 android:textAlignment="center"
                 android:textSize="24sp"
+                android:visibility="gone"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -96,12 +100,12 @@
                 android:id="@+id/imageMakePet"
                 android:layout_width="0dp"
                 android:layout_height="194dp"
-                android:layout_marginTop="15dp"
-                android:layout_marginBottom="15dp"
-                app:layout_constraintBottom_toTopOf="@+id/linearLayout3"
+                android:scaleType="centerCrop"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textView18" />
+                app:layout_constraintTop_toBottomOf="@+id/textView18"
+                app:layout_constraintVertical_bias="0.0" />
 
             <ImageView
                 android:id="@+id/iconMakePet"
@@ -122,7 +126,7 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/imageMakePet">
+                app:layout_constraintTop_toBottomOf="@+id/buttonImageCreatePet">
 
                 <LinearLayout
                     android:id="@+id/linearLayout2"
@@ -148,7 +152,7 @@
                     <View
                         android:id="@+id/view3"
                         android:layout_width="wrap_content"
-                        android:layout_height="27dp" />
+                        android:layout_height="22dp" />
 
                     <com.google.android.material.textfield.TextInputLayout
                         android:id="@+id/inputDescriptionMakePet"
@@ -169,7 +173,7 @@
                     <View
                         android:id="@+id/view4"
                         android:layout_width="wrap_content"
-                        android:layout_height="27dp" />
+                        android:layout_height="22dp" />
 
                     <com.google.android.material.textfield.TextInputLayout
                         android:id="@+id/inputDateMakePet"

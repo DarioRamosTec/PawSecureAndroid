@@ -221,7 +221,7 @@ public class UserRepository {
                         petResponse.code = String.valueOf(response.code());
                         mutableLiveData.setValue(petResponse);
                         break;
-                    case 200:
+                    case 201:
                         petResponse = response.body();
                         if (petResponse != null) {
                             petResponse.code = String.valueOf(response.code());
@@ -232,7 +232,9 @@ public class UserRepository {
             }
 
             @Override
-            public void onFailure(Call<PetResponse> call, Throwable t) { }
+            public void onFailure(Call<PetResponse> call, Throwable t) {
+                Log.d("UTT", "AAA");
+            }
         });
         return mutableLiveData;
     }

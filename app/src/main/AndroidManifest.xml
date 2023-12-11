@@ -3,6 +3,8 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.READ_MEDIA_IMAGES"/>
 
     <application
         android:allowBackup="true"
@@ -15,6 +17,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.PawSecure"
         tools:targetApi="31">
+        <activity
+            android:name=".view.PermissionsActivity"
+            android:exported="false" />
         <activity
             android:name=".view.PetActivity"
             android:exported="false" />

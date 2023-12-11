@@ -1,8 +1,5 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
-    <!-- Base application theme. -->
-    <style name="Theme.PawSecure" parent="Theme.Material3.Light.NoActionBar">
-        <!-- Status bar color.
-        <item name="android:statusBarColor">?attr/colorPrimaryVariant</item> -->
+    <style name="Theme.PawSecure" parent="Theme.Material3.DayNight.NoActionBar">
         <item name="android:fontFamily">@font/quicksand</item>
         <item name="colorPrimary">@color/md_theme_light_primary</item>
         <item name="colorOnPrimary">@color/md_theme_light_onPrimary</item>
@@ -30,5 +27,18 @@
         <item name="colorOnSurfaceInverse">@color/md_theme_light_inverseOnSurface</item>
         <item name="colorSurfaceInverse">@color/md_theme_light_inverseSurface</item>
         <item name="colorPrimaryInverse">@color/md_theme_light_inversePrimary</item>
+        <item name="textAppearanceTitleMedium">@style/Theme.PawSecure.TitleMedium</item>
+        <item name="textAppearanceTitleLarge">@style/Theme.PawSecure.TitleLarge</item>
     </style>
+
+    <style name="Theme.PawSecure.TitleLarge" parent="TextAppearance.Material3.TitleLarge">
+        <item name="fontFamily">@font/quicksand</item>
+        <item name="android:textSize">18sp</item>
+    </style>
+
+    <style name="Theme.PawSecure.TitleMedium" parent="TextAppearance.Material3.TitleMedium">
+        <item name="fontFamily">@font/quicksand_light</item>
+        <item name="android:textSize">14sp</item>
+    </style>
+
 </resources>

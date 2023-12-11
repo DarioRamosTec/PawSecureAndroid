@@ -6,6 +6,7 @@ import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.widget.Toolbar;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -57,7 +58,6 @@ public class ChooseActivity extends PawSecureActivity {
         OnBackPressedCallback callback = new OnBackPressedCallback(true) {
             @Override
             public void handleOnBackPressed() {
-                startActivity(new Intent(getApplicationContext(), NexusActivity.class));
                 finish();
             }
         };
@@ -111,7 +111,8 @@ public class ChooseActivity extends PawSecureActivity {
                         petResponse.data.add(0, new Pet.PetCreate());
                         recyclerPetChoose.setAdapter(new PetAdapter(petResponse.data, pawSecureActivity));
                     }
-                    recyclerPetChoose.setLayoutManager(new GridLayoutManager(pawSecureActivity, 2, RecyclerView.VERTICAL, false));
+                    GridLayoutManager gridLayoutManager = new GridLayoutManager(pawSecureActivity, 2, RecyclerView.VERTICAL, false);
+                    recyclerPetChoose.setLayoutManager(gridLayoutManager);
                     recyclerPetChoose.setHasFixedSize(true);
                     break;
             }

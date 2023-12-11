@@ -24,6 +24,7 @@ public class ImagePetManager {
             petsList.add(9, new ImagePet() {{ this.icon = R.drawable.pet_rabbit_2; this.animal = 3; }});
             petsList.add(10, new ImagePet() {{ this.icon = R.drawable.pet_rabbit_3; this.animal = 3; }});
             petsList.add(11, new ImagePet() {{ this.icon = R.drawable.pet_rabbit_4; this.animal = 3; }});
+            petsList.add(12, new ImagePet() {{ this.icon = R.drawable.icon_animal; this.animal = 1; }});
         }
         return petsList;
     }

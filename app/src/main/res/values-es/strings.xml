@@ -53,8 +53,8 @@
     <string name="choose_hello">¡Crea un espacio para tus mascotas!</string>
     <string name="choose_msg">Escoger las mascotas que quieras para tu espacio.</string>
     <string name="item_space_description">Una imagen de tu mascota</string>
-    <string name="choose_create_pet">Crear perfil de mascota</string>
-    <string name="choose_create_msg">¡Crea un perfl para tu mascota!</string>
+    <string name="choose_create_pet">Crear perfil</string>
+    <string name="choose_create_msg">Crea un perfil para tu mascota</string>
     <string name="make_pet_description">Editar icono de mascota</string>
     <string name="account_description">Descripción</string>
     <string name="create">Crear</string>
@@ -68,4 +68,9 @@
     <string name="account_catchword">Lema</string>
     <string name="create_pet_error">No se pudo crear el perfil.</string>
     <string name="retry">Reintentar</string>
+    <string name="permissions_title">Permisos</string>
+    <string name="permissions_subtitle">Maneja tus permisos</string>
+    <string name="create_space_title">Crea un espacio</string>
+    <string name="choose_subtitle">Selecciona tus mascotas deseadas</string>
+    <string name="create_pet_title">Crea una mascota</string>
 </resources>
