@@ -11,6 +11,7 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.Manifest;
@@ -18,6 +19,7 @@ import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothManager;
+import android.bluetooth.BluetoothSocket;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -33,6 +35,7 @@ import android.util.Base64;
 import android.widget.Button;
 
 import com.example.pawsecure.R;
+import com.example.pawsecure.adapter.DevicesAdapter;
 import com.example.pawsecure.adapter.PetAdapter;
 import com.example.pawsecure.implementation.PawSecureActivity;
 import com.example.pawsecure.implementation.PawSecureObserver;
@@ -48,6 +51,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 public class LinkActivity extends PawSecureActivity {
 
@@ -58,6 +62,9 @@ public class LinkActivity extends PawSecureActivity {
     ConstraintLayout constraintLink;
     BroadcastReceiver receiver;
     LinkViewModel linkViewModel;
+    RecyclerView recyclerLink;
+    BluetoothManager bluetoothManager;
+    BluetoothAdapter bluetoothAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,6 +78,9 @@ public class LinkActivity extends PawSecureActivity {
             //startActivity(intent);
         }
 
+        bluetoothManager = getSystemService(BluetoothManager.class);
+        bluetoothAdapter = bluetoothManager.getAdapter();
+
         linkViewModel = new ViewModelProvider(this).get(LinkViewModel.class);
 
         OnBackPressedCallback callback = new OnBackPressedCallback(true) {
@@ -83,6 +93,11 @@ public class LinkActivity extends PawSecureActivity {
         topAppLink = findViewById(R.id.topAppLink);
         constraintLink = findViewById(R.id.constraintLink);
         buttonLink = findViewById(R.id.buttonLink);
+        recyclerLink = findViewById(R.id.recyclerLink);
+        recyclerLink.setAdapter(new DevicesAdapter(new ArrayList<>(), this));
+        recyclerLink.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
+        recyclerLink.setHasFixedSize(true);
+
         topAppLink.setNavigationOnClickListener(view -> finish());
 
         snackbar = Snackbar.make(this, constraintLink, getResources().getText(R.string.link_error), Snackbar.LENGTH_INDEFINITE).setAction(R.string.go_settings, view -> toSettings());
@@ -124,8 +139,12 @@ public class LinkActivity extends PawSecureActivity {
                 if (BluetoothDevice.ACTION_FOUND.equals(action)) {
                     BluetoothDevice device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
                     try {
-                        String deviceName = device.getName();
-                        String deviceHardwareAddress = device.getAddress();
+                        DevicesAdapter adapter = (DevicesAdapter) recyclerLink.getAdapter();
+                        List<BluetoothDevice> bluetoothDevices = adapter.getList();
+                        if (bluetoothDevices != null) {
+                            bluetoothDevices.add(device);
+                            adapter.notifyItemInserted(adapter.getItemCount() - 1);
+                        }
                     } catch (SecurityException e) {
 
                     }
@@ -164,8 +183,6 @@ public class LinkActivity extends PawSecureActivity {
     }
 
     void link() {
-        BluetoothManager bluetoothManager = getSystemService(BluetoothManager.class);
-        BluetoothAdapter bluetoothAdapter = bluetoothManager.getAdapter();
         if (bluetoothAdapter != null) {
             if (!bluetoothAdapter.isEnabled()) {
                 Intent intent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
@@ -176,7 +193,6 @@ public class LinkActivity extends PawSecureActivity {
                         bluetoothAdapter.cancelDiscovery();
                     }
                     bluetoothAdapter.startDiscovery();
-                    //linkViewModel.searchDevice(this, bluetoothAdapter).observe(this, new PawSecureObserver<Boolean>(this, new SearchOnChanged(this, this, linkViewModel, bluetoothAdapter)));
                 } catch (SecurityException e) {
 
                 }
@@ -184,23 +200,24 @@ public class LinkActivity extends PawSecureActivity {
         }
     }
 
-    class SearchOnChanged extends PawSecureOnChanged implements PawSecureObserver.PawSecureOnChanged<Boolean> {
-
-        BluetoothAdapter bluetoothAdapter;
-
-        public SearchOnChanged(Context context, PawSecureActivity pawSecureActivity, PawSecureViewModel pawSecureViewModel, BluetoothAdapter bluetoothAdapter) {
-            super(context, pawSecureActivity, pawSecureViewModel);
-            this.bluetoothAdapter = bluetoothAdapter;
-        }
-
-
-        @Override
-        public void onChanged(Boolean aBoolean) {
-            try {
+    public void connectToDevice (BluetoothDevice bluetoothDevice) {
+        try {
+            BluetoothSocket bluetoothSocket = bluetoothDevice.createRfcommSocketToServiceRecord(UUID.fromString("fb349b5f-8000-0080-0010-c5c9c331914b"));
+            if (bluetoothAdapter.isDiscovering()) {
                 bluetoothAdapter.cancelDiscovery();
-            } catch (SecurityException e) {
-
             }
+
+            try {
+                bluetoothSocket.connect();
+            } catch (IOException connectException) {
+                try {
+                    bluetoothSocket.close();
+                } catch (IOException closeException) {
+                }
+                return;
+            }
+            startActivity(new Intent(this, ProfileActivity.class));
+        } catch (SecurityException | IOException e) {
 
         }
     }

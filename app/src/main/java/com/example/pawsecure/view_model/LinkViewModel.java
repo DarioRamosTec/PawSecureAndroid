@@ -14,14 +14,5 @@ import com.example.pawsecure.implementation.PawSecureViewModel;
 import com.example.pawsecure.response.TokenResponse;
 
 public class LinkViewModel extends PawSecureViewModel {
-    public LiveData<Boolean> searchDevice(Context context, BluetoothAdapter bluetoothAdapter) {
-        MutableLiveData<Boolean> mutableLiveData = null;
-        try {
-            mutableLiveData = new MutableLiveData<>();
-            mutableLiveData.setValue(bluetoothAdapter.startDiscovery());
-        } catch (SecurityException e) {
 
-        }
-        return mutableLiveData;
-    }
 }
