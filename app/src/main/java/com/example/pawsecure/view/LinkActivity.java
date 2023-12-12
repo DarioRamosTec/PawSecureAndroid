@@ -202,7 +202,7 @@ public class LinkActivity extends PawSecureActivity {
 
     public void connectToDevice (BluetoothDevice bluetoothDevice) {
         try {
-            BluetoothSocket bluetoothSocket = bluetoothDevice.createRfcommSocketToServiceRecord(UUID.fromString("fb349b5f-8000-0080-0010-c5c9c331914b"));
+            BluetoothSocket bluetoothSocket = bluetoothDevice.createRfcommSocketToServiceRecord(UUID.fromString("10c78985-4332-4ae1-a64c-fd4265aabe26"));
             if (bluetoothAdapter.isDiscovering()) {
                 bluetoothAdapter.cancelDiscovery();
             }
