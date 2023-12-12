@@ -98,6 +98,7 @@ public class ChooseActivity extends PawSecureActivity {
 
         fabChoose.setEnabled(false);
         fabChoose.setOnClickListener(view -> {
+            List<Pet> petListGroup = ((PetIconAdapter)recyclerGroupChoose.getAdapter()).getPetList();
             Intent intent = new Intent(this, LinkActivity.class);
             int[] ints = new int[petListGroup.size()];
             for (int i = 0; i < petListGroup.size() ; i++) {

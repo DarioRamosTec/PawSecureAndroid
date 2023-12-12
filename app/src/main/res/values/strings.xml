@@ -86,4 +86,8 @@
     <string name="sensors">Sensors</string>
     <string name="records">Records</string>
     <string name="create_space_subtitle">Define your space\'s info</string>
+    <string name="link_subtitle">Link your space</string>
+    <string name="link">Link</string>
+    <string name="go_settings">Manage</string>
+    <string name="link_error">The system has deny the permission.</string>
 </resources>

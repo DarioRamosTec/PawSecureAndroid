@@ -2,6 +2,8 @@ package com.example.pawsecure.implementation;
 
 import android.animation.ObjectAnimator;
 import android.content.Intent;
+import android.net.Uri;
+import android.provider.Settings;
 import android.view.View;
 import android.widget.Button;
 
@@ -68,5 +70,12 @@ public class PawSecureActivity extends AppCompatActivity implements PawSecureInt
 
     public void startIntentForResult(Class<?> cls) {
         activityResultLauncher.launch(new Intent(this, cls));
+    }
+
+    protected void toSettings() {
+        Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+        Uri uri = Uri.fromParts("package", getPackageName(), null);
+        intent.setData(uri);
+        startActivity(intent);
     }
 }

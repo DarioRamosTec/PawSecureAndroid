@@ -76,4 +76,8 @@
     <string name="sensors">Sensores</string>
     <string name="records">Registros</string>
     <string name="create_space_subtitle">Define la información</string>
+    <string name="link_subtitle">Vincula tu espacio</string>
+    <string name="link">Vincular</string>
+    <string name="go_settings">Configurar</string>
+    <string name="link_error">Se negó el permiso.</string>
 </resources>
