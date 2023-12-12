@@ -14,4 +14,6 @@ public class SpaceResponse extends PawSecureResponse {
 
     @SerializedName("data")
     public List<Space> data;
+    @SerializedName("errors")
+    public ValidationSpaceResponse errors;
 }

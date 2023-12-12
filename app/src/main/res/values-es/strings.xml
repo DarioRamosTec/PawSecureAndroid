@@ -79,5 +79,9 @@
     <string name="link_subtitle">Vincula tu espacio</string>
     <string name="link">Vincular</string>
     <string name="go_settings">Configurar</string>
-    <string name="link_error">Se negó el permiso.</string>
+    <string name="link_search_error">Se negó el permiso.</string>
+    <string name="link_title">Busca el dispositivo</string>
+    <string name="search">Buscar</string>
+    <string name="title_msg">Busca el dispositivo deseado y vinculate seleccionandolo.</string>
+    <string name="link_linking_error">La conexión falló.</string>
 </resources>

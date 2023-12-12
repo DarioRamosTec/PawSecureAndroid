@@ -5,12 +5,9 @@ import androidx.activity.result.ActivityResult;
 import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -25,29 +22,17 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
-import android.graphics.Bitmap;
-import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.provider.MediaStore;
-import android.provider.Settings;
-import android.util.Base64;
 import android.widget.Button;
 
 import com.example.pawsecure.R;
 import com.example.pawsecure.adapter.DevicesAdapter;
-import com.example.pawsecure.adapter.PetAdapter;
 import com.example.pawsecure.implementation.PawSecureActivity;
-import com.example.pawsecure.implementation.PawSecureObserver;
-import com.example.pawsecure.implementation.PawSecureOnChanged;
-import com.example.pawsecure.implementation.PawSecureViewModel;
-import com.example.pawsecure.model.Pet;
-import com.example.pawsecure.response.PetResponse;
 import com.example.pawsecure.view_model.LinkViewModel;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.snackbar.Snackbar;
 
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -56,8 +41,7 @@ import java.util.UUID;
 public class LinkActivity extends PawSecureActivity {
 
     MaterialToolbar topAppLink;
-    Button buttonLink;
-    int[] ids;
+    Button searchButtonLink;
     Snackbar snackbar;
     ConstraintLayout constraintLink;
     BroadcastReceiver receiver;
@@ -70,13 +54,6 @@ public class LinkActivity extends PawSecureActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_link);
-
-        if (getIntent().getExtras() != null) {
-            ids = (int[]) getIntent().getExtras().get("IDS_SPACE");
-            //Intent intent = new Intent(this, CreateSpaceActivity.class);
-            //intent.putExtra("IDS_SPACE", ids);
-            //startActivity(intent);
-        }
 
         bluetoothManager = getSystemService(BluetoothManager.class);
         bluetoothAdapter = bluetoothManager.getAdapter();
@@ -92,7 +69,7 @@ public class LinkActivity extends PawSecureActivity {
         this.getOnBackPressedDispatcher().addCallback(this, callback);
         topAppLink = findViewById(R.id.topAppLink);
         constraintLink = findViewById(R.id.constraintLink);
-        buttonLink = findViewById(R.id.buttonLink);
+        searchButtonLink = findViewById(R.id.searchButtonLink);
         recyclerLink = findViewById(R.id.recyclerLink);
         recyclerLink.setAdapter(new DevicesAdapter(new ArrayList<>(), this));
         recyclerLink.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
@@ -100,7 +77,7 @@ public class LinkActivity extends PawSecureActivity {
 
         topAppLink.setNavigationOnClickListener(view -> finish());
 
-        snackbar = Snackbar.make(this, constraintLink, getResources().getText(R.string.link_error), Snackbar.LENGTH_INDEFINITE).setAction(R.string.go_settings, view -> toSettings());
+        snackbar = Snackbar.make(this, constraintLink, getResources().getText(R.string.link_search_error), Snackbar.LENGTH_INDEFINITE).setAction(R.string.go_settings, view -> toSettings());
 
         activityResultLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), new ActivityResultCallback<ActivityResult>() {
             @Override
@@ -111,7 +88,7 @@ public class LinkActivity extends PawSecureActivity {
             }
         });
 
-        buttonLink.setOnClickListener(view -> {
+        searchButtonLink.setOnClickListener(view -> {
             String[] permissions;
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
                 permissions = new String[]{Manifest.permission.BLUETOOTH_CONNECT, Manifest.permission.BLUETOOTH_SCAN, Manifest.permission.ACCESS_FINE_LOCATION};
@@ -201,24 +178,31 @@ public class LinkActivity extends PawSecureActivity {
     }
 
     public void connectToDevice (BluetoothDevice bluetoothDevice) {
+        boolean connnected = false;
         try {
             BluetoothSocket bluetoothSocket = bluetoothDevice.createRfcommSocketToServiceRecord(UUID.fromString("10c78985-4332-4ae1-a64c-fd4265aabe26"));
             if (bluetoothAdapter.isDiscovering()) {
                 bluetoothAdapter.cancelDiscovery();
             }
-
             try {
                 bluetoothSocket.connect();
+                connnected = true;
             } catch (IOException connectException) {
                 try {
                     bluetoothSocket.close();
-                } catch (IOException closeException) {
-                }
-                return;
-            }
-            startActivity(new Intent(this, ProfileActivity.class));
-        } catch (SecurityException | IOException e) {
+                } catch (IOException ignored) {
 
+                }
+            }
+        } catch (SecurityException | IOException ignored) {
+
+        }
+
+        if (connnected) {
+            startActivity(new Intent(this, ProfileActivity.class));
+            finish();
+        } else {
+            snackbar = Snackbar.make(this, constraintLink, getResources().getText(R.string.link_linking_error), Snackbar.LENGTH_SHORT);
         }
     }
 }

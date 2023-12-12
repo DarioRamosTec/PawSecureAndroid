@@ -8,6 +8,7 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
@@ -21,7 +22,9 @@ import com.example.pawsecure.R;
 import com.example.pawsecure.fragment.ImagePetBottomSheet;
 import com.example.pawsecure.implementation.PawSecureActivity;
 import com.example.pawsecure.implementation.PawSecureObserver;
-import com.example.pawsecure.response.PetResponse;
+import com.example.pawsecure.implementation.PawSecureOnChanged;
+import com.example.pawsecure.implementation.PawSecureViewModel;
+import com.example.pawsecure.response.SpaceResponse;
 import com.example.pawsecure.token.Token;
 import com.example.pawsecure.view_model.CreatePetViewModel;
 import com.example.pawsecure.view_model.CreateSpaceViewModel;
@@ -53,11 +56,17 @@ public class CreateSpaceActivity extends PawSecureActivity implements View.OnCli
     MaterialToolbar topBarCreateSpace;
     Button buttonCreateSpace;
     RecyclerView recyclerCreateSpace;
+    int[] ids;
+    int id = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_space);
+
+        if (getIntent().getExtras() != null) {
+            ids = (int[]) getIntent().getExtras().get("IDS_SPACE");
+        }
 
         inputNameCreatePet = findViewById(R.id.inputNameCreatePet);
         inputDescriptionCreatePet = findViewById(R.id.inputDescriptionCreatePet);
@@ -76,16 +85,83 @@ public class CreateSpaceActivity extends PawSecureActivity implements View.OnCli
         establishCurtain(findViewById(R.id.progressCreateSpace), findViewById(R.id.curtainCreateSpace));
         topBarCreateSpace.setNavigationOnClickListener(view -> finish());
 
-        //recycler
+        buttonCreateSpace.setOnClickListener(this);
 
-        //buttonCreateSpace.setOnClickListener(this);
+        //recycler
     }
 
     @Override
     public void onClick(View view) {
         showCurtain(new Button[] { buttonCreateSpace });
-        //createSpaceViewModel.pet(Token.getBearer(), editNameMakePet.getText().toString(), null,
-        //        null, iconPet, imageEncoded, animalPet, editDateMakePet.getText().toString(),
-        //        editDescriptionMakePet.getText().toString()).observe(this, new PawSecureObserver<PetResponse>(this, new CreatePetActivity.PetOnChanged(this, this, createPetViewModel)));
+        store();
+    }
+
+    void store() {
+        String name = editNameCreatePet.getText().toString();
+        String description = editDescriptionCreatePet.getText().toString();
+        createSpaceViewModel.space(Token.getBearer(), name, description).observe(this, new PawSecureObserver<SpaceResponse>(this, new SpaceOnChanged(this, this, createSpaceViewModel)));
+    }
+
+    void pivot() {
+        createSpaceViewModel.petSpace(Token.getBearer(), id, ids).observe(this, new PawSecureObserver<SpaceResponse>(this, new PetSpaceOnChanged(this, this, createSpaceViewModel)));
+    }
+
+    class SpaceOnChanged extends PawSecureOnChanged implements PawSecureObserver.PawSecureOnChanged<SpaceResponse> {
+
+        public SpaceOnChanged(Context context, PawSecureActivity pawSecureActivity, PawSecureViewModel pawSecureViewModel) {
+            super(context, pawSecureActivity, pawSecureViewModel);
+        }
+
+        @Override
+        public void onChanged(SpaceResponse spaceResponse) {
+            switch (spaceResponse.code) {
+                case "403":
+                case "401":
+                    checkAuth(context, pawSecureViewModel, pawSecureActivity);
+                    break;
+                case "400":
+                    hideCurtain(new Button[] { buttonCreateSpace });
+                    checkValidationTextInput(spaceResponse.errors.name, inputNameCreatePet);
+                    checkValidationTextInput(spaceResponse.errors.description, inputDescriptionCreatePet);
+                    break;
+                case "201":
+                    for (TextInputLayout input : inputLayoutList ) {
+                        setNullTextInput(input);
+                    }
+                    id = spaceResponse.data.get(0).id;
+                    pivot();
+                    break;
+            }
+        }
+    }
+
+    static class PetSpaceOnChanged extends PawSecureOnChanged implements PawSecureObserver.PawSecureOnChanged<SpaceResponse> {
+        PawSecureActivity pawSecureActivity;
+        public PetSpaceOnChanged(Context context, PawSecureActivity pawSecureActivity, PawSecureViewModel pawSecureViewModel) {
+            super(context, pawSecureActivity, pawSecureViewModel);
+        }
+
+        @Override
+        public void onChanged(SpaceResponse spaceResponse) {
+            switch (spaceResponse.code) {
+                case "403":
+                case "401":
+                    checkAuth(context, pawSecureViewModel, pawSecureActivity);
+                    break;
+                case "201":
+                    pawSecureActivity.restartActivities(NexusActivity.class);
+                    break;
+            }
+        }
+    }
+
+    @Override
+    public void onAuth() {
+        if (id == 0) {
+            store();
+        } else {
+            pivot();
+        }
+        super.onAuth();
     }
 }

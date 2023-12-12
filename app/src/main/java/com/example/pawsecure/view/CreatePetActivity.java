@@ -240,6 +240,7 @@ public class CreatePetActivity extends PawSecureActivity implements View.OnClick
     @Override
     public void onAuth() {
         sendToastError();
+        hideCurtain(new Button[] { buttonMakePet });
         super.onAuth();
     }
 }

@@ -54,12 +54,12 @@ public class NexusActivity extends PawSecureActivity {
 
     void getSpaces() {
         showCurtain(new Button[] {});
-        nexusViewModel.spaces(Token.getBearer()).observe(this, new PawSecureObserver<SpaceResponse>(this, new NexusActivity.ObserveSpaces(this, this, nexusViewModel)));
+        nexusViewModel.spaces(Token.getBearer()).observe(this, new PawSecureObserver<SpaceResponse>(this, new NexusActivity.SpacesOnChanged(this, this, nexusViewModel)));
     }
 
-    class ObserveSpaces extends PawSecureOnChanged implements PawSecureObserver.PawSecureOnChanged<SpaceResponse> {
+    class SpacesOnChanged extends PawSecureOnChanged implements PawSecureObserver.PawSecureOnChanged<SpaceResponse> {
 
-        public ObserveSpaces(Context context, PawSecureActivity pawSecureActivity, PawSecureViewModel pawSecureViewModel) {
+        public SpacesOnChanged(Context context, PawSecureActivity pawSecureActivity, PawSecureViewModel pawSecureViewModel) {
             super(context, pawSecureActivity, pawSecureViewModel);
         }
 

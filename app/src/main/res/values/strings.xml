@@ -89,5 +89,9 @@
     <string name="link_subtitle">Link your space</string>
     <string name="link">Link</string>
     <string name="go_settings">Manage</string>
-    <string name="link_error">The system has deny the permission.</string>
+    <string name="link_search_error">The system has deny the permission.</string>
+    <string name="link_title">Search the device</string>
+    <string name="search">Search</string>
+    <string name="title_msg">Search desired device and tap to link it.</string>
+    <string name="link_linking_error">The connection go wrong.</string>
 </resources>

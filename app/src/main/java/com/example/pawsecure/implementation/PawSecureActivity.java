@@ -68,6 +68,13 @@ public class PawSecureActivity extends AppCompatActivity implements PawSecureInt
         }
     }
 
+    public void restartActivities(Class<?> cls) {
+        Intent intent = new Intent(this, cls);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        startActivity(intent);
+        finish();
+    }
+
     public void startIntentForResult(Class<?> cls) {
         activityResultLauncher.launch(new Intent(this, cls));
     }

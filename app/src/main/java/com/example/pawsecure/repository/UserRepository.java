@@ -5,8 +5,9 @@ import android.util.Log;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
-import com.example.pawsecure.model.Pet;
 import com.example.pawsecure.request.PetRequest;
+import com.example.pawsecure.request.PetSpaceRequest;
+import com.example.pawsecure.request.SpaceRequest;
 import com.example.pawsecure.request.UserRequest;
 import com.example.pawsecure.response.GeneralResponse;
 import com.example.pawsecure.response.PetResponse;
@@ -24,6 +25,8 @@ import retrofit2.Response;
 public class UserRepository {
     private UserRequest userRequest;
     private PetRequest petRequest;
+    private SpaceRequest spaceRequest;
+    private PetSpaceRequest petSpaceRequest;
 
     public UserRepository() {
 
@@ -41,6 +44,20 @@ public class UserRepository {
             petRequest = RetrofitRequest.obtainRetrofit().create(PetRequest.class);
         }
         return petRequest;
+    }
+
+    SpaceRequest getSpaceRequest() {
+        if (spaceRequest == null) {
+            spaceRequest = RetrofitRequest.obtainRetrofit().create(SpaceRequest.class);
+        }
+        return spaceRequest;
+    }
+
+    PetSpaceRequest getPetSpaceRequest() {
+        if (petSpaceRequest == null) {
+            petSpaceRequest = RetrofitRequest.obtainRetrofit().create(PetSpaceRequest.class);
+        }
+        return petSpaceRequest;
     }
 
     public LiveData<GeneralResponse> signUp(String name, String email, String password, String password_again, String lang) {
@@ -200,7 +217,7 @@ public class UserRepository {
                                            String sex, int icon, String image, int animal,
                                            String birthday, String description) {
         MutableLiveData<PetResponse> mutableLiveData = new MutableLiveData<>();
-        getPetRequest().pet(headerAuth, name, race, sex, icon, image, animal, birthday, description)
+        getPetRequest().store(headerAuth, name, race, sex, icon, image, animal, birthday, description)
                 .enqueue(new Callback<PetResponse>() {
             @Override
             public void onResponse(Call<PetResponse> call, Response<PetResponse> response) {
@@ -233,9 +250,89 @@ public class UserRepository {
 
             @Override
             public void onFailure(Call<PetResponse> call, Throwable t) {
-                Log.d("UTT", "AAA");
             }
         });
+        return mutableLiveData;
+    }
+
+    public LiveData<SpaceResponse> storeSpace (String auth, String name, String description) {
+        MutableLiveData<SpaceResponse> mutableLiveData = new MutableLiveData<>();
+        getSpaceRequest().store(auth, name, description)
+                .enqueue(new Callback<SpaceResponse>() {
+                    @Override
+                    public void onResponse(Call<SpaceResponse> call, Response<SpaceResponse> response) {
+                        SpaceResponse spaceResponse;
+                        switch (response.code()) {
+                            case 403:
+                            case 401:
+                                spaceResponse = new SpaceResponse();
+                                spaceResponse.code = String.valueOf(response.code());
+                                mutableLiveData.setValue(spaceResponse);
+                                break;
+                            case 400:
+                                try {
+                                    spaceResponse = new Gson().fromJson(response.errorBody().string(), SpaceResponse.class);
+                                } catch (IOException e) {
+                                    throw new RuntimeException(e);
+                                }
+                                spaceResponse.code = String.valueOf(response.code());
+                                mutableLiveData.setValue(spaceResponse);
+                                break;
+                            case 201:
+                                spaceResponse = response.body();
+                                if (spaceResponse != null) {
+                                    spaceResponse.code = String.valueOf(response.code());
+                                }
+                                mutableLiveData.setValue(spaceResponse);
+                                break;
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<SpaceResponse> call, Throwable t) {
+                    }
+                });
+        return mutableLiveData;
+    }
+
+    public LiveData<SpaceResponse> pivotPetSpace (String auth, int id, int[] pets) {
+        MutableLiveData<SpaceResponse> mutableLiveData = new MutableLiveData<>();
+        getPetSpaceRequest().store(auth, id, pets)
+                .enqueue(new Callback<SpaceResponse>() {
+                    @Override
+                    public void onResponse(Call<SpaceResponse> call, Response<SpaceResponse> response) {
+                        SpaceResponse spaceResponse;
+                        switch (response.code()) {
+                            case 404:
+                            case 403:
+                            case 401:
+                                spaceResponse = new SpaceResponse();
+                                spaceResponse.code = String.valueOf(response.code());
+                                mutableLiveData.setValue(spaceResponse);
+                                break;
+                            case 400:
+                                try {
+                                    spaceResponse = new Gson().fromJson(response.errorBody().string(), SpaceResponse.class);
+                                } catch (IOException e) {
+                                    throw new RuntimeException(e);
+                                }
+                                spaceResponse.code = String.valueOf(response.code());
+                                mutableLiveData.setValue(spaceResponse);
+                                break;
+                            case 201:
+                                spaceResponse = response.body();
+                                if (spaceResponse != null) {
+                                    spaceResponse.code = String.valueOf(response.code());
+                                }
+                                mutableLiveData.setValue(spaceResponse);
+                                break;
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<SpaceResponse> call, Throwable t) {
+                    }
+                });
         return mutableLiveData;
     }
 
