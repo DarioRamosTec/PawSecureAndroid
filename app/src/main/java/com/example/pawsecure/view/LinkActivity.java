@@ -18,6 +18,9 @@ import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothManager;
 import android.bluetooth.BluetoothSocket;
+import android.bluetooth.le.BluetoothLeScanner;
+import android.bluetooth.le.ScanCallback;
+import android.bluetooth.le.ScanResult;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -26,6 +29,8 @@ import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.os.ParcelUuid;
+import android.util.Log;
 import android.widget.Button;
 
 import com.example.pawsecure.R;
@@ -36,6 +41,7 @@ import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.snackbar.Snackbar;
 
 import java.io.IOException;
+import java.io.OutputStream;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
@@ -183,33 +189,62 @@ public class LinkActivity extends PawSecureActivity {
     }
 
     public void connectToDevice(BluetoothDevice bluetoothDevice) {
+
         try {
             if (bluetoothDevice.getBondState() != BluetoothDevice.BOND_NONE) {
                 Set<BluetoothDevice> bluetoothDeviceSet = bluetoothAdapter.getBondedDevices();
                 for (BluetoothDevice bt : bluetoothDeviceSet) {
-                    Method m = bt.getClass().getMethod("removeBond", (Class[]) null);
-                    m.invoke(bt, (Object[]) null);
+                    //Method m = bt.getClass().getMethod("removeBond", (Class[]) null);
+                    //m.invoke(bt, (Object[]) null);
+                    bt.getUuids();
                 }
 
             }
         } catch (SecurityException e) {
-
-        } catch (InvocationTargetException e) {
-            throw new RuntimeException(e);
-        } catch (NoSuchMethodException e) {
-            throw new RuntimeException(e);
-        } catch (IllegalAccessException e) {
-            throw new RuntimeException(e);
         }
 
         ((Runnable) () -> {
             try {
                 connected(bluetoothDevice.createBond());
-                bluetoothDevice.getUuids();
-            } catch (SecurityException e) {
+                ParcelUuid[] parcelUuids = bluetoothDevice.getUuids();
+                for (ParcelUuid p : parcelUuids) {
+                    BluetoothSocket bluetoothSocket = bluetoothDevice.createRfcommSocketToServiceRecord(p.getUuid());
+                    bluetoothSocket.connect();
+                    try {
+                        //
+                        if (bluetoothSocket.isConnected()) {
+                            OutputStream outputStream = bluetoothSocket.getOutputStream();
+                            outputStream.write("Casanostra:8712832781:H1}".getBytes());
+                            Log.d("UTT", "aa");
+                        }
+                    } catch (Exception e)  {
+
+                    }
+                }
+            } catch (SecurityException | IOException e) {
 
             }
         }).run();
+
+        /*
+        BluetoothLeScanner bluetoothLeScanner = bluetoothAdapter.getBluetoothLeScanner();
+        try {
+            bluetoothDevice.createBond();
+            bluetoothLeScanner.startScan(new ScanCallback() {
+                @Override
+                public void onScanResult(int callbackType, ScanResult result) {
+                    super.onScanResult(callbackType, result);
+                    if (Objects.equals(result.getDevice().getAddress(), bluetoothDevice.getAddress())) {
+                        List<ParcelUuid> uuids = result.getScanRecord().getServiceUuids();
+                    }
+                }
+            });
+        } catch (SecurityException e) {
+
+        }
+
+
+         */
     }
 
     public void connected(boolean success) {
