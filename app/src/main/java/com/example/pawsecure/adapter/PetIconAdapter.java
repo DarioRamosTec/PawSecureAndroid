@@ -67,8 +67,7 @@ public class PetIconAdapter extends RecyclerView.Adapter<PetIconAdapter.ViewHold
         }
 
         void getData(Pet pet, PawSecureActivity pawSecureActivity) {
-            imagePetIcon.setImageDrawable(AppCompatResources.getDrawable(pawSecureActivity, ImagePetManager.getIdIconPet(pet.icon)));
-
+            imagePetIcon.setImageDrawable(AppCompatResources.getDrawable(itemView.getContext(), ImagePetManager.getIdIconPet(pet.icon)));
         }
     }
 }

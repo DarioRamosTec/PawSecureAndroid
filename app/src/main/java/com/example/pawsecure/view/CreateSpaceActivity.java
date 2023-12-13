@@ -56,7 +56,7 @@ public class CreateSpaceActivity extends PawSecureActivity implements View.OnCli
     MaterialToolbar topBarCreateSpace;
     Button buttonCreateSpace;
     RecyclerView recyclerCreateSpace;
-    int[] ids;
+    ArrayList<Integer> ids;
     int id = 0;
 
     @Override
@@ -64,8 +64,14 @@ public class CreateSpaceActivity extends PawSecureActivity implements View.OnCli
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_space);
 
+        ids = new ArrayList<>();
         if (getIntent().getExtras() != null) {
-            ids = (int[]) getIntent().getExtras().get("IDS_SPACE");
+            int[] idsSpaces = (int[]) getIntent().getExtras().get("IDS_SPACE");
+            if (idsSpaces != null) {
+                for (int i = 0; i < idsSpaces.length; i++) {
+                    ids.add(idsSpaces[i]);
+                }
+            }
         }
 
         inputNameCreatePet = findViewById(R.id.inputNameCreatePet);
@@ -136,7 +142,6 @@ public class CreateSpaceActivity extends PawSecureActivity implements View.OnCli
     }
 
     static class PetSpaceOnChanged extends PawSecureOnChanged implements PawSecureObserver.PawSecureOnChanged<SpaceResponse> {
-        PawSecureActivity pawSecureActivity;
         public PetSpaceOnChanged(Context context, PawSecureActivity pawSecureActivity, PawSecureViewModel pawSecureViewModel) {
             super(context, pawSecureActivity, pawSecureViewModel);
         }

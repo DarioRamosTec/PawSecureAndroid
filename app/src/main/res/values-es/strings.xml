@@ -84,4 +84,5 @@
     <string name="search">Buscar</string>
     <string name="title_msg">Busca el dispositivo deseado y vinculate seleccionandolo.</string>
     <string name="link_linking_error">La conexión falló.</string>
+    <string name="space_not_linked">No se ha vinculado a un dispositivo.</string>
 </resources>

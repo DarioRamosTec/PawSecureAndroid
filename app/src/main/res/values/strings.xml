@@ -94,4 +94,5 @@
     <string name="search">Search</string>
     <string name="title_msg">Search desired device and tap to link it.</string>
     <string name="link_linking_error">The connection go wrong.</string>
+    <string name="space_not_linked">The space isn\'t linked to any device, you need to link.</string>
 </resources>

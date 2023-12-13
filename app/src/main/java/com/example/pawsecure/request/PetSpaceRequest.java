@@ -2,6 +2,8 @@ package com.example.pawsecure.request;
 
 import com.example.pawsecure.response.SpaceResponse;
 
+import java.util.ArrayList;
+
 import retrofit2.Call;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
@@ -15,5 +17,5 @@ public interface PetSpaceRequest {
     @POST("auth/spaces/{id}")
     Call<SpaceResponse> store (@Header("Authorization") String authorization,
                                @Path("id") int id,
-                               @Field("pets") int[] pets);
+                               @Field("pets[]") ArrayList<Integer> pets);
 }

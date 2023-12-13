@@ -17,6 +17,7 @@ import com.example.pawsecure.retrofit.RetrofitRequest;
 import com.google.gson.Gson;
 
 import java.io.IOException;
+import java.util.ArrayList;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -295,7 +296,7 @@ public class UserRepository {
         return mutableLiveData;
     }
 
-    public LiveData<SpaceResponse> pivotPetSpace (String auth, int id, int[] pets) {
+    public LiveData<SpaceResponse> pivotPetSpace (String auth, int id, ArrayList<Integer> pets) {
         MutableLiveData<SpaceResponse> mutableLiveData = new MutableLiveData<>();
         getPetSpaceRequest().store(auth, id, pets)
                 .enqueue(new Callback<SpaceResponse>() {
@@ -320,6 +321,37 @@ public class UserRepository {
                                 mutableLiveData.setValue(spaceResponse);
                                 break;
                             case 201:
+                                spaceResponse = response.body();
+                                if (spaceResponse != null) {
+                                    spaceResponse.code = String.valueOf(response.code());
+                                }
+                                mutableLiveData.setValue(spaceResponse);
+                                break;
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<SpaceResponse> call, Throwable t) {
+                    }
+                });
+        return mutableLiveData;
+    }
+
+    public LiveData<SpaceResponse> indexSpace (String auth, int id) {
+        MutableLiveData<SpaceResponse> mutableLiveData = new MutableLiveData<>();
+        getSpaceRequest().index(auth, id).enqueue(new Callback<SpaceResponse>() {
+                    @Override
+                    public void onResponse(Call<SpaceResponse> call, Response<SpaceResponse> response) {
+                        SpaceResponse spaceResponse;
+                        switch (response.code()) {
+                            case 404:
+                            case 403:
+                            case 401:
+                                spaceResponse = new SpaceResponse();
+                                spaceResponse.code = String.valueOf(response.code());
+                                mutableLiveData.setValue(spaceResponse);
+                                break;
+                            case 200:
                                 spaceResponse = response.body();
                                 if (spaceResponse != null) {
                                     spaceResponse.code = String.valueOf(response.code());

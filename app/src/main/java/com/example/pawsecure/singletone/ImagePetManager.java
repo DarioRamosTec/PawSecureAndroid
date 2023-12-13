@@ -32,7 +32,7 @@ public class ImagePetManager {
     public static int getIdIconPet (int icon) {
         if (icon <= -1) {
             return R.drawable.icon_new;
-        } else if (icon == 0 || icon >= getList().size()) {
+        } else if (icon >= getList().size()) {
             return R.drawable.icon_animal;
         }
         return getList().get(icon).icon;

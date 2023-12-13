@@ -2,6 +2,7 @@ package com.example.pawsecure.view_model;
 
 import android.Manifest;
 import android.bluetooth.BluetoothAdapter;
+import android.bluetooth.BluetoothDevice;
 import android.content.Context;
 import android.content.pm.PackageManager;
 

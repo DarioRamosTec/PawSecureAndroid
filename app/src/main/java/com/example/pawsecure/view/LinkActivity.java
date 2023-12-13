@@ -6,6 +6,7 @@ import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -24,6 +25,7 @@ import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.widget.Button;
 
 import com.example.pawsecure.R;
@@ -34,8 +36,11 @@ import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.snackbar.Snackbar;
 
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 public class LinkActivity extends PawSecureActivity {
@@ -177,32 +182,43 @@ public class LinkActivity extends PawSecureActivity {
         }
     }
 
-    public void connectToDevice (BluetoothDevice bluetoothDevice) {
-        boolean connnected = false;
+    public void connectToDevice(BluetoothDevice bluetoothDevice) {
         try {
-            BluetoothSocket bluetoothSocket = bluetoothDevice.createRfcommSocketToServiceRecord(UUID.fromString("10c78985-4332-4ae1-a64c-fd4265aabe26"));
-            if (bluetoothAdapter.isDiscovering()) {
-                bluetoothAdapter.cancelDiscovery();
-            }
-            try {
-                bluetoothSocket.connect();
-                connnected = true;
-            } catch (IOException connectException) {
-                try {
-                    bluetoothSocket.close();
-                } catch (IOException ignored) {
-
+            if (bluetoothDevice.getBondState() != BluetoothDevice.BOND_NONE) {
+                Set<BluetoothDevice> bluetoothDeviceSet = bluetoothAdapter.getBondedDevices();
+                for (BluetoothDevice bt : bluetoothDeviceSet) {
+                    Method m = bt.getClass().getMethod("removeBond", (Class[]) null);
+                    m.invoke(bt, (Object[]) null);
                 }
-            }
-        } catch (SecurityException | IOException ignored) {
 
+            }
+        } catch (SecurityException e) {
+
+        } catch (InvocationTargetException e) {
+            throw new RuntimeException(e);
+        } catch (NoSuchMethodException e) {
+            throw new RuntimeException(e);
+        } catch (IllegalAccessException e) {
+            throw new RuntimeException(e);
         }
 
-        if (connnected) {
-            startActivity(new Intent(this, ProfileActivity.class));
-            finish();
+        ((Runnable) () -> {
+            try {
+                connected(bluetoothDevice.createBond());
+                bluetoothDevice.getUuids();
+            } catch (SecurityException e) {
+
+            }
+        }).run();
+    }
+
+    public void connected(boolean success) {
+        if (success) {
+            //startActivity(new Intent(this, ProfileActivity.class));
+            //finish();
         } else {
             snackbar = Snackbar.make(this, constraintLink, getResources().getText(R.string.link_linking_error), Snackbar.LENGTH_SHORT);
+            snackbar.show();
         }
     }
 }

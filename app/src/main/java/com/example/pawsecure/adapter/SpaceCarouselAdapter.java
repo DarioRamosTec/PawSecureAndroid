@@ -7,22 +7,31 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.content.res.AppCompatResources;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.pawsecure.R;
 import com.example.pawsecure.model.Pet;
+import com.example.pawsecure.retrofit.RetrofitRequest;
+import com.example.pawsecure.singletone.ImagePetManager;
+import com.example.pawsecure.token.Token;
 import com.squareup.picasso.Picasso;
 
 import org.w3c.dom.Text;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class SpaceCarouselAdapter extends RecyclerView.Adapter<SpaceCarouselAdapter.ViewHolder> {
 
-    List<Pet> listPet;
+    List<Pet> listPet = new ArrayList<>();
 
     public SpaceCarouselAdapter (List<Pet> listPet) {
-        this.listPet = listPet;
+        for (Pet pet : listPet) {
+            if (!(pet.image == null || pet.image.equals(""))) {
+                this.listPet.add(pet);
+            }
+        }
     }
 
     @NonNull
@@ -50,12 +59,17 @@ public class SpaceCarouselAdapter extends RecyclerView.Adapter<SpaceCarouselAdap
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             imageCarouselSpace = itemView.findViewById(R.id.imageCarouselSpace);
-
         }
 
         public void getData(Pet pet) {
-            //pet.image;
-
+            if (pet.image == null || pet.image.equals("")) {
+                imageCarouselSpace.setImageDrawable(null);
+            } else {
+                Picasso.get().load(RetrofitRequest.site+RetrofitRequest.mePets+pet.id+"?token="+ Token.getToken())
+                        .placeholder(R.drawable.icon_placeholder)
+                        .error(R.drawable.icon_connect)
+                        .into(imageCarouselSpace);
+            }
         }
     }
 }

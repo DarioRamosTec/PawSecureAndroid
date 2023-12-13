@@ -77,7 +77,7 @@ public class NexusActivity extends PawSecureActivity {
                         PawSecureAnimator.alpha(textNothingNexus, 1, 1200, 0).start();
                         PawSecureAnimator.translateY(textNothingNexus, 0, 1200, -150).start();
                     } else {
-                        recyclerNexus.setAdapter(new SpaceAdapter(spaceResponse.data));
+                        recyclerNexus.setAdapter(new SpaceAdapter(spaceResponse.data, pawSecureActivity));
                         recyclerNexus.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false));
                         recyclerNexus.setHasFixedSize(true);
                     }
