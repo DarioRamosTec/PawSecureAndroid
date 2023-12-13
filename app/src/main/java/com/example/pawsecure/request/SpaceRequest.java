@@ -21,4 +21,10 @@ public interface SpaceRequest {
     @GET("auth/space/{id}")
     Call<SpaceResponse> index (@Header("Authorization") String authorization,
                                @Path("id") int id);
+
+    @FormUrlEncoded
+    @POST("auth/space/{id}/link")
+    Call<SpaceResponse> link (@Header("Authorization") String authorization,
+                              @Path("id") int id,
+                              @Field("mac") String mac);
 }

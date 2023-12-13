@@ -368,4 +368,43 @@ public class UserRepository {
         return mutableLiveData;
     }
 
+    public LiveData<SpaceResponse> linkSpace (String auth, int id, String mac) {
+        MutableLiveData<SpaceResponse> mutableLiveData = new MutableLiveData<>();
+        getSpaceRequest().link(auth, id, mac).enqueue(new Callback<SpaceResponse>() {
+            @Override
+            public void onResponse(Call<SpaceResponse> call, Response<SpaceResponse> response) {
+                SpaceResponse spaceResponse;
+                switch (response.code()) {
+                    case 403:
+                    case 401:
+                        spaceResponse = new SpaceResponse();
+                        spaceResponse.code = String.valueOf(response.code());
+                        mutableLiveData.setValue(spaceResponse);
+                        break;
+                    case 400:
+                        try {
+                            spaceResponse = new Gson().fromJson(response.errorBody().string(), SpaceResponse.class);
+                        } catch (IOException e) {
+                            throw new RuntimeException(e);
+                        }
+                        spaceResponse.code = String.valueOf(response.code());
+                        mutableLiveData.setValue(spaceResponse);
+                        break;
+                    case 200:
+                        spaceResponse = response.body();
+                        if (spaceResponse != null) {
+                            spaceResponse.code = String.valueOf(response.code());
+                        }
+                        mutableLiveData.setValue(spaceResponse);
+                        break;
+                }
+            }
+
+            @Override
+            public void onFailure(Call<SpaceResponse> call, Throwable t) {
+            }
+        });
+        return mutableLiveData;
+    }
+
 }

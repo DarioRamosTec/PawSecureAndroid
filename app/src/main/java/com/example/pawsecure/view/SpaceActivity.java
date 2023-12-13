@@ -63,7 +63,15 @@ public class SpaceActivity extends PawSecureActivity implements View.OnClickList
             @Override
             public void onActivityResult(ActivityResult result) {
                 if (result.getResultCode() == Activity.RESULT_OK) {
-
+                    Intent intent = result.getData();
+                    if (intent != null) {
+                        Bundle bundle = intent.getExtras();
+                        if (bundle != null) {
+                            if (bundle.getBoolean("CHECK_SPACE")) {
+                                decideLink(true);
+                            }
+                        }
+                    }
                 }
             }
         });
@@ -71,7 +79,9 @@ public class SpaceActivity extends PawSecureActivity implements View.OnClickList
 
     @Override
     public void onClick(View view) {
-        startIntentForResult(LinkActivity.class);
+        Intent intent = new Intent(this, LinkActivity.class);
+        intent.putExtra("SPACE_ID", spaceId);
+        activityResultLauncher.launch(intent);
     }
 
     class SpaceOnChanged extends PawSecureOnChanged implements PawSecureObserver.PawSecureOnChanged<SpaceResponse> {
@@ -90,13 +100,25 @@ public class SpaceActivity extends PawSecureActivity implements View.OnClickList
                 case "200":
                     hideCurtain(new Button[] {});
                     space = spaceResponse.data.get(0);
-                    if (space.linked == 1) {
-                        linearLinked.setVisibility(View.VISIBLE);
-                    } else {
-                        linearNotLinked.setVisibility(View.VISIBLE);
-                    }
+                    decideLink();
                     break;
             }
+        }
+    }
+
+    void decideLink() {
+        if (space.linked == 1) {
+            linearLinked.setVisibility(View.VISIBLE);
+        } else {
+            linearNotLinked.setVisibility(View.VISIBLE);
+        }
+    }
+
+    void decideLink(boolean linked) {
+        if (linked) {
+            linearLinked.setVisibility(View.VISIBLE);
+        } else {
+            linearNotLinked.setVisibility(View.VISIBLE);
         }
     }
 

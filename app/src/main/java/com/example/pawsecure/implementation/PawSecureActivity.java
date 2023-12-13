@@ -6,6 +6,7 @@ import android.net.Uri;
 import android.provider.Settings;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.appcompat.app.AppCompatActivity;
@@ -20,6 +21,7 @@ public class PawSecureActivity extends AppCompatActivity implements PawSecureInt
 
     protected CircularProgressIndicator circularProgressIndicatorCurtain;
     protected View viewCurtain;
+    protected TextView textCurtain;
     protected float amountDarkCurtain = 0.15f;
     public ActivityResultLauncher<Intent> activityResultLauncher;
 
@@ -35,6 +37,9 @@ public class PawSecureActivity extends AppCompatActivity implements PawSecureInt
         animationFinal.start();
         circularProgressIndicatorCurtain.hide();
         circularProgressIndicatorCurtain.setContentDescription(null);
+        if (textCurtain != null) {
+            textCurtain.setVisibility(View.INVISIBLE);
+        }
         for (Button button : btnToDisable) {
             button.setEnabled(true);
         }
@@ -46,6 +51,9 @@ public class PawSecureActivity extends AppCompatActivity implements PawSecureInt
         animationStart.start();
         circularProgressIndicatorCurtain.show();
         circularProgressIndicatorCurtain.setContentDescription(getText(R.string.wait));
+        if (textCurtain != null) {
+            textCurtain.setVisibility(View.VISIBLE);
+        }
         for (Button button : btnToDisable) {
             button.setEnabled(false);
         }
@@ -54,6 +62,16 @@ public class PawSecureActivity extends AppCompatActivity implements PawSecureInt
     protected void establishCurtain(CircularProgressIndicator circularProgressIndicatorCurtain, View viewCurtain) {
         this.circularProgressIndicatorCurtain = circularProgressIndicatorCurtain;
         this.viewCurtain = viewCurtain;
+    }
+
+    protected void establishCurtain(CircularProgressIndicator circularProgressIndicatorCurtain, View viewCurtain, TextView textCurtain) {
+        this.circularProgressIndicatorCurtain = circularProgressIndicatorCurtain;
+        this.viewCurtain = viewCurtain;
+        this.textCurtain = textCurtain;
+    }
+
+    protected void curtainText(String str) {
+        textCurtain.setText(str);
     }
 
     @Override

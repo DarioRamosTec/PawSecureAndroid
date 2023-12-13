@@ -70,7 +70,7 @@ public class DevicesAdapter extends RecyclerView.Adapter<DevicesAdapter.ViewHold
             try {
                 addressDevice.setText(bluetoothDevice.getAddress());
                 nameDevice.setText(bluetoothDevice.getName());
-                linearDevice.setOnClickListener(view -> linkActivity.connectToDevice(bluetoothDevice));
+                linearDevice.setOnClickListener(view -> linkActivity.boundToDevice(bluetoothDevice));
             } catch (SecurityException e) {
 
             }

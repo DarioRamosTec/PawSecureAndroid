@@ -95,4 +95,13 @@
     <string name="title_msg">Search desired device and tap to link it.</string>
     <string name="link_linking_error">The connection go wrong.</string>
     <string name="space_not_linked">The space isn\'t linked to any device, you need to link.</string>
+    <string name="configure_wifi">Configure WiFi</string>
+    <string name="wifi_link_msg">Configure the connection to WiFi from the space.</string>
+    <string name="ssid">SSID</string>
+    <string name="link_bond">Bonding...</string>
+    <string name="link_uuid">Talking...</string>
+    <string name="link_connect">Connecting...</string>
+    <string name="link_reading">Reading...</string>
+    <string name="link_writing">Writing...</string>
+    <string name="link_saving">Saving...</string>
 </resources>

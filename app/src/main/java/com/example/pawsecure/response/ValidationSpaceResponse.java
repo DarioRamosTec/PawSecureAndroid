@@ -13,4 +13,7 @@ public class ValidationSpaceResponse {
 
     @SerializedName("pets")
     public List<String> pets;
+
+    @SerializedName("mac")
+    public List<String> mac;
 }

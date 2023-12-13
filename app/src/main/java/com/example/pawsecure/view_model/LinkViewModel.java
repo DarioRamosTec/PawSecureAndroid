@@ -12,8 +12,11 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.example.pawsecure.implementation.PawSecureViewModel;
+import com.example.pawsecure.response.SpaceResponse;
 import com.example.pawsecure.response.TokenResponse;
 
 public class LinkViewModel extends PawSecureViewModel {
-
+    public LiveData<SpaceResponse> link(String token, int id, String mac) {
+        return userRepository.linkSpace(token, id, mac);
+    }
 }

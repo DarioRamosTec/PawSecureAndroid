@@ -85,4 +85,13 @@
     <string name="title_msg">Busca el dispositivo deseado y vinculate seleccionandolo.</string>
     <string name="link_linking_error">La conexión falló.</string>
     <string name="space_not_linked">No se ha vinculado a un dispositivo.</string>
+    <string name="configure_wifi">Configurar WiFi</string>
+    <string name="wifi_link_msg">Inserta los datos de la conexión a internet para tu espacio.</string>
+    <string name="ssid">Clave</string>
+    <string name="link_bond">Uniendo...</string>
+    <string name="link_uuid">Comunicando...</string>
+    <string name="link_connect">Conectando...</string>
+    <string name="link_reading">Leyendo...</string>
+    <string name="link_writing">Escribiendo...</string>
+    <string name="link_saving">Guardando...</string>
 </resources>

@@ -26,18 +26,29 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
+import android.net.wifi.WifiManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.ParcelUuid;
 import android.util.Log;
+import android.view.View;
 import android.widget.Button;
 
 import com.example.pawsecure.R;
 import com.example.pawsecure.adapter.DevicesAdapter;
+import com.example.pawsecure.fragment.WifiLinkDialog;
 import com.example.pawsecure.implementation.PawSecureActivity;
+import com.example.pawsecure.implementation.PawSecureObserver;
+import com.example.pawsecure.implementation.PawSecureOnChanged;
+import com.example.pawsecure.implementation.PawSecureViewModel;
+import com.example.pawsecure.response.SpaceResponse;
+import com.example.pawsecure.token.Token;
 import com.example.pawsecure.view_model.LinkViewModel;
 import com.google.android.material.appbar.MaterialToolbar;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.snackbar.Snackbar;
 
 import java.io.IOException;
@@ -53,6 +64,7 @@ public class LinkActivity extends PawSecureActivity {
 
     MaterialToolbar topAppLink;
     Button searchButtonLink;
+    Button configureButtonLink;
     Snackbar snackbar;
     ConstraintLayout constraintLink;
     BroadcastReceiver receiver;
@@ -60,12 +72,20 @@ public class LinkActivity extends PawSecureActivity {
     RecyclerView recyclerLink;
     BluetoothManager bluetoothManager;
     BluetoothAdapter bluetoothAdapter;
+    WifiLinkDialog wifiLinkDialog;
+    public String password;
+    public String ssid;
+    int spaceId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_link);
 
+        Bundle bundle = getIntent().getExtras();
+        spaceId = (int) bundle.get("SPACE_ID");
+
+        establishCurtain(findViewById(R.id.progressLink), findViewById(R.id.curtainLink), findViewById(R.id.textCurtainLink));
         bluetoothManager = getSystemService(BluetoothManager.class);
         bluetoothAdapter = bluetoothManager.getAdapter();
 
@@ -81,6 +101,7 @@ public class LinkActivity extends PawSecureActivity {
         topAppLink = findViewById(R.id.topAppLink);
         constraintLink = findViewById(R.id.constraintLink);
         searchButtonLink = findViewById(R.id.searchButtonLink);
+        configureButtonLink = findViewById(R.id.configureButtonLink);
         recyclerLink = findViewById(R.id.recyclerLink);
         recyclerLink.setAdapter(new DevicesAdapter(new ArrayList<>(), this));
         recyclerLink.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
@@ -100,26 +121,9 @@ public class LinkActivity extends PawSecureActivity {
         });
 
         searchButtonLink.setOnClickListener(view -> {
-            String[] permissions;
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-                permissions = new String[]{Manifest.permission.BLUETOOTH_CONNECT, Manifest.permission.BLUETOOTH_SCAN, Manifest.permission.ACCESS_FINE_LOCATION};
-            } else {
-                permissions = new String[]{Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.BLUETOOTH, Manifest.permission.BLUETOOTH_ADMIN, Manifest.permission.ACCESS_FINE_LOCATION};
-            }
-            boolean request = true;
-            for (String permission : permissions) {
-                if (ContextCompat.checkSelfPermission(this, permission) == PackageManager.PERMISSION_DENIED) {
-                    request = false;
-                    break;
-                }
-            }
-
-            if (request) {
-                link();
-            } else {
-                requestPermissions(permissions, 111223);
-            }
+            search();
         });
+        configureButtonLink.setOnClickListener(view -> wifi());
 
         receiver = new BroadcastReceiver() {
             public void onReceive(Context context, Intent intent) {
@@ -130,8 +134,10 @@ public class LinkActivity extends PawSecureActivity {
                         DevicesAdapter adapter = (DevicesAdapter) recyclerLink.getAdapter();
                         List<BluetoothDevice> bluetoothDevices = adapter.getList();
                         if (bluetoothDevices != null) {
-                            bluetoothDevices.add(device);
-                            adapter.notifyItemInserted(adapter.getItemCount() - 1);
+                            if (!bluetoothDevices.contains(device)) {
+                                bluetoothDevices.add(device);
+                                adapter.notifyItemInserted(adapter.getItemCount() - 1);
+                            }
                         }
                     } catch (SecurityException e) {
 
@@ -142,6 +148,10 @@ public class LinkActivity extends PawSecureActivity {
 
         IntentFilter filter = new IntentFilter(BluetoothDevice.ACTION_FOUND);
         registerReceiver(receiver, filter);
+        wifiLinkDialog = new WifiLinkDialog(this);
+
+        search();
+        wifi();
     }
 
     @Override
@@ -163,10 +173,32 @@ public class LinkActivity extends PawSecureActivity {
                 break;
             }
             if (granted) {
-                link();
+                search();
                 return;
             }
             snackbar.show();
+        }
+    }
+
+    void search() {
+        String[] permissions;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            permissions = new String[]{Manifest.permission.BLUETOOTH_CONNECT, Manifest.permission.BLUETOOTH_SCAN, Manifest.permission.ACCESS_FINE_LOCATION};
+        } else {
+            permissions = new String[]{Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.BLUETOOTH, Manifest.permission.BLUETOOTH_ADMIN, Manifest.permission.ACCESS_FINE_LOCATION};
+        }
+        boolean request = true;
+        for (String permission : permissions) {
+            if (ContextCompat.checkSelfPermission(this, permission) == PackageManager.PERMISSION_DENIED) {
+                request = false;
+                break;
+            }
+        }
+
+        if (request) {
+            link();
+        } else {
+            requestPermissions(permissions, 111223);
         }
     }
 
@@ -188,72 +220,89 @@ public class LinkActivity extends PawSecureActivity {
         }
     }
 
-    public void connectToDevice(BluetoothDevice bluetoothDevice) {
-
+    public void boundToDevice(BluetoothDevice bluetoothDevice) {
+        showCurtain(new Button[] { searchButtonLink, configureButtonLink });
+        curtainText(getString(R.string.link_bond));
         try {
-            if (bluetoothDevice.getBondState() != BluetoothDevice.BOND_NONE) {
-                Set<BluetoothDevice> bluetoothDeviceSet = bluetoothAdapter.getBondedDevices();
-                for (BluetoothDevice bt : bluetoothDeviceSet) {
-                    //Method m = bt.getClass().getMethod("removeBond", (Class[]) null);
-                    //m.invoke(bt, (Object[]) null);
-                    bt.getUuids();
-                }
-
+            if (bluetoothDevice.getBondState() == BluetoothDevice.BOND_NONE) {
+                connectToDevice(bluetoothDevice.createBond(), bluetoothDevice);
+            } else {
+                connectToDevice(true, bluetoothDevice);
             }
-        } catch (SecurityException e) {
-        }
-
-        ((Runnable) () -> {
-            try {
-                connected(bluetoothDevice.createBond());
-                ParcelUuid[] parcelUuids = bluetoothDevice.getUuids();
-                for (ParcelUuid p : parcelUuids) {
-                    BluetoothSocket bluetoothSocket = bluetoothDevice.createRfcommSocketToServiceRecord(p.getUuid());
-                    bluetoothSocket.connect();
-                    try {
-                        //
-                        if (bluetoothSocket.isConnected()) {
-                            OutputStream outputStream = bluetoothSocket.getOutputStream();
-                            outputStream.write("Casanostra:8712832781:H1}".getBytes());
-                            Log.d("UTT", "aa");
-                        }
-                    } catch (Exception e)  {
-
-                    }
-                }
-            } catch (SecurityException | IOException e) {
-
-            }
-        }).run();
-
-        /*
-        BluetoothLeScanner bluetoothLeScanner = bluetoothAdapter.getBluetoothLeScanner();
-        try {
-            bluetoothDevice.createBond();
-            bluetoothLeScanner.startScan(new ScanCallback() {
-                @Override
-                public void onScanResult(int callbackType, ScanResult result) {
-                    super.onScanResult(callbackType, result);
-                    if (Objects.equals(result.getDevice().getAddress(), bluetoothDevice.getAddress())) {
-                        List<ParcelUuid> uuids = result.getScanRecord().getServiceUuids();
-                    }
-                }
-            });
-        } catch (SecurityException e) {
-
-        }
-
-
-         */
+        } catch (SecurityException e) {}
     }
 
-    public void connected(boolean success) {
+    public void connectToDevice(boolean success, BluetoothDevice bluetoothDevice) {
         if (success) {
-            //startActivity(new Intent(this, ProfileActivity.class));
-            //finish();
-        } else {
-            snackbar = Snackbar.make(this, constraintLink, getResources().getText(R.string.link_linking_error), Snackbar.LENGTH_SHORT);
-            snackbar.show();
+            ((Runnable) () -> {
+                try {
+                    if (bluetoothDevice.getBondState() == BluetoothDevice.BOND_BONDED) {
+                        curtainText(getString(R.string.link_uuid));
+                        ParcelUuid[] parcelUuids = bluetoothDevice.getUuids();
+                        if (parcelUuids != null) {
+                            for (ParcelUuid p : parcelUuids) {
+                                BluetoothSocket bluetoothSocket = bluetoothDevice.createRfcommSocketToServiceRecord(p.getUuid());
+                                curtainText(getString(R.string.link_connect));
+                                bluetoothSocket.connect();
+                                if (bluetoothSocket.isConnected()) {
+                                    curtainText(getString(R.string.link_reading));
+                                    OutputStream outputStream = bluetoothSocket.getOutputStream();
+                                    String stt = this.ssid+":"+this.password+":"+"H1}";
+                                    curtainText(getString(R.string.link_writing));
+                                    outputStream.write(stt.getBytes());
+                                    curtainText(getString(R.string.link_saving));
+                                    linkViewModel.link(Token.getBearer(), spaceId, bluetoothDevice.getAddress())
+                                                .observe(this, new PawSecureObserver<SpaceResponse>(this, new LinkActivity.LinkOnChanged(this, this, linkViewModel)));
+                                    return;
+                                }
+                            }
+                        }
+                    }
+                } catch (SecurityException | IOException e) {}
+            }).run();
+        }
+        hideCurtain(new Button[] { searchButtonLink, configureButtonLink });
+        snackbar = Snackbar.make(this, constraintLink, getResources().getText(R.string.link_linking_error), Snackbar.LENGTH_SHORT);
+        snackbar.show();
+    }
+
+    void wifi() {
+        if (!wifiLinkDialog.isAdded()) {
+            wifiLinkDialog.show(getSupportFragmentManager(), null);
+        }
+    }
+
+    public void defineWifi(String ssid, String password) {
+        this.ssid = ssid;
+        this.password = password;
+        if (wifiLinkDialog.isAdded()) {
+            wifiLinkDialog.dismiss();
+        }
+    }
+
+    class LinkOnChanged extends PawSecureOnChanged implements PawSecureObserver.PawSecureOnChanged<SpaceResponse> {
+
+        public LinkOnChanged(Context context, PawSecureActivity pawSecureActivity, PawSecureViewModel pawSecureViewModel) {
+            super(context, pawSecureActivity, pawSecureViewModel);
+        }
+
+        @Override
+        public void onChanged(SpaceResponse spaceResponse) {
+            switch (spaceResponse.code) {
+                case "403":
+                case "401":
+                    checkAuth(context, pawSecureViewModel, pawSecureActivity);
+                    break;
+                default:
+                    hideCurtain(new Button[] { searchButtonLink, configureButtonLink });
+                    break;
+                case "200":
+                    Intent intent = new Intent();
+                    intent.putExtra("CHECK_SPACE", true);
+                    setResult(Activity.RESULT_OK, intent);
+                    finish();
+                    break;
+            }
         }
     }
 }
