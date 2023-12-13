@@ -7,5 +7,6 @@ public class Sensor {
     public String data;
     public int space;
     public Integer pet;
+    public boolean seen;
     public SensorType sensor_type;
 }
