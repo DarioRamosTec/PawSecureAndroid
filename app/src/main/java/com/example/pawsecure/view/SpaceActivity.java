@@ -29,6 +29,7 @@ import com.example.pawsecure.implementation.PawSecureViewModel;
 import com.example.pawsecure.model.Pet;
 import com.example.pawsecure.model.Sensor;
 import com.example.pawsecure.model.Space;
+import com.example.pawsecure.response.SensorResponse;
 import com.example.pawsecure.response.SpaceResponse;
 import com.example.pawsecure.response.SpaceSensorResponse;
 import com.example.pawsecure.singletone.ImagePetManager;
@@ -79,6 +80,7 @@ public class SpaceActivity extends PawSecureActivity implements View.OnClickList
     TextView presenceValue;
     TextView positionUpdate;
     TextView positionValue;
+    List<Sensor> sensorList;
     int tabId = 0;
 
     @Override
@@ -164,7 +166,7 @@ public class SpaceActivity extends PawSecureActivity implements View.OnClickList
         positionValue = linearSensors.findViewById(R.id.positionValue);
 
         reloadButtonSensor.setOnClickListener(view -> {
-            reloadData();
+            reloadAllData();
         });
 
         tabLayoutSpace.setEnabled(false);
@@ -184,9 +186,15 @@ public class SpaceActivity extends PawSecureActivity implements View.OnClickList
     @Override
     public void onMapReady(@NonNull GoogleMap googleMap) {
         this.googleMap = googleMap;
-        LatLng marker = new LatLng(-34, 151);
-        this.googleMap.addMarker(new MarkerOptions().position(marker).title(getString(R.string.space_maps_title)));
-        this.googleMap.moveCamera(CameraUpdateFactory.newLatLng(marker));
+        setMap(25.5345162, -103.3274717);
+    }
+
+    void setMap(double latitude, double longitude) {
+        if (this.googleMap != null) {
+            LatLng marker = new LatLng(latitude, longitude);
+            this.googleMap.addMarker(new MarkerOptions().position(marker).title(getString(R.string.space_maps_title)));
+            this.googleMap.moveCamera(CameraUpdateFactory.newLatLng(marker));
+        }
     }
 
     class SpaceOnChanged extends PawSecureOnChanged implements PawSecureObserver.PawSecureOnChanged<SpaceResponse> {
@@ -253,8 +261,8 @@ public class SpaceActivity extends PawSecureActivity implements View.OnClickList
     }
 
     void establishAllSensors() {
-        reloadData();
-        spaceViewModel.sensor(Token.getBearer(), space.id).observe(this, new PawSecureObserver<SpaceSensorResponse>(this, new SpaceSensorOnChanged(this, this, spaceViewModel)));
+        reloadAllData();
+        spaceViewModel.sensors(Token.getBearer(), space.id).observe(this, new PawSecureObserver<SpaceSensorResponse>(this, new SpaceSensorOnChanged(this, this, spaceViewModel)));
     }
 
     class SpaceSensorOnChanged extends PawSecureOnChanged implements PawSecureObserver.PawSecureOnChanged<SpaceSensorResponse> {
@@ -280,7 +288,7 @@ public class SpaceActivity extends PawSecureActivity implements View.OnClickList
     }
 
     void searchForData(int id) {
-        List<Sensor> sensorList = listMap.get(String.valueOf(id));
+        sensorList = listMap.get(String.valueOf(id));
         Sensor presence = sensorList.get(0);
         Sensor humidity = sensorList.get(1);
         Sensor sound = sensorList.get(2);
@@ -335,6 +343,8 @@ public class SpaceActivity extends PawSecureActivity implements View.OnClickList
         if (position != null) {
             positionUpdate.setText(String.format(getString(R.string.space_last), position.time));
             positionValue.setText(String.format(getString(R.string.sensor_string), (position.measure == 1 ? getString(R.string.yes) : getString(R.string.no))));
+            String[] dataLL = position.data.split("j");
+            setMap(Double.parseDouble(dataLL[0]), Double.parseDouble(dataLL[1]));
         } else {
             positionUpdate.setText(String.format(getString(R.string.space_last), ""));
         }
@@ -344,11 +354,69 @@ public class SpaceActivity extends PawSecureActivity implements View.OnClickList
         //introducir set target  con chip
     }
 
-    void reloadData() {
-        //showCurtain(new Button[] {reloadButtonSensor});
-        //todos
-        //o uno
+    void reloadAllData() {
+        for (int i = 0; i <= 6; i++) {
+            reloadData(i);
+        }
         //con snackbar diciendo donde
+    }
+
+    class SensorOnChanged extends PawSecureOnChanged implements PawSecureObserver.PawSecureOnChanged<SensorResponse> {
+
+        public SensorOnChanged(Context context, PawSecureActivity pawSecureActivity, PawSecureViewModel pawSecureViewModel) {
+            super(context, pawSecureActivity, pawSecureViewModel);
+        }
+
+        @Override
+        public void onChanged(SensorResponse sensorResponse) {
+            switch (sensorResponse.code) {
+                case "403":
+                case "401":
+                    checkAuth(context, pawSecureViewModel, pawSecureActivity);
+                    break;
+                case "202":
+                case "200":
+                    int sensorTab = (sensorResponse.data.pet == null ? 0 : sensorResponse.data.pet);
+                    listMap.get(String.valueOf(sensorTab)).set(sensorResponse.data.sensor_type.id, sensorResponse.data);
+                    if (tabId == sensorTab) {
+                        searchForData(tabId);
+                    }
+                    break;
+            }
+        }
+    }
+
+    void reloadData(int index) {
+        switch (index) {
+            case 0:
+                spaceViewModel.sensor(Token.getBearer(), space.id, "presence")
+                        .observe(this, new PawSecureObserver<SensorResponse>(this, new SensorOnChanged(this, this, spaceViewModel)));
+                break;
+            case 1:
+                spaceViewModel.sensor(Token.getBearer(), space.id, "humidity")
+                        .observe(this, new PawSecureObserver<SensorResponse>(this, new SensorOnChanged(this, this, spaceViewModel)));
+                break;
+            case 2:
+                spaceViewModel.sensor(Token.getBearer(), space.id, "sound")
+                        .observe(this, new PawSecureObserver<SensorResponse>(this, new SensorOnChanged(this, this, spaceViewModel)));
+                break;
+            case 3:
+                spaceViewModel.sensor(Token.getBearer(), space.id, "temperature")
+                        .observe(this, new PawSecureObserver<SensorResponse>(this, new SensorOnChanged(this, this, spaceViewModel)));
+                break;
+            case 4:
+                spaceViewModel.sensor(Token.getBearer(), space.id, "gas")
+                        .observe(this, new PawSecureObserver<SensorResponse>(this, new SensorOnChanged(this, this, spaceViewModel)));
+                break;
+            case 5:
+                spaceViewModel.motion(Token.getBearer(), space.id)
+                        .observe(this, new PawSecureObserver<SensorResponse>(this, new SensorOnChanged(this, this, spaceViewModel)));
+                break;
+            case 6:
+                spaceViewModel.position(Token.getBearer(), space.id)
+                        .observe(this, new PawSecureObserver<SensorResponse>(this, new SensorOnChanged(this, this, spaceViewModel)));
+                break;
+        }
     }
 
 }

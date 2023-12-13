@@ -6,6 +6,6 @@ public class Sensor {
     public double measure;
     public String data;
     public int space;
-    public int pet;
+    public Integer pet;
     public SensorType sensor_type;
 }

@@ -12,6 +12,7 @@ import com.example.pawsecure.request.SpaceRequest;
 import com.example.pawsecure.request.UserRequest;
 import com.example.pawsecure.response.GeneralResponse;
 import com.example.pawsecure.response.PetResponse;
+import com.example.pawsecure.response.SensorResponse;
 import com.example.pawsecure.response.SpaceResponse;
 import com.example.pawsecure.response.SpaceSensorResponse;
 import com.example.pawsecure.response.TokenResponse;
@@ -447,4 +448,49 @@ public class UserRepository {
         return mutableLiveData;
     }
 
+    public LiveData<SensorResponse> sensorPosition (String auth, int id) {
+        MutableLiveData<SensorResponse> mutableLiveData = new MutableLiveData<>();
+        getSensorRequest().position(auth, id).enqueue(getCallBackSensor(mutableLiveData));
+        return mutableLiveData;
+    }
+
+    public LiveData<SensorResponse> sensorMotion (String auth, int id) {
+        MutableLiveData<SensorResponse> mutableLiveData = new MutableLiveData<>();
+        getSensorRequest().motion(auth, id).enqueue(getCallBackSensor(mutableLiveData));
+        return mutableLiveData;
+    }
+
+    public LiveData<SensorResponse> findSensor (String auth, int id, String sensor) {
+        MutableLiveData<SensorResponse> mutableLiveData = new MutableLiveData<>();
+        getSensorRequest().sensor(auth, id, sensor).enqueue(getCallBackSensor(mutableLiveData));
+        return mutableLiveData;
+    }
+
+    Callback<SensorResponse> getCallBackSensor(MutableLiveData<SensorResponse> mutableLiveData) {
+        return new Callback<SensorResponse>() {
+            @Override
+            public void onResponse(Call<SensorResponse> call, Response<SensorResponse> response) {
+                SensorResponse sensorResponse;
+                switch (response.code()) {
+                    case 403:
+                    case 401:
+                        sensorResponse = new SensorResponse();
+                        sensorResponse.code = String.valueOf(response.code());
+                        mutableLiveData.setValue(sensorResponse);
+                        break;
+                    case 200:
+                        sensorResponse = response.body();
+                        if (sensorResponse != null) {
+                            sensorResponse.code = String.valueOf(response.code());
+                        }
+                        mutableLiveData.setValue(sensorResponse);
+                        break;
+                }
+            }
+
+            @Override
+            public void onFailure(Call<SensorResponse> call, Throwable t) {
+            }
+        };
+    }
 }

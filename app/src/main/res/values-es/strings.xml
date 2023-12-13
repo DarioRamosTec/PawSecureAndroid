@@ -107,7 +107,7 @@
     <string name="presence">Presencia</string>
     <string name="position">Ubicación</string>
     <string name="closeness">Cercanía</string>
-    <string name="reload_connection">Actualizar datos</string>
+    <string name="reload_connection">Actualizar todos los datos</string>
     <string name="yes">Si</string>
     <string name="no">No</string>
 </resources>

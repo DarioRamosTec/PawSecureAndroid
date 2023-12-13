@@ -117,7 +117,7 @@
     <string name="presence">Presence</string>
     <string name="position">Location</string>
     <string name="closeness">Closeness</string>
-    <string name="reload_connection">Reload data</string>
+    <string name="reload_connection">Reload all data</string>
     <string name="sensor_value" translatable="false">%1$d %2$s</string>
     <string name="sensor_string" translatable="false">%1$s</string>
     <string name="yes">Yes</string>
