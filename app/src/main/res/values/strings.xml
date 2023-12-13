@@ -108,4 +108,18 @@
     <string name="item_space_link">Link</string>
     <string name="pet_none">None</string>
     <string name="space_maps_title">Mark in the space</string>
+    <string name="temperature">Temperature</string>
+    <string name="humidity">Humidity</string>
+    <string name="space_last">Last update: %1$s</string>
+    <string name="sound">Sound</string>
+    <string name="gas">Gas</string>
+    <string name="motion">Motion</string>
+    <string name="presence">Presence</string>
+    <string name="position">Location</string>
+    <string name="closeness">Closeness</string>
+    <string name="reload_connection">Reload data</string>
+    <string name="sensor_value" translatable="false">%1$d %2$s</string>
+    <string name="sensor_string" translatable="false">%1$s</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
 </resources>

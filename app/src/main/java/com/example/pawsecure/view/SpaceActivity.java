@@ -11,12 +11,15 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Resources;
 import android.os.Bundle;
+import android.util.DisplayMetrics;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.example.pawsecure.R;
 import com.example.pawsecure.implementation.PawSecureActivity;
@@ -24,8 +27,10 @@ import com.example.pawsecure.implementation.PawSecureObserver;
 import com.example.pawsecure.implementation.PawSecureOnChanged;
 import com.example.pawsecure.implementation.PawSecureViewModel;
 import com.example.pawsecure.model.Pet;
+import com.example.pawsecure.model.Sensor;
 import com.example.pawsecure.model.Space;
 import com.example.pawsecure.response.SpaceResponse;
+import com.example.pawsecure.response.SpaceSensorResponse;
 import com.example.pawsecure.singletone.ImagePetManager;
 import com.example.pawsecure.token.Token;
 import com.example.pawsecure.view_model.SpaceViewModel;
@@ -39,21 +44,42 @@ import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.tabs.TabLayout;
 
+import java.util.List;
+import java.util.Map;
+
 public class SpaceActivity extends PawSecureActivity implements View.OnClickListener, OnMapReadyCallback {
 
     LinearLayout linearNotLinked;
     LinearLayout linearLinkedSpace;
+    LinearLayout linearSensors;
     Button linkButtonSpace;
     SpaceViewModel spaceViewModel;
     int spaceId;
     Space space;
     MaterialToolbar topBarCreateSpace;
     TabLayout tabLayoutSpace;
-    MapsActivity mapsActivity;
     SupportMapFragment mapSpace;
     GoogleMap googleMap;
     SwipeRefreshLayout refreshLayout;
     FrameLayout bottomSheetSpace;
+    Button reloadButtonSensor;
+    Map<String, List<Sensor>> listMap;
+
+    TextView temperatureUpdate;
+    TextView temperatureValue;
+    TextView humidityValue;
+    TextView humidityUpdate;
+    TextView soundValue;
+    TextView soundUpdate;
+    TextView gasUpdate;
+    TextView gasValue;
+    TextView motionUpdate;
+    TextView motionValue;
+    TextView presenceUpdate;
+    TextView presenceValue;
+    TextView positionUpdate;
+    TextView positionValue;
+    int tabId = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,6 +96,7 @@ public class SpaceActivity extends PawSecureActivity implements View.OnClickList
         tabLayoutSpace = findViewById(R.id.tabLayoutSpace);
         refreshLayout = findViewById(R.id.refreshLayout);
         bottomSheetSpace = findViewById(R.id.bottomSheetSpace);
+        linearSensors = findViewById(R.id.linearSensors);
         mapSpace = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.mapSpace);
 
@@ -113,8 +140,34 @@ public class SpaceActivity extends PawSecureActivity implements View.OnClickList
 
         BottomSheetBehavior<FrameLayout> standardBottomSheetBehavior = BottomSheetBehavior.from(bottomSheetSpace);
         standardBottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
-        //standardBottomSheetBehavior.setPeekHeight(150);
+        DisplayMetrics metrics = this.getResources().getDisplayMetrics();
+        standardBottomSheetBehavior.setPeekHeight(140);
         standardBottomSheetBehavior.setHideable(false);
+
+        View child = getLayoutInflater().inflate(R.layout.layout_sensors, null);
+        linearSensors.addView(child);
+        reloadButtonSensor = linearSensors.findViewById(R.id.reloadButtonSensor);
+
+        temperatureUpdate = linearSensors.findViewById(R.id.temperatureUpdate);
+        temperatureValue = linearSensors.findViewById(R.id.temperatureValue);
+        humidityValue = linearSensors.findViewById(R.id.humidityValue);
+        humidityUpdate = linearSensors.findViewById(R.id.humidityUpdate);
+        soundValue = linearSensors.findViewById(R.id.soundValue);
+        soundUpdate = linearSensors.findViewById(R.id.soundUpdate);
+        gasUpdate = linearSensors.findViewById(R.id.gasUpdate);
+        gasValue = linearSensors.findViewById(R.id.gasValue);
+        motionUpdate = linearSensors.findViewById(R.id.motionUpdate);
+        motionValue = linearSensors.findViewById(R.id.motionValue);
+        presenceUpdate = linearSensors.findViewById(R.id.presenceUpdate);
+        presenceValue = linearSensors.findViewById(R.id.presenceValue);
+        positionUpdate = linearSensors.findViewById(R.id.positionUpdate);
+        positionValue = linearSensors.findViewById(R.id.positionValue);
+
+        reloadButtonSensor.setOnClickListener(view -> {
+            reloadData();
+        });
+
+        tabLayoutSpace.setEnabled(false);
     }
 
     @Override
@@ -150,7 +203,6 @@ public class SpaceActivity extends PawSecureActivity implements View.OnClickList
                     checkAuth(context, pawSecureViewModel, pawSecureActivity);
                     break;
                 case "200":
-                    hideCurtain(new Button[] {});
                     space = spaceResponse.data.get(0);
                     topBarCreateSpace.setTitle(space.name);
                     decideLink();
@@ -161,23 +213,26 @@ public class SpaceActivity extends PawSecureActivity implements View.OnClickList
     }
 
     void decideLink() {
+        hideCurtain(new Button[] {});
         //space.linked == 1
         if (true) {
             linearLinkedSpace.setVisibility(View.VISIBLE);
             topBarCreateSpace.inflateMenu(R.menu.menu_space);
+            establishAllSensors();
         } else {
             linearNotLinked.setVisibility(View.VISIBLE);
         }
     }
     void tabPets() {
-        tabLayoutSpace.addTab(tabLayoutSpace.newTab().setText(getString(R.string.pet_none)));
+        tabLayoutSpace.addTab(tabLayoutSpace.newTab().setText(getString(R.string.pet_none)).setId(0));
         for (Pet pet : space.pets) {
             tabLayoutSpace.addTab(tabLayoutSpace.newTab().setText(pet.name).setIcon(ImagePetManager.getIdIconPet(pet.icon)).setId(pet.id));
         }
         tabLayoutSpace.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
-                searchForData(tab.getId());
+                tabId = tab.getId();
+                searchForData(tabId);
             }
 
             @Override
@@ -192,12 +247,108 @@ public class SpaceActivity extends PawSecureActivity implements View.OnClickList
         });
     }
 
-    void searchForData(int id) {
+    @Override
+    public void onAuth() {
+        super.onAuth();
+    }
 
+    void establishAllSensors() {
+        reloadData();
+        spaceViewModel.sensor(Token.getBearer(), space.id).observe(this, new PawSecureObserver<SpaceSensorResponse>(this, new SpaceSensorOnChanged(this, this, spaceViewModel)));
+    }
+
+    class SpaceSensorOnChanged extends PawSecureOnChanged implements PawSecureObserver.PawSecureOnChanged<SpaceSensorResponse> {
+
+        public SpaceSensorOnChanged(Context context, PawSecureActivity pawSecureActivity, PawSecureViewModel pawSecureViewModel) {
+            super(context, pawSecureActivity, pawSecureViewModel);
+        }
+
+        @Override
+        public void onChanged(SpaceSensorResponse spaceResponse) {
+            switch (spaceResponse.code) {
+                case "403":
+                case "401":
+                    checkAuth(context, pawSecureViewModel, pawSecureActivity);
+                    break;
+                case "200":
+                    listMap = spaceResponse.data.get(0);
+                    searchForData(tabId);
+                    tabLayoutSpace.setEnabled(true);
+                    break;
+            }
+        }
+    }
+
+    void searchForData(int id) {
+        List<Sensor> sensorList = listMap.get(String.valueOf(id));
+        Sensor presence = sensorList.get(0);
+        Sensor humidity = sensorList.get(1);
+        Sensor sound = sensorList.get(2);
+        Sensor temperature = sensorList.get(3);
+        Sensor gas = sensorList.get(4);
+        Sensor motion = sensorList.get(5);
+        Sensor position = sensorList.get(6);
+
+        Resources res = getResources();
+        if (temperature != null) {
+            temperatureUpdate.setText(String.format(getString(R.string.space_last), temperature.time));
+            temperatureValue.setText(String.format(getString(R.string.sensor_value), temperature.measure, temperature.sensor_type.unity));
+        } else {
+            temperatureUpdate.setText(String.format(getString(R.string.space_last), ""));
+        }
+
+        if (humidity != null) {
+            humidityUpdate.setText(String.format(getString(R.string.space_last), humidity.time));
+            humidityValue.setText(String.format(getString(R.string.sensor_value), humidity.measure, humidity.sensor_type.unity));
+        } else {
+            humidityUpdate.setText(String.format(getString(R.string.space_last), ""));
+        }
+
+        if (sound != null) {
+            soundUpdate.setText(String.format(getString(R.string.space_last), sound.time));
+            soundValue.setText(String.format(getString(R.string.sensor_string), (sound.measure == 1 ? getString(R.string.yes) : getString(R.string.no))));
+        } else {
+            soundUpdate.setText(String.format(getString(R.string.space_last), ""));
+        }
+
+        if (gas != null) {
+            gasUpdate.setText(String.format(getString(R.string.space_last), gas.time));
+            gasValue.setText(String.format(getString(R.string.sensor_string), (gas.measure == 1 ? getString(R.string.yes) : getString(R.string.no))));
+        } else {
+            gasUpdate.setText(String.format(getString(R.string.space_last), ""));
+        }
+
+        if (motion != null) {
+            motionUpdate.setText(String.format(getString(R.string.space_last), motion.time));
+            motionValue.setText(String.format(getString(R.string.sensor_string), (motion.measure == 1 ? getString(R.string.yes) : getString(R.string.no))));
+        } else {
+            motionUpdate.setText(String.format(getString(R.string.space_last), ""));
+        }
+
+        if (presence != null) {
+            presenceUpdate.setText(String.format(getString(R.string.space_last), presence.time));
+            presenceValue.setText(String.format(getString(R.string.sensor_string), (presence.measure == 1 ? getString(R.string.yes) : getString(R.string.no))));
+        } else {
+            presenceUpdate.setText(String.format(getString(R.string.space_last), ""));
+        }
+
+        if (position != null) {
+            positionUpdate.setText(String.format(getString(R.string.space_last), position.time));
+            positionValue.setText(String.format(getString(R.string.sensor_string), (position.measure == 1 ? getString(R.string.yes) : getString(R.string.no))));
+        } else {
+            positionUpdate.setText(String.format(getString(R.string.space_last), ""));
+        }
+    }
+
+    void setTarget() {
+        //introducir set target  con chip
     }
 
     void reloadData() {
-
+        //showCurtain(new Button[] {reloadButtonSensor});
+        //todos
+        //o uno
+        //con snackbar diciendo donde
     }
 
 }

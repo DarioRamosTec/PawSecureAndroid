@@ -98,4 +98,16 @@
     <string name="item_space_link">Vincular</string>
     <string name="pet_none">Ninguno</string>
     <string name="space_maps_title">Ubicación del espacio</string>
+    <string name="temperature">Temperatura</string>
+    <string name="humidity">Humedad</string>
+    <string name="space_last">Última actualización: %1$s</string>
+    <string name="sound">Sonido</string>
+    <string name="gas">Gas</string>
+    <string name="motion">Movimiento</string>
+    <string name="presence">Presencia</string>
+    <string name="position">Ubicación</string>
+    <string name="closeness">Cercanía</string>
+    <string name="reload_connection">Actualizar datos</string>
+    <string name="yes">Si</string>
+    <string name="no">No</string>
 </resources>

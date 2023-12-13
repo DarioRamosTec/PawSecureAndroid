@@ -7,11 +7,13 @@ import androidx.lifecycle.MutableLiveData;
 
 import com.example.pawsecure.request.PetRequest;
 import com.example.pawsecure.request.PetSpaceRequest;
+import com.example.pawsecure.request.SensorRequest;
 import com.example.pawsecure.request.SpaceRequest;
 import com.example.pawsecure.request.UserRequest;
 import com.example.pawsecure.response.GeneralResponse;
 import com.example.pawsecure.response.PetResponse;
 import com.example.pawsecure.response.SpaceResponse;
+import com.example.pawsecure.response.SpaceSensorResponse;
 import com.example.pawsecure.response.TokenResponse;
 import com.example.pawsecure.retrofit.RetrofitRequest;
 import com.google.gson.Gson;
@@ -28,6 +30,7 @@ public class UserRepository {
     private PetRequest petRequest;
     private SpaceRequest spaceRequest;
     private PetSpaceRequest petSpaceRequest;
+    private SensorRequest sensorRequest;
 
     public UserRepository() {
 
@@ -59,6 +62,13 @@ public class UserRepository {
             petSpaceRequest = RetrofitRequest.obtainRetrofit().create(PetSpaceRequest.class);
         }
         return petSpaceRequest;
+    }
+
+    SensorRequest getSensorRequest() {
+        if (sensorRequest == null) {
+            sensorRequest = RetrofitRequest.obtainRetrofit().create(SensorRequest.class);
+        }
+        return sensorRequest;
     }
 
     public LiveData<GeneralResponse> signUp(String name, String email, String password, String password_again, String lang) {
@@ -402,6 +412,36 @@ public class UserRepository {
 
             @Override
             public void onFailure(Call<SpaceResponse> call, Throwable t) {
+            }
+        });
+        return mutableLiveData;
+    }
+
+    public LiveData<SpaceSensorResponse> indexSensor (String auth, int id) {
+        MutableLiveData<SpaceSensorResponse> mutableLiveData = new MutableLiveData<>();
+        getSensorRequest().index(auth, id).enqueue(new Callback<SpaceSensorResponse>() {
+            @Override
+            public void onResponse(Call<SpaceSensorResponse> call, Response<SpaceSensorResponse> response) {
+                SpaceSensorResponse spaceSensorResponse;
+                switch (response.code()) {
+                    case 403:
+                    case 401:
+                        spaceSensorResponse = new SpaceSensorResponse();
+                        spaceSensorResponse.code = String.valueOf(response.code());
+                        mutableLiveData.setValue(spaceSensorResponse);
+                        break;
+                    case 200:
+                        spaceSensorResponse = response.body();
+                        if (spaceSensorResponse != null) {
+                            spaceSensorResponse.code = String.valueOf(response.code());
+                        }
+                        mutableLiveData.setValue(spaceSensorResponse);
+                        break;
+                }
+            }
+
+            @Override
+            public void onFailure(Call<SpaceSensorResponse> call, Throwable t) {
             }
         });
         return mutableLiveData;
