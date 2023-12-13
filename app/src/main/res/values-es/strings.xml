@@ -94,4 +94,8 @@
     <string name="link_reading">Leyendo...</string>
     <string name="link_writing">Escribiendo...</string>
     <string name="link_saving">Guardando...</string>
+    <string name="wifi_link_hello">Conéctate a WiFi</string>
+    <string name="item_space_link">Vincular</string>
+    <string name="pet_none">Ninguno</string>
+    <string name="space_maps_title">Ubicación del espacio</string>
 </resources>

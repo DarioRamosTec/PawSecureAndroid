@@ -29,6 +29,7 @@
         <item name="colorPrimaryInverse">@color/md_theme_light_inversePrimary</item>
         <item name="textAppearanceTitleMedium">@style/Theme.PawSecure.TitleMedium</item>
         <item name="textAppearanceTitleLarge">@style/Theme.PawSecure.TitleLarge</item>
+        <item name="textAppearanceTitleSmall">@style/Theme.PawSecure.TitleSmall</item>
     </style>
 
     <style name="Theme.PawSecure.TitleLarge" parent="TextAppearance.Material3.TitleLarge">
@@ -39,6 +40,10 @@
     <style name="Theme.PawSecure.TitleMedium" parent="TextAppearance.Material3.TitleMedium">
         <item name="fontFamily">@font/quicksand_light</item>
         <item name="android:textSize">14sp</item>
+    </style>
+
+    <style name="Theme.PawSecure.TitleSmall" parent="TextAppearance.Material3.TitleSmall">
+        <item name="fontFamily">@font/quicksand</item>
     </style>
 
 </resources>
