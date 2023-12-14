@@ -116,4 +116,10 @@
     <string name="off">Fuera</string>
     <string name="strong">Fuerte</string>
     <string name="weak">Debil</string>
+    <string name="account_profile">Perfil</string>
+    <string name="edit_profile">Editar perfil</string>
+    <string name="logout">Cerrar sesión</string>
+    <string name="change_password">Cambiar contraseña</string>
+    <string name="save_changes">Guardar cambios</string>
+    <string name="link_linking_sucess">¡Conexión lista!</string>
 </resources>

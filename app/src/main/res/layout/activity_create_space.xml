@@ -56,6 +56,17 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
+            <ImageView
+                android:id="@+id/imageView5"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/icon_animal_group"
+                android:foreground="@drawable/icon_circle"
+                app:layout_constraintBottom_toBottomOf="@+id/recyclerCreateSpace"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/recyclerCreateSpace" />
+
             <LinearLayout
                 android:id="@+id/linearLayout3"
                 android:layout_width="0dp"
