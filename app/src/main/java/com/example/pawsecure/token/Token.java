@@ -94,4 +94,26 @@ public class Token {
         sharedPrefEditor.putString(context.getString(R.string.data_password), Token.password);
         sharedPrefEditor.apply();
     }
+
+    public static void setGoodbye(Context context) {
+        Token.token = null;
+        Token.type = null;
+        Token.expires = 0;
+        Token.expired = false;
+        Token.email = null;
+        Token.password = null;
+        Token.countDownTimer = null;
+
+        SharedPreferences sharedPref = context.getSharedPreferences(context.getString(R.string.data_directory), Context.MODE_PRIVATE);
+        SharedPreferences.Editor sharedPrefEditor = sharedPref.edit();
+        sharedPrefEditor.putString(context.getString(R.string.data_email), Token.email);
+        sharedPrefEditor.putString(context.getString(R.string.data_password), Token.password);
+        sharedPrefEditor.apply();
+
+        SharedPreferences sharedKey = context.getSharedPreferences(context.getString(R.string.key_directory), Context.MODE_PRIVATE);
+        SharedPreferences.Editor sharedKeyEditor = sharedKey.edit();
+        sharedKeyEditor.putString(context.getString(R.string.key_token), "");
+        sharedKeyEditor.putString(context.getString(R.string.key_type), "");
+        sharedKeyEditor.apply();
+    }
 }

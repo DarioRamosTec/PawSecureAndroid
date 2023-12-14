@@ -1,9 +1,11 @@
 package com.example.pawsecure.request;
 
 import com.example.pawsecure.response.GeneralResponse;
+import com.example.pawsecure.response.LangResponse;
 import com.example.pawsecure.response.PetResponse;
 import com.example.pawsecure.response.SpaceResponse;
 import com.example.pawsecure.response.TokenResponse;
+import com.example.pawsecure.response.UserResponse;
 
 import retrofit2.Call;
 import retrofit2.http.Field;
@@ -35,5 +37,19 @@ public interface UserRequest {
     Call<PetResponse> pets(@Header("Authorization") String authorization);
 
     @GET("auth/lang")
-    Call<GeneralResponse> lang(@Header("Authorization") String authorization);
+    Call<LangResponse> lang(@Header("Authorization") String authorization);
+
+    @GET("auth/me")
+    Call<UserResponse> index(@Header("Authorization") String authorization);
+
+    @POST("auth/logout")
+    Call<UserResponse> logout(@Header("Authorization") String authorization);
+
+    @FormUrlEncoded
+    @POST("auth/me")
+    Call<UserResponse> update(@Header("Authorization") String authorization,
+                              @Field("name") String name,
+                              @Field("middle_name") String middle_name,
+                              @Field("last_name") String last_name);
+
 }

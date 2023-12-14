@@ -18,6 +18,12 @@ public class ValidationUserResponse {
     @SerializedName("name")
     public List<String> name;
 
+    @SerializedName("middle_name")
+    public List<String> middle_name;
+
+    @SerializedName("last_name")
+    public List<String> last_name;
+
     @SerializedName("lang")
     public List<String> lang;
 }

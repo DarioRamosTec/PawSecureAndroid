@@ -8,6 +8,7 @@ import android.content.Context;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.pawsecure.R;
@@ -17,10 +18,13 @@ import com.example.pawsecure.implementation.PawSecureAnimator;
 import com.example.pawsecure.implementation.PawSecureObserver;
 import com.example.pawsecure.implementation.PawSecureOnChanged;
 import com.example.pawsecure.implementation.PawSecureViewModel;
+import com.example.pawsecure.response.LangResponse;
 import com.example.pawsecure.response.SpaceResponse;
 import com.example.pawsecure.token.Token;
 import com.example.pawsecure.view_model.NexusViewModel;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+
+import java.util.Locale;
 
 public class NexusActivity extends PawSecureActivity {
 
@@ -28,6 +32,8 @@ public class NexusActivity extends PawSecureActivity {
     TextView textNothingNexus;
     RecyclerView recyclerNexus;
     FloatingActionButton fabNexus;
+    ImageView profileViewNexus;
+    ImageView permissionViewNexus;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,6 +44,8 @@ public class NexusActivity extends PawSecureActivity {
         establishCurtain(findViewById(R.id.progressCurtainNexus), findViewById(R.id.viewCurtainNexus));
         textNothingNexus = findViewById(R.id.textNothingNexus);
         recyclerNexus = findViewById(R.id.recyclerNexus);
+        profileViewNexus = findViewById(R.id.profileViewNexus);
+        permissionViewNexus = findViewById(R.id.permissionViewNexus);
         textNothingNexus.setText("");
 
         nexusViewModel = new ViewModelProvider(this).get(NexusViewModel.class);
@@ -50,6 +58,13 @@ public class NexusActivity extends PawSecureActivity {
                 startIntent(ChooseActivity.class, false);
             }
         });
+        profileViewNexus.setOnClickListener(view -> {
+            startIntent(ProfileActivity.class, false);
+        });
+        permissionViewNexus.setOnClickListener(view -> {
+            startIntent(PermissionsActivity.class, false);
+        });
+        nexusViewModel.lang(Token.getBearer()).observe(this, new PawSecureObserver<LangResponse>(this, new LangOnChanged(this, this, nexusViewModel)));
     }
 
     void getSpaces() {
@@ -81,6 +96,27 @@ public class NexusActivity extends PawSecureActivity {
                         recyclerNexus.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false));
                         recyclerNexus.setHasFixedSize(true);
                     }
+                    break;
+            }
+        }
+    }
+
+    class LangOnChanged extends PawSecureOnChanged implements PawSecureObserver.PawSecureOnChanged<LangResponse> {
+
+        public LangOnChanged(Context context, PawSecureActivity pawSecureActivity, PawSecureViewModel pawSecureViewModel) {
+            super(context, pawSecureActivity, pawSecureViewModel);
+        }
+
+        @Override
+        public void onChanged(LangResponse langResponse) {
+            switch (langResponse.code) {
+                case "403":
+                case "401":
+                    checkAuth(context, pawSecureViewModel, pawSecureActivity);
+                    break;
+                case "200":
+                    hideCurtain(new Button[] {});
+                    Locale.setDefault(new Locale(langResponse.data));
                     break;
             }
         }

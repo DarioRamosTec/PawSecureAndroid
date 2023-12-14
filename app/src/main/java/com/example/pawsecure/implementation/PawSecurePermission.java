@@ -18,6 +18,7 @@ public class PawSecurePermission {
         this.permission = permission;
         this.name = name;
         this.image = resource;
+        this.description = description;
     }
 
     public boolean check(Context context) {

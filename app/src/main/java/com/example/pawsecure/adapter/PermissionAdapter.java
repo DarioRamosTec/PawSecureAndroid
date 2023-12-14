@@ -1,5 +1,10 @@
 package com.example.pawsecure.adapter;
 
+import static androidx.core.app.ActivityCompat.requestPermissions;
+
+import android.Manifest;
+import android.content.pm.PackageManager;
+import android.os.Build;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -63,7 +68,7 @@ public class PermissionAdapter extends RecyclerView.Adapter<PermissionAdapter.Vi
         }
         public void setData(PawSecurePermission permission, PermissionsActivity permissionsActivity) {
             textNameItemPermission.setText(permission.name);
-            textDescriptionItemPermission.setText(permission.description);
+            textDescriptionItemPermission.setText(permission.description.toString());
             switchItemPermission.setChecked(permission.check(itemView.getContext()));
             switchItemPermission.setOnCheckedChangeListener(new PermissionListener(permissionsActivity, permission, switchItemPermission));
         }
@@ -81,7 +86,7 @@ public class PermissionAdapter extends RecyclerView.Adapter<PermissionAdapter.Vi
 
         @Override
         public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-
+            activity.checkOutPermission(permission, aSwitch);
         }
     }
 }

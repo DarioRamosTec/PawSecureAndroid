@@ -129,9 +129,12 @@
     <string name="strong">Strong</string>
     <string name="weak">Weak</string>
     <string name="account_profile">Profile</string>
-    <string name="edit_profile">Edit profile</string>
     <string name="logout">Logout</string>
     <string name="change_password">Change password</string>
     <string name="save_changes">Save changes</string>
     <string name="link_linking_sucess">Success linking!</string>
+    <string name="middle_name">Middle name</string>
+    <string name="last_name">Last name</string>
+    <string name="profile_title">Your profile</string>
+    <string name="profile_subtitle">Edit your info</string>
 </resources>

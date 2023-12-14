@@ -11,11 +11,13 @@ import com.example.pawsecure.request.SensorRequest;
 import com.example.pawsecure.request.SpaceRequest;
 import com.example.pawsecure.request.UserRequest;
 import com.example.pawsecure.response.GeneralResponse;
+import com.example.pawsecure.response.LangResponse;
 import com.example.pawsecure.response.PetResponse;
 import com.example.pawsecure.response.SensorResponse;
 import com.example.pawsecure.response.SpaceResponse;
 import com.example.pawsecure.response.SpaceSensorResponse;
 import com.example.pawsecure.response.TokenResponse;
+import com.example.pawsecure.response.UserResponse;
 import com.example.pawsecure.retrofit.RetrofitRequest;
 import com.google.gson.Gson;
 
@@ -191,7 +193,9 @@ public class UserRepository {
             }
 
             @Override
-            public void onFailure(Call<SpaceResponse> call, Throwable t) { }
+            public void onFailure(Call<SpaceResponse> call, Throwable t) {
+
+            }
         });
         return mutableLiveData;
     }
@@ -529,6 +533,139 @@ public class UserRepository {
 
             @Override
             public void onFailure(Call<SpaceResponse> call, Throwable t) {
+            }
+        });
+        return mutableLiveData;
+    }
+
+    public LiveData<UserResponse> indexMe (String auth) {
+        MutableLiveData<UserResponse> mutableLiveData = new MutableLiveData<>();
+        getUserRequest().index(auth).enqueue(new Callback<UserResponse>() {
+            @Override
+            public void onResponse(Call<UserResponse> call, Response<UserResponse> response) {
+                UserResponse userResponse;
+                switch (response.code()) {
+                    case 403:
+                    case 401:
+                        userResponse = new UserResponse();
+                        userResponse.code = String.valueOf(response.code());
+                        mutableLiveData.setValue(userResponse);
+                        break;
+                    case 200:
+                        userResponse = response.body();
+                        if (userResponse != null) {
+                            userResponse.code = String.valueOf(response.code());
+                        }
+                        mutableLiveData.setValue(userResponse);
+                        break;
+                }
+            }
+
+            @Override
+            public void onFailure(Call<UserResponse> call, Throwable t) {
+
+            }
+        });
+        return mutableLiveData;
+    }
+
+    public LiveData<UserResponse> updateMe (String auth, String name, String middle_name, String last_name) {
+        MutableLiveData<UserResponse> mutableLiveData = new MutableLiveData<>();
+        getUserRequest().update(auth, name, middle_name, last_name).enqueue(new Callback<UserResponse>() {
+            @Override
+            public void onResponse(Call<UserResponse> call, Response<UserResponse> response) {
+                UserResponse userResponse;
+                switch (response.code()) {
+                    case 403:
+                    case 401:
+                        userResponse = new UserResponse();
+                        userResponse.code = String.valueOf(response.code());
+                        mutableLiveData.setValue(userResponse);
+                        break;
+                    case 400:
+                        try {
+                            userResponse = new Gson().fromJson(response.errorBody().string(), UserResponse.class);
+                        } catch (IOException e) {
+                            throw new RuntimeException(e);
+                        }
+                        userResponse.code = String.valueOf(response.code());
+                        mutableLiveData.setValue(userResponse);
+                        break;
+                    case 200:
+                        userResponse = response.body();
+                        if (userResponse != null) {
+                            userResponse.code = String.valueOf(response.code());
+                        }
+                        mutableLiveData.setValue(userResponse);
+                        break;
+                }
+            }
+
+            @Override
+            public void onFailure(Call<UserResponse> call, Throwable t) {
+
+            }
+        });
+        return mutableLiveData;
+    }
+
+    public LiveData<UserResponse> logoutMe (String auth) {
+        MutableLiveData<UserResponse> mutableLiveData = new MutableLiveData<>();
+        getUserRequest().logout(auth).enqueue(new Callback<UserResponse>() {
+            @Override
+            public void onResponse(Call<UserResponse> call, Response<UserResponse> response) {
+                UserResponse userResponse;
+                switch (response.code()) {
+                    case 403:
+                    case 401:
+                        userResponse = new UserResponse();
+                        userResponse.code = String.valueOf(response.code());
+                        mutableLiveData.setValue(userResponse);
+                        break;
+                    case 200:
+                        userResponse = response.body();
+                        if (userResponse != null) {
+                            userResponse.code = String.valueOf(response.code());
+                        }
+                        mutableLiveData.setValue(userResponse);
+                        break;
+                }
+            }
+
+            @Override
+            public void onFailure(Call<UserResponse> call, Throwable t) {
+
+            }
+        });
+        return mutableLiveData;
+    }
+
+    public LiveData<LangResponse> indexLang (String auth) {
+        MutableLiveData<LangResponse> mutableLiveData = new MutableLiveData<>();
+        getUserRequest().lang(auth).enqueue(new Callback<LangResponse>() {
+            @Override
+            public void onResponse(Call<LangResponse> call, Response<LangResponse> response) {
+                LangResponse langResponse;
+                switch (response.code()) {
+                    case 403:
+                    case 401:
+                        langResponse = new LangResponse();
+                        langResponse.code = String.valueOf(response.code());
+                        mutableLiveData.setValue(langResponse);
+                        break;
+                    case 200:
+                        langResponse = response.body();
+                        if (langResponse != null) {
+                            langResponse.code = String.valueOf(response.code());
+                        }
+                        mutableLiveData.setValue(langResponse);
+                        break;
+                }
+            }
+
+            @Override
+            public void onFailure(Call<LangResponse> call, Throwable t) {
+
             }
         });
         return mutableLiveData;

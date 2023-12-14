@@ -19,8 +19,11 @@ public class PermissionManager {
     public static Map<String, PawSecurePermission> getMap() {
         if (permissionDictionary == null) {
             permissionDictionary = new Hashtable<String, PawSecurePermission>() {{
-                put("CAMERA", new PawSecurePermission(Manifest.permission.CAMERA, "Camera", R.drawable.outline_camera_24, ""));
-                put("CALL_PHONE", new PawSecurePermission(Manifest.permission.CALL_PHONE, "Phone", R.drawable.round_local_phone_24, ""));
+                put("READ_MEDIA_IMAGES", new PawSecurePermission(Manifest.permission.READ_MEDIA_IMAGES, "IMAGES", R.drawable.outline_camera_24, "Habilidad para ver tus fotos."));
+                put("BLUETOOTH", new PawSecurePermission(Manifest.permission.BLUETOOTH, "BLUETOOTH", R.drawable.round_local_phone_24, "Forma de conectarse mediante bluetooth."));
+                put("ACCESS_NETWORK_STATE", new PawSecurePermission(Manifest.permission.ACCESS_NETWORK_STATE, "WIFI", R.drawable.outline_camera_24, "Conocer información de la red WiFi"));
+                put("INTERNET", new PawSecurePermission(Manifest.permission.INTERNET, "INTERNET", R.drawable.round_local_phone_24, "Conectarse a Internet"));
+                put("ACCESS_FINE_LOCATION", new PawSecurePermission(Manifest.permission.ACCESS_FINE_LOCATION, "LOCATION", R.drawable.outline_camera_24, "Accesar a la ubicación."));
             }};
         }
         return permissionDictionary;
