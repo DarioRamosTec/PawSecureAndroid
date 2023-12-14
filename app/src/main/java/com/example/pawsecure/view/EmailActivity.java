@@ -83,6 +83,7 @@ public class EmailActivity extends PawSecureActivity {
         public void onChanged(TokenResponse tokenResponse) {
             if (tokenResponse.code.equals("200")) {
                 startIntent(ActivateActivity.class, true);
+                Token.setData(getParent(), email, password);
             } else {
                 Snackbar snackbar = snackbar = Snackbar.make(getParent(), constraintEmail, getResources().getText(R.string.not_login), Snackbar.LENGTH_INDEFINITE)
                         .setAction(R.string.retry, view -> {
