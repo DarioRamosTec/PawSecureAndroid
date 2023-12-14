@@ -55,8 +55,7 @@ public class LoginActivity extends PawSecureActivity implements View.OnClickList
     }
 
     void goToNexus() {
-        startActivity(new Intent(this, NexusActivity.class));
-        finish();
+        restartActivities(NexusActivity.class);
     }
 
     void goToEmail() {

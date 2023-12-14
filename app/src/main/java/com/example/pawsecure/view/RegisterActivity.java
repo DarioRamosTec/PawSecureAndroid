@@ -87,8 +87,10 @@ public class RegisterActivity extends PawSecureActivity implements View.OnClickL
         finish();
     }
 
-    void goToEmail() {
+    void goToEmail(String email, String password) {
         Intent intent = new Intent(this, EmailActivity.class);
+        intent.putExtra("MAIL", email);
+        intent.putExtra("PASSWORD", password);
         startActivity(intent);
         finish();
     }
@@ -129,7 +131,7 @@ public class RegisterActivity extends PawSecureActivity implements View.OnClickL
                         textInputPasswordRegister.setErrorContentDescription(null);
                         textInputPasswordAgainRegister.setError(null);
                         textInputPasswordAgainRegister.setErrorContentDescription(null);
-                        goToEmail();
+                        goToEmail(editTextEmail.getText().toString(), editTextPassword.getText().toString());
                     }
         });
     }

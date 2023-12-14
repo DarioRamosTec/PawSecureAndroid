@@ -125,4 +125,5 @@
     <string name="middle_name">Apellido materno</string>
     <string name="last_name">Apellido paterno</string>
     <string name="profile_subtitle">Edita tu información</string>
+    <string name="not_login">No estás verificado</string>
 </resources>

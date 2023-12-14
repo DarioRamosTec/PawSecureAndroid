@@ -137,4 +137,5 @@
     <string name="last_name">Last name</string>
     <string name="profile_title">Your profile</string>
     <string name="profile_subtitle">Edit your info</string>
+    <string name="not_login">You are not verified.</string>
 </resources>
