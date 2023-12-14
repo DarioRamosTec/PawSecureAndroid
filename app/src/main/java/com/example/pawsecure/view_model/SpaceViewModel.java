@@ -33,4 +33,9 @@ public class SpaceViewModel extends PawSecureViewModel {
         return userRepository.findSensor(auth, id, sensor);
     }
 
+    public LiveData<SpaceResponse> target (String auth, int id, Integer pet) {
+        return userRepository.targetSensor(auth, id, pet);
+    }
+
+
 }

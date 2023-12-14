@@ -33,9 +33,11 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.ParcelUuid;
+import android.text.Editable;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 
 import com.example.pawsecure.R;
 import com.example.pawsecure.adapter.DevicesAdapter;
@@ -149,6 +151,7 @@ public class LinkActivity extends PawSecureActivity {
         IntentFilter filter = new IntentFilter(BluetoothDevice.ACTION_FOUND);
         registerReceiver(receiver, filter);
         wifiLinkDialog = new WifiLinkDialog(this);
+
 
         search();
         wifi();
@@ -275,9 +278,6 @@ public class LinkActivity extends PawSecureActivity {
     public void defineWifi(String ssid, String password) {
         this.ssid = ssid;
         this.password = password;
-        if (wifiLinkDialog.isAdded()) {
-            wifiLinkDialog.dismiss();
-        }
     }
 
     class LinkOnChanged extends PawSecureOnChanged implements PawSecureObserver.PawSecureOnChanged<SpaceResponse> {

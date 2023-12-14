@@ -110,4 +110,10 @@
     <string name="reload_connection">Actualizar todos los datos</string>
     <string name="yes">Si</string>
     <string name="no">No</string>
+    <string name="chip_space_reload">Recargar datos</string>
+    <string name="chip_space_target">Establecer objetivo</string>
+    <string name="on">Dentro</string>
+    <string name="off">Fuera</string>
+    <string name="strong">Fuerte</string>
+    <string name="weak">Debil</string>
 </resources>

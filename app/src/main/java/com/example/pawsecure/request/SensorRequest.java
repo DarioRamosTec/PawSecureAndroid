@@ -14,11 +14,11 @@ public interface SensorRequest {
     Call<SpaceSensorResponse> index (@Header("Authorization") String authorization,
                                      @Path("id") int id);
 
-    @GET("auth/space/{id}/'space/{id}/position'")
+    @GET("auth/space/{id}/position")
     Call<SensorResponse> position (@Header("Authorization") String authorization,
                                    @Path("id") int id);
 
-    @GET("auth/space/{id}/'space/{id}/motion'")
+    @GET("auth/space/{id}/motion")
     Call<SensorResponse> motion (@Header("Authorization") String authorization,
                                  @Path("id") int id);
 

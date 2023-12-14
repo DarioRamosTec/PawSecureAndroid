@@ -87,7 +87,8 @@
             android:id="@+id/linearLinkedSpace"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:visibility="gone">
 
             <androidx.coordinatorlayout.widget.CoordinatorLayout
                 android:id="@+id/coordinatorTabSpace"
@@ -129,6 +130,24 @@
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
+
+                    <com.google.android.material.chip.ChipGroup
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:layout_constraintBottom_toBottomOf="@+id/mapSpace"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintVertical_bias="0.01">
+
+                        <com.google.android.material.chip.Chip
+                            android:id="@+id/chipTargetSpace"
+                            style="@style/Widget.Material3.Chip.Filter"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/chip_space_target" />
+
+                    </com.google.android.material.chip.ChipGroup>
 
                     <androidx.coordinatorlayout.widget.CoordinatorLayout
                         android:id="@+id/coordinatorLayout"

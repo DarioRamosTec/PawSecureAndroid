@@ -478,6 +478,7 @@ public class UserRepository {
                         sensorResponse.code = String.valueOf(response.code());
                         mutableLiveData.setValue(sensorResponse);
                         break;
+                    case 202:
                     case 200:
                         sensorResponse = response.body();
                         if (sensorResponse != null) {
@@ -493,4 +494,44 @@ public class UserRepository {
             }
         };
     }
+
+    public LiveData<SpaceResponse> targetSensor (String auth, int id, Integer pet) {
+        MutableLiveData<SpaceResponse> mutableLiveData = new MutableLiveData<>();
+        getSpaceRequest().target(auth, id, pet).enqueue(new Callback<SpaceResponse>() {
+            @Override
+            public void onResponse(Call<SpaceResponse> call, Response<SpaceResponse> response) {
+                SpaceResponse spaceResponse;
+                switch (response.code()) {
+                    case 403:
+                    case 401:
+                        spaceResponse = new SpaceResponse();
+                        spaceResponse.code = String.valueOf(response.code());
+                        mutableLiveData.setValue(spaceResponse);
+                        break;
+                    case 400:
+                        try {
+                            spaceResponse = new Gson().fromJson(response.errorBody().string(), SpaceResponse.class);
+                        } catch (IOException e) {
+                            throw new RuntimeException(e);
+                        }
+                        spaceResponse.code = String.valueOf(response.code());
+                        mutableLiveData.setValue(spaceResponse);
+                        break;
+                    case 200:
+                        spaceResponse = response.body();
+                        if (spaceResponse != null) {
+                            spaceResponse.code = String.valueOf(response.code());
+                        }
+                        mutableLiveData.setValue(spaceResponse);
+                        break;
+                }
+            }
+
+            @Override
+            public void onFailure(Call<SpaceResponse> call, Throwable t) {
+            }
+        });
+        return mutableLiveData;
+    }
+
 }

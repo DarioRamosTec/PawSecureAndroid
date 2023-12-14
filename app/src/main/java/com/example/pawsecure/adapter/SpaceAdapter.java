@@ -76,7 +76,7 @@ public class SpaceAdapter extends RecyclerView.Adapter<SpaceAdapter.ViewHolder> 
             recyclerViewCarouselSpace.setLayoutManager(new CarouselLayoutManager());
             recyclerItemSpace.setAdapter(new PetIconAdapter(space.pets, null));
             PawSecureLinearLayoutManager pawSecureLinearLayoutManager = new PawSecureLinearLayoutManager(textItemSpace.getContext(), LinearLayoutManager.VERTICAL, false);
-            pawSecureLinearLayoutManager.setSmoothScrollDuration(1000);
+            pawSecureLinearLayoutManager.setSmoothScrollDuration(800);
             recyclerItemSpace.setLayoutManager(pawSecureLinearLayoutManager);
             recyclerItemSpace.setHasFixedSize(true);
             if (space.pets.size() > 1) {

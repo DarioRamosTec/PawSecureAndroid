@@ -11,7 +11,7 @@ public class Space {
     public String description;
 
     public List<Pet> pets;
-    public int target;
+    public Integer target;
     public int linked;
     public String mac;
 }

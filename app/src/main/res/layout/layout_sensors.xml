@@ -23,13 +23,13 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="5dp"
                 android:layout_marginEnd="5dp"
-                android:layout_weight="3"
+                android:layout_weight="2"
                 android:src="@drawable/icon_temperature" />
 
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="7"
+                android:layout_weight="3"
                 android:orientation="vertical">
 
                 <TextView
@@ -56,11 +56,12 @@
                 android:id="@+id/temperatureValue"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="5dp"
-                android:layout_weight="3"
+                android:layout_marginEnd="10dp"
+                android:layout_weight="2"
                 android:fontFamily="@font/quicksand_light"
                 android:textAlignment="textEnd"
-                android:textAppearance="@style/Theme.PawSecure.TitleMedium" />
+                android:textAppearance="@style/Theme.PawSecure.TitleMedium"
+                android:textSize="12sp" />
         </LinearLayout>
 
         <LinearLayout
@@ -76,13 +77,13 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="5dp"
                 android:layout_marginEnd="5dp"
-                android:layout_weight="3"
+                android:layout_weight="2"
                 android:src="@drawable/icon_humidity" />
 
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="7"
+                android:layout_weight="3"
                 android:orientation="vertical">
 
                 <TextView
@@ -109,8 +110,8 @@
                 android:id="@+id/humidityValue"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="5dp"
-                android:layout_weight="3"
+                android:layout_marginEnd="10dp"
+                android:layout_weight="2"
                 android:fontFamily="@font/quicksand_light"
                 android:textAlignment="textEnd"
                 android:textAppearance="@style/Theme.PawSecure.TitleMedium" />
@@ -129,13 +130,13 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="5dp"
                 android:layout_marginEnd="5dp"
-                android:layout_weight="3"
+                android:layout_weight="2"
                 android:src="@drawable/icon_sound" />
 
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="7"
+                android:layout_weight="3"
                 android:orientation="vertical">
 
                 <TextView
@@ -162,8 +163,8 @@
                 android:id="@+id/soundValue"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="5dp"
-                android:layout_weight="3"
+                android:layout_marginEnd="10dp"
+                android:layout_weight="2"
                 android:fontFamily="@font/quicksand_light"
                 android:textAlignment="textEnd"
                 android:textAppearance="@style/Theme.PawSecure.TitleMedium" />
@@ -182,13 +183,13 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="5dp"
                 android:layout_marginEnd="5dp"
-                android:layout_weight="3"
+                android:layout_weight="2"
                 android:src="@drawable/icon_gas" />
 
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="7"
+                android:layout_weight="3"
                 android:orientation="vertical">
 
                 <TextView
@@ -215,8 +216,8 @@
                 android:id="@+id/gasValue"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="5dp"
-                android:layout_weight="3"
+                android:layout_marginEnd="10dp"
+                android:layout_weight="2"
                 android:fontFamily="@font/quicksand_light"
                 android:textAlignment="textEnd"
                 android:textAppearance="@style/Theme.PawSecure.TitleMedium" />
@@ -235,13 +236,13 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="5dp"
                 android:layout_marginEnd="5dp"
-                android:layout_weight="3"
+                android:layout_weight="2"
                 android:src="@drawable/icon_movement" />
 
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="7"
+                android:layout_weight="3"
                 android:orientation="vertical">
 
                 <TextView
@@ -268,8 +269,8 @@
                 android:id="@+id/motionValue"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="5dp"
-                android:layout_weight="3"
+                android:layout_marginEnd="10dp"
+                android:layout_weight="2"
                 android:fontFamily="@font/quicksand_light"
                 android:textAlignment="textEnd"
                 android:textAppearance="@style/Theme.PawSecure.TitleMedium" />
@@ -288,12 +289,12 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="5dp"
                 android:layout_marginEnd="5dp"
-                android:layout_weight="3" />
+                android:layout_weight="2" />
 
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="7"
+                android:layout_weight="3"
                 android:orientation="vertical">
 
                 <TextView
@@ -320,8 +321,8 @@
                 android:id="@+id/presenceValue"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="5dp"
-                android:layout_weight="3"
+                android:layout_marginEnd="10dp"
+                android:layout_weight="2"
                 android:fontFamily="@font/quicksand_light"
                 android:textAlignment="textEnd"
                 android:textAppearance="@style/Theme.PawSecure.TitleMedium" />
@@ -340,12 +341,12 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="5dp"
                 android:layout_marginEnd="5dp"
-                android:layout_weight="3" />
+                android:layout_weight="2" />
 
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="7"
+                android:layout_weight="3"
                 android:orientation="vertical">
 
                 <TextView
@@ -372,8 +373,8 @@
                 android:id="@+id/positionValue"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="5dp"
-                android:layout_weight="3"
+                android:layout_marginEnd="10dp"
+                android:layout_weight="2"
                 android:fontFamily="@font/quicksand_light"
                 android:textAlignment="textEnd"
                 android:textAppearance="@style/Theme.PawSecure.TitleMedium" />
@@ -441,6 +442,7 @@
             android:layout_marginStart="32dp"
             android:layout_marginTop="10dp"
             android:layout_marginEnd="32dp"
+            android:layout_marginBottom="10dp"
             android:layout_weight="1"
             android:text="@string/reload_connection" />
 

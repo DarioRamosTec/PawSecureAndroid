@@ -13,10 +13,14 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.util.DisplayMetrics;
+import android.view.KeyEvent;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -43,6 +47,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
+import com.google.android.material.chip.Chip;
 import com.google.android.material.tabs.TabLayout;
 
 import java.util.List;
@@ -81,7 +86,10 @@ public class SpaceActivity extends PawSecureActivity implements View.OnClickList
     TextView positionUpdate;
     TextView positionValue;
     List<Sensor> sensorList;
+    Chip chipTargetReload;
+    Chip chipTargetSpace;
     int tabId = 0;
+    Boolean chipTargetIsInSite;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -99,11 +107,11 @@ public class SpaceActivity extends PawSecureActivity implements View.OnClickList
         refreshLayout = findViewById(R.id.refreshLayout);
         bottomSheetSpace = findViewById(R.id.bottomSheetSpace);
         linearSensors = findViewById(R.id.linearSensors);
+        chipTargetSpace = findViewById(R.id.chipTargetSpace);
         mapSpace = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.mapSpace);
 
         establishCurtain(findViewById(R.id.progressSpace), findViewById(R.id.curtainSpace));
-        showCurtain(new Button[] {});
         spaceViewModel = new ViewModelProvider(this).get(SpaceViewModel.class);
         spaceViewModel.space(Token.getBearer(), spaceId).observe(this, new PawSecureObserver<SpaceResponse>(this, new SpaceOnChanged(this, this, spaceViewModel)));
         linkButtonSpace.setOnClickListener(this);
@@ -149,6 +157,7 @@ public class SpaceActivity extends PawSecureActivity implements View.OnClickList
         View child = getLayoutInflater().inflate(R.layout.layout_sensors, null);
         linearSensors.addView(child);
         reloadButtonSensor = linearSensors.findViewById(R.id.reloadButtonSensor);
+        showCurtain(new Button[] { reloadButtonSensor });
 
         temperatureUpdate = linearSensors.findViewById(R.id.temperatureUpdate);
         temperatureValue = linearSensors.findViewById(R.id.temperatureValue);
@@ -170,6 +179,17 @@ public class SpaceActivity extends PawSecureActivity implements View.OnClickList
         });
 
         tabLayoutSpace.setEnabled(false);
+        reloadButtonSensor.setEnabled(false);
+        chipTargetSpace.setEnabled(false);
+
+        chipTargetSpace.setOnClickListener(view -> {
+            if (!chipTargetIsInSite) {
+                setTarget();
+            }
+            chipTargetSpace.setChecked(true);
+            chipTargetIsInSite = true;
+        });
+
     }
 
     @Override
@@ -186,14 +206,20 @@ public class SpaceActivity extends PawSecureActivity implements View.OnClickList
     @Override
     public void onMapReady(@NonNull GoogleMap googleMap) {
         this.googleMap = googleMap;
-        setMap(25.5345162, -103.3274717);
     }
 
-    void setMap(double latitude, double longitude) {
+    void setMap(double latitude, double longitude, String hour) {
         if (this.googleMap != null) {
+            this.googleMap.clear();
             LatLng marker = new LatLng(latitude, longitude);
-            this.googleMap.addMarker(new MarkerOptions().position(marker).title(getString(R.string.space_maps_title)));
+            this.googleMap.addMarker(new MarkerOptions().position(marker).title(hour));
             this.googleMap.moveCamera(CameraUpdateFactory.newLatLng(marker));
+        }
+    }
+
+    void clearMap() {
+        if (this.googleMap != null) {
+            this.googleMap.clear();
         }
     }
 
@@ -215,13 +241,25 @@ public class SpaceActivity extends PawSecureActivity implements View.OnClickList
                     topBarCreateSpace.setTitle(space.name);
                     decideLink();
                     tabPets();
+                    chipTargetSpace.setEnabled(true);
+                    establishChip();
                     break;
             }
         }
     }
+    
+    void establishChip() {
+        if ((space.target == null && tabId == 0) || (space.target != null && space.target == tabId) ) {
+            chipTargetIsInSite = true;
+            chipTargetSpace.setChecked(true);
+        } else {
+            chipTargetIsInSite = false;
+            chipTargetSpace.setChecked(false);
+        }
+    }
 
     void decideLink() {
-        hideCurtain(new Button[] {});
+        hideCurtain(new Button[] { reloadButtonSensor });
         //space.linked == 1
         if (true) {
             linearLinkedSpace.setVisibility(View.VISIBLE);
@@ -241,6 +279,15 @@ public class SpaceActivity extends PawSecureActivity implements View.OnClickList
             public void onTabSelected(TabLayout.Tab tab) {
                 tabId = tab.getId();
                 searchForData(tabId);
+                establishChip();
+                sensorList = listMap.get(String.valueOf(tabId));
+                Sensor position = sensorList.get(6);
+                if (position != null) {
+                    String[] dataLL = position.data.split(",");
+                    setMap(Double.parseDouble(dataLL[0]), Double.parseDouble(dataLL[1]), position.time);
+                } else {
+                    clearMap();
+                }
             }
 
             @Override
@@ -261,7 +308,7 @@ public class SpaceActivity extends PawSecureActivity implements View.OnClickList
     }
 
     void establishAllSensors() {
-        reloadAllData();
+        showCurtain(new Button[] { reloadButtonSensor });
         spaceViewModel.sensors(Token.getBearer(), space.id).observe(this, new PawSecureObserver<SpaceSensorResponse>(this, new SpaceSensorOnChanged(this, this, spaceViewModel)));
     }
 
@@ -278,10 +325,13 @@ public class SpaceActivity extends PawSecureActivity implements View.OnClickList
                 case "401":
                     checkAuth(context, pawSecureViewModel, pawSecureActivity);
                     break;
+                case "202":
                 case "200":
+                    hideCurtain(new Button[] { reloadButtonSensor });
                     listMap = spaceResponse.data.get(0);
                     searchForData(tabId);
                     tabLayoutSpace.setEnabled(true);
+                    reloadButtonSensor.setEnabled(true);
                     break;
             }
         }
@@ -300,23 +350,26 @@ public class SpaceActivity extends PawSecureActivity implements View.OnClickList
         Resources res = getResources();
         if (temperature != null) {
             temperatureUpdate.setText(String.format(getString(R.string.space_last), temperature.time));
-            temperatureValue.setText(String.format(getString(R.string.sensor_value), temperature.measure, temperature.sensor_type.unity));
+            temperatureValue.setText(String.format(getString(R.string.sensor_value), String.valueOf(temperature.measure), temperature.sensor_type.unity));
         } else {
             temperatureUpdate.setText(String.format(getString(R.string.space_last), ""));
+            temperatureValue.setText("");
         }
 
         if (humidity != null) {
             humidityUpdate.setText(String.format(getString(R.string.space_last), humidity.time));
-            humidityValue.setText(String.format(getString(R.string.sensor_value), humidity.measure, humidity.sensor_type.unity));
+            humidityValue.setText(String.format(getString(R.string.sensor_value), String.valueOf(humidity.measure), humidity.sensor_type.unity));
         } else {
             humidityUpdate.setText(String.format(getString(R.string.space_last), ""));
+            humidityValue.setText("");
         }
 
         if (sound != null) {
             soundUpdate.setText(String.format(getString(R.string.space_last), sound.time));
-            soundValue.setText(String.format(getString(R.string.sensor_string), (sound.measure == 1 ? getString(R.string.yes) : getString(R.string.no))));
+            soundValue.setText(String.format(getString(R.string.sensor_string), (sound.measure == 1 ? getString(R.string.strong) : getString(R.string.weak))));
         } else {
             soundUpdate.setText(String.format(getString(R.string.space_last), ""));
+            soundValue.setText("");
         }
 
         if (gas != null) {
@@ -324,41 +377,59 @@ public class SpaceActivity extends PawSecureActivity implements View.OnClickList
             gasValue.setText(String.format(getString(R.string.sensor_string), (gas.measure == 1 ? getString(R.string.yes) : getString(R.string.no))));
         } else {
             gasUpdate.setText(String.format(getString(R.string.space_last), ""));
+            gasValue.setText("");
         }
 
         if (motion != null) {
             motionUpdate.setText(String.format(getString(R.string.space_last), motion.time));
-            motionValue.setText(String.format(getString(R.string.sensor_string), (motion.measure == 1 ? getString(R.string.yes) : getString(R.string.no))));
+            motionValue.setText(String.format(getString(R.string.sensor_string), (motion.measure == 1 ? getString(R.string.strong) : getString(R.string.weak))));
         } else {
             motionUpdate.setText(String.format(getString(R.string.space_last), ""));
+            motionValue.setText("");
         }
 
         if (presence != null) {
             presenceUpdate.setText(String.format(getString(R.string.space_last), presence.time));
-            presenceValue.setText(String.format(getString(R.string.sensor_string), (presence.measure == 1 ? getString(R.string.yes) : getString(R.string.no))));
+            presenceValue.setText(String.format(getString(R.string.sensor_string), (presence.measure == 1 ? getString(R.string.on) : getString(R.string.off))));
         } else {
             presenceUpdate.setText(String.format(getString(R.string.space_last), ""));
+            presenceValue.setText("");
         }
 
         if (position != null) {
             positionUpdate.setText(String.format(getString(R.string.space_last), position.time));
-            positionValue.setText(String.format(getString(R.string.sensor_string), (position.measure == 1 ? getString(R.string.yes) : getString(R.string.no))));
-            String[] dataLL = position.data.split("j");
-            setMap(Double.parseDouble(dataLL[0]), Double.parseDouble(dataLL[1]));
+            String[] dataLL = position.data.split(",");
+            setMap(Double.parseDouble(dataLL[0]), Double.parseDouble(dataLL[1]), position.time);
         } else {
             positionUpdate.setText(String.format(getString(R.string.space_last), ""));
+            //positionValue.setText("");
         }
     }
 
     void setTarget() {
-        //introducir set target  con chip
+        showCurtain(new Button[] { reloadButtonSensor });
+        tabLayoutSpace.setEnabled(false);
+        chipTargetSpace.setEnabled(false);
+        spaceViewModel.target(Token.getBearer(), space.id, (tabId == 0 ? null : tabId )).observe(this, new PawSecureObserver<SpaceResponse>(this, new TargetOnChanged(this, this, spaceViewModel)));
     }
 
     void reloadAllData() {
+        reloadButtonSensor.setEnabled(false);
         for (int i = 0; i <= 6; i++) {
             reloadData(i);
         }
-        //con snackbar diciendo donde
+        new CountDownTimer(5000, 1000) {
+
+            @Override
+            public void onTick(long l) {
+
+            }
+
+            @Override
+            public void onFinish() {
+                reloadButtonSensor.setEnabled(true);
+            }
+        }.start();
     }
 
     class SensorOnChanged extends PawSecureOnChanged implements PawSecureObserver.PawSecureOnChanged<SensorResponse> {
@@ -377,10 +448,33 @@ public class SpaceActivity extends PawSecureActivity implements View.OnClickList
                 case "202":
                 case "200":
                     int sensorTab = (sensorResponse.data.pet == null ? 0 : sensorResponse.data.pet);
-                    listMap.get(String.valueOf(sensorTab)).set(sensorResponse.data.sensor_type.id, sensorResponse.data);
+                    listMap.get(String.valueOf(sensorTab)).set(sensorResponse.data.sensor_type.id-1, sensorResponse.data);
                     if (tabId == sensorTab) {
                         searchForData(tabId);
                     }
+                    break;
+            }
+        }
+    }
+
+    class TargetOnChanged extends PawSecureOnChanged implements PawSecureObserver.PawSecureOnChanged<SpaceResponse> {
+
+        public TargetOnChanged(Context context, PawSecureActivity pawSecureActivity, PawSecureViewModel pawSecureViewModel) {
+            super(context, pawSecureActivity, pawSecureViewModel);
+        }
+
+        @Override
+        public void onChanged(SpaceResponse spaceResponse) {
+            switch (spaceResponse.code) {
+                case "403":
+                case "401":
+                    checkAuth(context, pawSecureViewModel, pawSecureActivity);
+                    break;
+                case "200":
+                    tabLayoutSpace.setEnabled(true);
+                    chipTargetSpace.setEnabled(true);
+                    hideCurtain(new Button[] { reloadButtonSensor });
+                    space = spaceResponse.data.get(0);
                     break;
             }
         }
