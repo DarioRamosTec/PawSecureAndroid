@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.pawsecure.R;
 import com.example.pawsecure.implementation.PawSecureAdapter;
+import com.example.pawsecure.implementation.PawSecureDeviceFind;
 import com.example.pawsecure.singletone.ImagePetManager;
 import com.example.pawsecure.view.CreatePetActivity;
 import com.example.pawsecure.view.LinkActivity;
@@ -24,9 +25,9 @@ import java.util.List;
 public class DevicesAdapter extends RecyclerView.Adapter<DevicesAdapter.ViewHolder> {
 
     List<BluetoothDevice> list;
-    LinkActivity linkActivity;
+    PawSecureDeviceFind linkActivity;
 
-    public DevicesAdapter (List<BluetoothDevice> list, LinkActivity linkActivity) {
+    public DevicesAdapter (List<BluetoothDevice> list, PawSecureDeviceFind linkActivity) {
         this.list = list;
         this.linkActivity = linkActivity;
     }
@@ -66,7 +67,7 @@ public class DevicesAdapter extends RecyclerView.Adapter<DevicesAdapter.ViewHold
             linearDevice = itemView.findViewById(R.id.linearDevice);
         }
 
-        void setData(BluetoothDevice bluetoothDevice, LinkActivity linkActivity) {
+        void setData(BluetoothDevice bluetoothDevice, PawSecureDeviceFind linkActivity) {
             try {
                 addressDevice.setText(bluetoothDevice.getAddress());
                 nameDevice.setText(bluetoothDevice.getName());

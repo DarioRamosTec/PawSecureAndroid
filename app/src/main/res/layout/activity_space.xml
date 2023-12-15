@@ -5,7 +5,8 @@
     xmlns:map="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".view.SpaceActivity">
+    tools:context=".view.SpaceActivity"
+    android:id="@+id/constraintSpace">
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:id="@+id/coordinatorChoose"
@@ -131,23 +132,61 @@
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
 
-                    <com.google.android.material.chip.ChipGroup
-                        android:layout_width="wrap_content"
+                    <HorizontalScrollView
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:scrollbars="none"
                         app:layout_constraintBottom_toBottomOf="@+id/mapSpace"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintVertical_bias="0.01">
+                        app:layout_constraintVertical_bias="0.0">
 
-                        <com.google.android.material.chip.Chip
-                            android:id="@+id/chipTargetSpace"
-                            style="@style/Widget.Material3.Chip.Filter"
+                        <com.google.android.material.chip.ChipGroup
                             android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="@string/chip_space_target" />
+                            android:layout_height="match_parent"
+                            android:paddingStart="8dp"
+                            android:paddingEnd="8dp"
+                            app:chipSpacing="8dp"
+                            app:singleLine="true">
 
-                    </com.google.android.material.chip.ChipGroup>
+                            <com.google.android.material.chip.Chip
+                                android:id="@+id/chipTargetSpace"
+                                style="@style/Widget.Material3.Chip.Filter"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/chip_space_target" />
+
+                            <com.google.android.material.chip.Chip
+                                android:id="@+id/chipBuzzerSpace"
+                                style="@style/Widget.Material3.Chip.Assist"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/make_buzzer"
+                                app:chipIcon="@drawable/icon_buzzer"
+                                app:ensureMinTouchTargetSize="true"
+                                app:closeIconEnabled="false" />
+
+                            <com.google.android.material.chip.Chip
+                                android:id="@+id/chipFanSpace"
+                                style="@style/Widget.Material3.Chip.Assist"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/make_fan"
+                                app:chipIcon="@drawable/icon_fan"
+                                app:closeIconEnabled="false" />
+
+                            <com.google.android.material.chip.Chip
+                                android:id="@+id/chipLightSpace"
+                                style="@style/Widget.Material3.Chip.Assist"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/make_light"
+                                app:chipIcon="@drawable/icon_light"
+                                app:closeIconEnabled="false" />
+
+                        </com.google.android.material.chip.ChipGroup>
+                    </HorizontalScrollView>
 
                     <androidx.coordinatorlayout.widget.CoordinatorLayout
                         android:id="@+id/coordinatorLayout"
@@ -199,6 +238,53 @@
         </LinearLayout>
 
     </LinearLayout>
+
+    <androidx.fragment.app.FragmentContainerView
+        android:id="@+id/fragmentContainerView"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/coordinatorChoose">
+
+    </androidx.fragment.app.FragmentContainerView>
+
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/coordinatorChoose">
+
+        <LinearLayout
+            android:id="@+id/sideSheetSpace"
+            style="@style/Widget.Material3.SideSheet"
+            android:layout_width="256dp"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            app:layout_behavior="com.google.android.material.sidesheet.SideSheetBehavior">
+
+            <TextView
+                android:id="@+id/textSheetSpace"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:layout_marginBottom="8dp"
+                android:text="@string/title_msg"
+                android:textAlignment="center"
+                android:textSize="16sp" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recyclerSheetSpace"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+
+        </LinearLayout>
+
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
     <com.google.android.material.progressindicator.CircularProgressIndicator
         android:id="@+id/progressSpace"

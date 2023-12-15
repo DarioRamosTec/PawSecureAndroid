@@ -1,32 +1,47 @@
 package com.example.pawsecure.view;
 
+import static com.google.android.material.bottomsheet.BottomSheetBehavior.STATE_EXPANDED;
+
 import androidx.activity.result.ActivityResult;
 import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.Toolbar;
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.core.content.ContextCompat;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
+import android.Manifest;
 import android.app.Activity;
+import android.bluetooth.BluetoothAdapter;
+import android.bluetooth.BluetoothDevice;
+import android.bluetooth.BluetoothManager;
+import android.bluetooth.BluetoothSocket;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
+import android.content.pm.PackageManager;
 import android.content.res.Resources;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.os.ParcelUuid;
 import android.util.DisplayMetrics;
-import android.view.KeyEvent;
 import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
-import android.widget.CompoundButton;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.example.pawsecure.R;
+import com.example.pawsecure.adapter.DevicesAdapter;
 import com.example.pawsecure.implementation.PawSecureActivity;
+import com.example.pawsecure.implementation.PawSecureDeviceFind;
 import com.example.pawsecure.implementation.PawSecureObserver;
 import com.example.pawsecure.implementation.PawSecureOnChanged;
 import com.example.pawsecure.implementation.PawSecureViewModel;
@@ -48,12 +63,18 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.chip.Chip;
+import com.google.android.material.sidesheet.SideSheetBehavior;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.tabs.TabLayout;
 
+import java.io.IOException;
+import java.io.OutputStream;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicBoolean;
 
-public class SpaceActivity extends PawSecureActivity implements View.OnClickListener, OnMapReadyCallback {
+public class SpaceActivity extends PawSecureActivity implements View.OnClickListener, OnMapReadyCallback, PawSecureDeviceFind {
 
     LinearLayout linearNotLinked;
     LinearLayout linearLinkedSpace;
@@ -70,7 +91,7 @@ public class SpaceActivity extends PawSecureActivity implements View.OnClickList
     FrameLayout bottomSheetSpace;
     Button reloadButtonSensor;
     Map<String, List<Sensor>> listMap;
-
+    BluetoothDevice bluetoothDeviceTarget;
     TextView temperatureUpdate;
     TextView temperatureValue;
     TextView humidityValue;
@@ -86,10 +107,19 @@ public class SpaceActivity extends PawSecureActivity implements View.OnClickList
     TextView positionUpdate;
     TextView positionValue;
     List<Sensor> sensorList;
-    Chip chipTargetReload;
+    Chip chipBuzzerSpace;
+    Chip chipFanSpace;
+    Chip chipLightSpace;
+    ConstraintLayout constraintSpace;
     Chip chipTargetSpace;
     int tabId = 0;
     Boolean chipTargetIsInSite;
+    View sideSheetSpace;
+    SideSheetBehavior<View> sideSheetBehavior;
+    RecyclerView recyclerSheetSpace;
+    BroadcastReceiver receiver;
+    BluetoothManager bluetoothManager;
+    BluetoothAdapter bluetoothAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -99,6 +129,9 @@ public class SpaceActivity extends PawSecureActivity implements View.OnClickList
         Bundle bundle = getIntent().getExtras();
         spaceId = (int) bundle.get("SPACE_ID");
 
+        chipBuzzerSpace = findViewById(R.id.chipBuzzerSpace);
+        chipLightSpace = findViewById(R.id.chipLightSpace);
+        chipFanSpace = findViewById(R.id.chipFanSpace);
         linearNotLinked = findViewById(R.id.linearNotLinked);
         linearLinkedSpace = findViewById(R.id.linearLinkedSpace);
         linkButtonSpace = findViewById(R.id.linkButtonSpace);
@@ -120,6 +153,9 @@ public class SpaceActivity extends PawSecureActivity implements View.OnClickList
             public boolean onMenuItemClick(MenuItem item) {
                 if (item.getItemId() == R.id.menuSpaceLink) {
                     goToLink();
+                    return true;
+                } else if (item.getItemId() == R.id.menuSpaceDevice) {
+                    goToDevice();
                     return true;
                 }
                 return false;
@@ -190,6 +226,149 @@ public class SpaceActivity extends PawSecureActivity implements View.OnClickList
             chipTargetIsInSite = true;
         });
 
+        chipBuzzerSpace.setOnClickListener(view -> {
+            connectToDevice("B");
+        });
+
+        chipFanSpace.setOnClickListener(view -> {
+            connectToDevice("V");
+        });
+
+        chipLightSpace.setOnClickListener(view -> {
+            connectToDevice("L");
+        });
+
+        bluetoothManager = getSystemService(BluetoothManager.class);
+        bluetoothAdapter = bluetoothManager.getAdapter();
+
+        sideSheetSpace = findViewById(R.id.sideSheetSpace);
+        sideSheetBehavior = SideSheetBehavior.from(sideSheetSpace);
+        sideSheetBehavior.setState(SideSheetBehavior.STATE_HIDDEN);
+        sideSheetBehavior.setDraggable(true);
+
+        recyclerSheetSpace = findViewById(R.id.recyclerSheetSpace);
+        recyclerSheetSpace.setAdapter(new DevicesAdapter(new ArrayList<>(), this));
+        recyclerSheetSpace.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
+        recyclerSheetSpace.setHasFixedSize(true);
+
+        receiver = new BroadcastReceiver() {
+            public void onReceive(Context context, Intent intent) {
+                String action = intent.getAction();
+                if (BluetoothDevice.ACTION_FOUND.equals(action)) {
+                    BluetoothDevice device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
+                    try {
+                        DevicesAdapter adapter = (DevicesAdapter) recyclerSheetSpace.getAdapter();
+                        List<BluetoothDevice> bluetoothDevices = adapter.getList();
+                        if (bluetoothDevices != null) {
+                            if (!bluetoothDevices.contains(device)) {
+                                bluetoothDevices.add(device);
+                                adapter.notifyItemInserted(adapter.getItemCount() - 1);
+                            }
+                        }
+                    } catch (SecurityException e) {
+
+                    }
+                }
+            }
+        };
+
+        IntentFilter filter = new IntentFilter(BluetoothDevice.ACTION_FOUND);
+        registerReceiver(receiver, filter);
+        search();
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == 111223) {
+            boolean granted = true;
+            for (int result : grantResults) {
+                if (result == PackageManager.PERMISSION_GRANTED) {
+                    continue;
+                }
+                granted = false;
+                break;
+            }
+            if (granted) {
+                search();
+                return;
+            }
+            Snackbar.make(this, constraintSpace, getResources().getText(R.string.link_search_error), Snackbar.LENGTH_INDEFINITE).setAction(R.string.go_settings, view -> toSettings());
+        }
+    }
+
+    void search() {
+        String[] permissions;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            permissions = new String[]{Manifest.permission.BLUETOOTH_CONNECT, Manifest.permission.BLUETOOTH_SCAN, Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_WIFI_STATE};
+        } else {
+            permissions = new String[]{Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.BLUETOOTH, Manifest.permission.BLUETOOTH_ADMIN, Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_WIFI_STATE};
+        }
+        boolean request = true;
+        for (String permission : permissions) {
+            if (ContextCompat.checkSelfPermission(this, permission) == PackageManager.PERMISSION_DENIED) {
+                request = false;
+                break;
+            }
+        }
+
+        if (request) {
+            link();
+        } else {
+            requestPermissions(permissions, 111223);
+        }
+    }
+
+    void link() {
+        if (bluetoothAdapter != null) {
+            if (!bluetoothAdapter.isEnabled()) {
+                Intent intent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
+                activityResultLauncher.launch(intent);
+            } else {
+                try {
+                    if (bluetoothAdapter.isDiscovering()) {
+                        bluetoothAdapter.cancelDiscovery();
+                    }
+                    bluetoothAdapter.startDiscovery();
+                } catch (SecurityException e) {
+
+                }
+            }
+        }
+    }
+
+
+    public void boundToDevice(BluetoothDevice bluetoothDevice) {
+        try {
+            bluetoothDeviceTarget = bluetoothDevice;
+            bluetoothDeviceTarget.createBond();
+        } catch (SecurityException e) {}
+    }
+
+    public void connectToDevice(String value) {
+        ((Runnable) () -> {
+            try {
+                if (bluetoothDeviceTarget != null) {
+                    ParcelUuid[] parcelUuids = bluetoothDeviceTarget.getUuids();
+                    if (parcelUuids != null) {
+                        for (ParcelUuid p : parcelUuids) {
+                            BluetoothSocket bluetoothSocket = bluetoothDeviceTarget.createRfcommSocketToServiceRecord(p.getUuid());
+                            bluetoothSocket.connect();
+                            if (bluetoothSocket.isConnected()) {
+                                OutputStream outputStream = bluetoothSocket.getOutputStream();
+                                String stt = value;
+                                outputStream.write(stt.getBytes());
+                            }
+                        }
+                    }
+                }
+            } catch (SecurityException | IOException e) {
+            }
+        }).run();
+    }
+
+    void goToDevice() {
+        sideSheetBehavior.expand();
     }
 
     @Override
@@ -512,5 +691,4 @@ public class SpaceActivity extends PawSecureActivity implements View.OnClickList
                 break;
         }
     }
-
 }

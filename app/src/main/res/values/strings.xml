@@ -138,4 +138,9 @@
     <string name="profile_title">Your profile</string>
     <string name="profile_subtitle">Edit your info</string>
     <string name="not_login">You are not verified.</string>
+    <string name="make_buzzer">Make a sound</string>
+    <string name="make_fan">Start the fan</string>
+    <string name="make_light">On light</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="item_space_act">Act</string>
 </resources>

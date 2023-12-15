@@ -32,6 +32,7 @@ import com.example.pawsecure.R;
 import com.example.pawsecure.adapter.DevicesAdapter;
 import com.example.pawsecure.fragment.WifiLinkDialog;
 import com.example.pawsecure.implementation.PawSecureActivity;
+import com.example.pawsecure.implementation.PawSecureDeviceFind;
 import com.example.pawsecure.implementation.PawSecureObserver;
 import com.example.pawsecure.implementation.PawSecureOnChanged;
 import com.example.pawsecure.implementation.PawSecureViewModel;
@@ -47,7 +48,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-public class LinkActivity extends PawSecureActivity  {
+public class LinkActivity extends PawSecureActivity implements PawSecureDeviceFind {
 
     MaterialToolbar topAppLink;
     Button searchButtonLink;
@@ -220,7 +221,6 @@ public class LinkActivity extends PawSecureActivity  {
     }
 
     public void connectToDevice(boolean success, BluetoothDevice bluetoothDevice) {
-        AtomicBoolean finish = new AtomicBoolean(false);
         if (success) {
             ((Runnable) () -> {
                 try {
@@ -235,25 +235,19 @@ public class LinkActivity extends PawSecureActivity  {
                                 if (bluetoothSocket.isConnected()) {
                                     curtainText(getString(R.string.link_reading));
                                     OutputStream outputStream = bluetoothSocket.getOutputStream();
-                                    String stt = this.ssid+":"+this.password+":"+"H1}";
+                                    String stt = "{"+this.ssid+":"+this.password+":"+"H1}";
                                     curtainText(getString(R.string.link_writing));
                                     outputStream.write(stt.getBytes());
                                     curtainText(getString(R.string.link_saving));
                                     linkViewModel.link(Token.getBearer(), spaceId, bluetoothDevice.getAddress())
                                                 .observe(this, new PawSecureObserver<SpaceResponse>(this, new LinkActivity.LinkOnChanged(this, this, linkViewModel)));
-                                    finish.set(true);
+                                    hideCurtain(new Button[] { searchButtonLink, configureButtonLink });
                                 }
                             }
                         }
                     }
                 } catch (SecurityException | IOException e) {}
             }).run();
-        }
-
-        if (!finish.get()) {
-            hideCurtain(new Button[] { searchButtonLink, configureButtonLink });
-            snackbar = Snackbar.make(this, constraintLink, getResources().getText(R.string.link_linking_error), Snackbar.LENGTH_SHORT);
-            snackbar.show();
         }
     }
 
